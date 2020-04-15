@@ -30,6 +30,7 @@ file(
     third_party/*.[ch]pp
     third_party/*.[ch]
     scenes/*.[ch]pp
+    scenes/*.h
     scenes/*.glsl
     )
 add_executable(pgm ${source_files})

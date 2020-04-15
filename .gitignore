@@ -1,0 +1,5 @@
+Makefile
+build/
+.idea/
+cmake-build-debug/
+imgui.ini
