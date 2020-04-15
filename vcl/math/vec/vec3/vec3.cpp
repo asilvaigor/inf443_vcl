@@ -91,11 +91,26 @@ float const* vec3::cend() const
     return &z+1;
 }
 
+float vec3::norm() {
+    return (float) hypot(hypot(x, y), z);
+}
+
+vec3 vec3::normalized() {
+    float n = norm();
+    return {x / n, y / n, z / n};
+}
+
 vec3 cross(const vec3& a,const vec3& b)
 {
     return    { a.y*b.z-a.z*b.y,
                 a.z*b.x-a.x*b.z,
                 a.x*b.y-a.y*b.x };
+}
+
+vec3 random()
+{
+    vec3 v(rand(), rand(), rand());
+    return v.normalized();
 }
 
 }

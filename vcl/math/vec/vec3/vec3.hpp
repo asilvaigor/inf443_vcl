@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vcl/containers/buffer_stack/buffer_stack.hpp"
+#include <iostream>
 
 namespace vcl {
 
@@ -53,11 +54,29 @@ template <> struct buffer_stack<float, 3> {
     float const* cend() const;
     ///@}
 
+    /**
+     * Norm of the vec3.
+     */
+    float norm();
+
+    /**
+     * Normalized vec3, its norm will now be 1.
+     */
+    vec3 normalized();
+
+    friend inline std::ostream &operator<<(std::ostream &output, const vec3 &v) {
+        output << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+        return output;
+    }
 };
 
 /** Cross product between two vec3.
  * \relates buffer_stack<float,3> */
 vec3 cross(const vec3& a,const vec3& b);
 
+/**
+ * Random normalized vec3.
+ */
+vec3 random();
 
 }
