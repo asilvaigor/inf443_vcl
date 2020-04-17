@@ -64,6 +64,11 @@ template <> struct buffer_stack<float, 3> {
      */
     vec3 normalized();
 
+    /**
+     * Distance to another vec3.
+     */
+    float dist(vec3 &v);
+
     friend inline std::ostream &operator<<(std::ostream &output, const vec3 &v) {
         output << "(" << v.x << ", " << v.y << ", " << v.z << ")";
         return output;

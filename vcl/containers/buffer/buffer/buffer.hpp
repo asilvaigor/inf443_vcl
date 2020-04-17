@@ -44,6 +44,8 @@ struct buffer
     size_t size() const;
     /** Resize container to a new size (similar to vector.resize()) */
     void resize(size_t size);
+    /** Reserve size in the container (similar to vector.reserve()) */
+    void reserve(size_t size);
     /** Add an element at the end of the container (similar to vector.push_back()) */
     void push_back(T const& value);
     /** Remove all elements of the container, new size is 0 (similar to vector.clear()) */
@@ -173,6 +175,12 @@ template <typename T>
 void buffer<T>::resize(size_t size)
 {
     data.resize(size);
+}
+
+template <typename T>
+void buffer<T>::reserve(size_t size)
+{
+    data.reserve(size);
 }
 
 template <typename T>

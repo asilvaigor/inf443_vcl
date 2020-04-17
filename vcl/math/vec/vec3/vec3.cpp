@@ -100,6 +100,10 @@ vec3 vec3::normalized() {
     return {x / n, y / n, z / n};
 }
 
+float vec3::dist(vec3 &v) {
+    return (float) hypot(hypot(x - v.x, y - v.y), z - v.z);
+}
+
 vec3 cross(const vec3& a,const vec3& b)
 {
     return    { a.y*b.z-a.z*b.y,
