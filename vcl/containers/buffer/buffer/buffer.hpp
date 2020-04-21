@@ -52,6 +52,9 @@ struct buffer
     void clear();
     /** Fill the container with the same element (from index 0 to size-1) */
     void fill(T const& value);
+    /** Inserts another vector at a position. Same as std::vector insert */
+    typename std::vector<T>::iterator insert(typename std::vector<T>::iterator pos,
+            typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end);
 
     /** \name Element access
      * \brief  Allows buffer[i], buffer(i), and buffer.at(i)
@@ -239,6 +242,13 @@ void buffer<T>::fill(T const& value)
     for(size_t k=0; k<N; ++k)
         data[k] = value;
 }
+
+template <typename T>
+typename std::vector<T>::iterator buffer<T>::insert(typename std::vector<T>::iterator pos,
+        typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end) {
+    return data.insert(pos, begin, end);
+}
+
 
 template <typename T>
 typename std::vector<T>::iterator buffer<T>::begin()

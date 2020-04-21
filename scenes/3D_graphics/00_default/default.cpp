@@ -34,7 +34,8 @@ void scene_model::setup_data(std::map<std::string,GLuint>& shaders, scene_struct
     // Example of uniform parameter setting: color of the shape (used in the shader)
     surface.uniform.color = {1.0f, 1.0f, 0.6f};
 
-
+    TreeSpecies species = TreeSpecies::pine();
+    tree.setupData(shaders, species);
 }
 
 
@@ -46,10 +47,7 @@ void scene_model::frame_draw(std::map<std::string,GLuint>& shaders, scene_struct
 {
     // Drawing call: need to provide the camera information (use the default shader if it has been set previously)
     draw(surface, scene.camera);
-
-
-
-
+    tree.draw(scene.camera);
 }
 
 

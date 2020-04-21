@@ -39,6 +39,8 @@ struct mesh
     void fill_color_uniform(const vec3& c);
     void fill_color_uniform(const vec4& c);
 
+    /** Appends two meshes together */
+    void add(mesh &m);
 };
 
 /** Compute per-vertex normals given a set of position coordinates and triangle index connectivity */

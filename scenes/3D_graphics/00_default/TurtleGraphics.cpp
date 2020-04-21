@@ -4,11 +4,16 @@
 
 #include "TurtleGraphics.h"
 
-TurtleGraphics::TurtleGraphics(vcl::vec3 p, float w) {
+TurtleGraphics::TurtleGraphics(vcl::vec3 p) {
     position = p;
-    width = w;
     dir = {0, 0, 1};
     right = {0, -1, 0};
+}
+
+TurtleGraphics::TurtleGraphics(vcl::vec3 &p, vcl::vec3 &dir, vcl::vec3 &right) {
+    this->position = p;
+    this->dir = dir;
+    this->right = right;
 }
 
 void TurtleGraphics::turnRight(float angle) {
@@ -26,7 +31,6 @@ void TurtleGraphics::turnLeft(float angle) {
 void TurtleGraphics::pitchUp(float angle) {
     vcl::Quaternion rot(right, angle);
     dir = rot.rotated(dir).normalized();
-    std::cout << "dir: " << dir << std::endl;
 }
 
 void TurtleGraphics::pitchDown(float angle) {
@@ -46,14 +50,14 @@ void TurtleGraphics::move(float distance) {
     position += dir * distance;
 }
 
-void TurtleGraphics::setWidth(float w) {
-    width = w;
-}
-
 vcl::vec3 TurtleGraphics::getPosition() {
     return position;
 }
 
-float TurtleGraphics::getWidth() {
-    return width;
+vcl::vec3 TurtleGraphics::getDirection() {
+    return dir;
+}
+
+vcl::vec3 TurtleGraphics::getRight() {
+    return right;
 }

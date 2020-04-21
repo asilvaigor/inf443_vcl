@@ -14,12 +14,18 @@
 class TurtleGraphics {
 public:
     /**
-     * Can be given a starting point and a width. It will start looking up, with belly pointing in the direction of the
-     * x axis.
+     * Can be given a starting point. It will start looking in the direction of the z axis.
      * @param p Starting point.
-     * @param w Width of the drawing.
      */
-    explicit TurtleGraphics(vcl::vec3 p = {0, 0, 0}, float w = 1.0);
+    explicit TurtleGraphics(vcl::vec3 p = {0, 0, 0});
+
+    /**
+     * Customize the orientation too.
+     * @param p Starting point.
+     * @param dir Vector pointing to the front of the turtle.
+     * @param right Vector pointing to the right of the turtle.
+     */
+    TurtleGraphics(vcl::vec3 &p, vcl::vec3 &dir, vcl::vec3 &right);
 
     /**
      * Rotates the turtle right (yaw) in its own perspective.
@@ -51,21 +57,16 @@ public:
      */
     void move(float distance);
 
-    /**
-     * Sets the drawing width.
-     * @param w
-     */
-    void setWidth(float w);
-
     vcl::vec3 getPosition();
 
-    float getWidth();
+    vcl::vec3 getDirection();
+
+    vcl::vec3 getRight();
 
 private:
     vcl::vec3 position;
     vcl::vec3 dir;
     vcl::vec3 right;
-    float width;
 };
 
 

@@ -128,6 +128,27 @@ void mesh::fill_color_uniform(const vec4& c)
         color[k] = c;
 }
 
+void mesh::add(mesh &m) {
+    int s = position.size();
+    position.insert(position.end(), m.position.begin(), m.position.end());
+    normal.insert(normal.end(), m.normal.begin(), m.normal.end());
+    color.insert(color.end(), m.color.begin(), m.color.end());
+
+    for (auto &c : m.connectivity) {
+        c[0] += s;
+        c[1] += s;
+        c[2] += s;
+    }
+    connectivity.insert(connectivity.end(), m.connectivity.begin(), m.connectivity.end());
+
+    auto t1 = texture_uv[texture_uv.size() - 1];
+    auto t2 = texture_uv[texture_uv.size() - 2];
+    auto tMax = t1 + (t1 - t2);
+
+    for (auto &t : m.texture_uv)
+        t += tMax;
+    texture_uv.insert(texture_uv.end(), m.texture_uv.begin(), m.texture_uv.end());
+}
 
 vec3 center_of_mass(const mesh& shape)
 {

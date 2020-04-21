@@ -30,6 +30,24 @@ public:
      */
     vcl::mesh toMesh();
 
+    /**
+     * Calculates a point in the bezier spline, using its equation.
+     * @param i Index of the starting point of the bezier spline which the point will be calculated.
+     * @param offset Float between 0 and 1, proportion in the bezier curve to get the point.
+     * @return Point position.
+     */
+    vcl::vec3 position(int i, float offset);
+
+    /**
+     * Calculates a tangent vector in the bezier spline, using its derivative.
+     * @param i Index of the starting point of the bezier spline which the derivative will be calculated.
+     * @param offset Float between 0 and 1, proportion in the bezier curve to get the tangent.
+     * @return Tangent direction.
+     */
+    vcl::vec3 tangent(int i, float offset);
+
+    int getNPoints() const;
+
 private:
     int nPoints;
     std::vector<vcl::vec3> pts;

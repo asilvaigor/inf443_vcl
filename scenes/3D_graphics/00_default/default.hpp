@@ -1,9 +1,14 @@
 #pragma once
 
 #include "main/scene_base/base.hpp"
+#include "Tree.h"
 
 #ifdef SCENE_DEFAULT_3D_GRAPHICS
 
+struct gui_scene_structure
+{
+    bool wireframe;
+};
 
 struct scene_model : scene_base
 {
@@ -26,6 +31,7 @@ struct scene_model : scene_base
     // visual representation of a surface
     //  Surface is a class attribute to be initialized in setup_data and used in frame_draw
     vcl::mesh_drawable surface;
+    Tree tree;
 
 
 };
