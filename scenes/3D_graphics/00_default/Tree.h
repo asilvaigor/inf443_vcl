@@ -10,13 +10,17 @@
 
 class Tree {
 public:
-    void setupData(std::map<std::string, GLuint> &shaders, TreeSpecies &species);
+    void setupData(std::map<std::string, GLuint> &shaders, TreeSpecies &species, vcl::vec3 position = {0, 0, 0});
 
     void draw(const vcl::camera_scene &camera);
 
 private:
-    vcl::mesh_drawable drawable;
+    vcl::mesh_drawable branchesDrawable;
+    vcl::mesh_drawable leavesDrawable;
     GLuint textureId;
+    GLuint textureWhiteId;
+    Leaf *leaf;
+    vcl::mesh_drawable leafDrawable;
 };
 
 

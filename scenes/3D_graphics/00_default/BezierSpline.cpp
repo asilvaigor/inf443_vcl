@@ -25,21 +25,25 @@ vcl::mesh BezierSpline::toMesh() {
     const float circleResolution = 64;
     const float lengthResolution = 8;
     const int minNCircles = 2;
-    const int minCircleNPoints = 6;
+    const int minCircleNPoints = 3;
 
     // Calculating number of points in each circle and number of circles in total.
     int uMax = 0, vMax = 0;
-    for (int i = 0; i < nPoints; i++) {
+    for (int i = 0; i < nPoints - 1; i++) {
         uMax = std::max(uMax, std::max(minCircleNPoints, (int) ceil(circleResolution * radius[i])));
         if (i < nPoints - 1)
             vMax += std::max(minNCircles, (int) ceil(lengthResolution * pts[i].dist(pts[i + 1])));
     }
 
+    bool finishesInPoint = radius.back() < FLT_EPSILON;
+    if (finishesInPoint)
+        vMax--;
+
     // Allocating memory
-    mesh.position.reserve((unsigned long) uMax * vMax);
-    mesh.normal.reserve((unsigned long) uMax * vMax);
-    mesh.texture_uv.reserve((unsigned long) uMax * vMax);
-    mesh.connectivity.reserve((unsigned long) (uMax + 2) * (vMax - 1) * 2);
+    mesh.position.reserve((unsigned long) uMax * vMax + finishesInPoint);
+    mesh.normal.reserve((unsigned long) uMax * vMax + finishesInPoint);
+    mesh.texture_uv.reserve((unsigned long) uMax * vMax + finishesInPoint);
+    mesh.connectivity.reserve((unsigned long) uMax * (vMax - 1) * 2 + finishesInPoint * uMax);
 
     // Going through each point in the spline
     vcl::vec3 lastCenter;
@@ -66,29 +70,45 @@ vcl::mesh BezierSpline::toMesh() {
                 dir = (nextCenter - center).normalized();
             }
 
-            // Placing points in mesh as a circle orthogonal to dir
-            vcl::vec3 ort1 = vcl::cross(dir, {1, 0, 0}).normalized();
-            vcl::vec3 ort2 = vcl::cross(dir, ort1).normalized();
-            for (int u = 0; u < uMax; u++) {
-                auto angle = (float) (2 * M_PI * u / uMax);
-                vcl::vec3 normal = std::cos(angle) * ort1 + std::sin(angle) * ort2;
-                mesh.position.push_back(center + r * normal);
-                mesh.normal.push_back(normal);
-                mesh.texture_uv.push_back({1.0f * u / uMax, 1.0f * v / vMax});
+            if (r > FLT_EPSILON) {
+                // Placing points in mesh as a circle orthogonal to dir
+                vcl::vec3 ort1 = vcl::cross(dir, {1, 0, 0}).normalized();
+                vcl::vec3 ort2 = vcl::cross(dir, ort1).normalized();
+                for (int u = 0; u < uMax; u++) {
+                    auto angle = (float) (2 * M_PI * u / uMax);
+                    vcl::vec3 normal = std::cos(angle) * ort1 + std::sin(angle) * ort2;
+                    mesh.position.push_back(center + r * normal);
+                    mesh.normal.push_back(normal);
+                    mesh.texture_uv.push_back({1.0f * u / uMax, 1.0f * v / vMax});
+                }
+            } else {
+                mesh.position.push_back(center);
+                mesh.normal.push_back(dir);
+                mesh.texture_uv.push_back({0, 1.0f * v / vMax});
             }
 
             // Adjusting connectivity
             if (i != 0 || j != 0) {
-                for (int k1 = 0, k2 = 0; k1 < uMax + 2 && k2 < uMax + 2; k1++, k2++) {
-                    auto i0 = (unsigned int) (mesh.position.size() - uMax);
-                    auto j0 = (unsigned int) (mesh.position.size() - 2 * uMax);
+                if (!finishesInPoint || (i != nPoints - 2 || j != nCircles - 1)) {
+                    for (int k1 = 0, k2 = 0; k1 < uMax + 1 && k2 < uMax + 1; k1++, k2++) {
+                        auto i0 = (unsigned int) (mesh.position.size() - uMax);
+                        auto j0 = (unsigned int) (mesh.position.size() - 2 * uMax);
 
-                    auto i1 = i0 + (unsigned int) k1 % uMax;
-                    auto i2 = i0 + (unsigned int) (k1 + 1) % uMax;
-                    auto j1 = j0 + (unsigned int) k2 % uMax;
-                    auto j2 = j0 + (unsigned int) (k2 + 1) % uMax;
-                    mesh.connectivity.push_back({i1, j1, i2});
-                    mesh.connectivity.push_back({j1, i2, j2});
+                        auto i1 = i0 + (unsigned int) k1 % uMax;
+                        auto i2 = i0 + (unsigned int) (k1 + 1) % uMax;
+                        auto j1 = j0 + (unsigned int) k2 % uMax;
+                        auto j2 = j0 + (unsigned int) (k2 + 1) % uMax;
+                        mesh.connectivity.push_back({i1, j1, i2});
+                        mesh.connectivity.push_back({j1, i2, j2});
+                    }
+                } else {
+                    for (int k1 = 0; k1 < uMax + 1; k1++) {
+                        auto i0 = (unsigned int) (mesh.position.size() - uMax - 1);
+                        auto j0 = (unsigned int) (mesh.position.size() - 1);
+                        auto i1 = i0 + (unsigned int) k1 % uMax;
+                        auto i2 = i0 + (unsigned int) (k1 + 1) % uMax;
+                        mesh.connectivity.push_back({i1, j0, i2});
+                    }
                 }
             }
 

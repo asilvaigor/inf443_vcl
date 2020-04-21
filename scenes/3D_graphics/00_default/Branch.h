@@ -9,15 +9,19 @@
 #include "TreeSpecies.h"
 #include "TurtleGraphics.h"
 #include "BezierSpline.h"
+#include "Leaf.h"
 
 
 class Branch {
 public:
-    explicit Branch(TreeSpecies& species, int depth = 0, int startIdx = 0, TurtleGraphics turtle = TurtleGraphics(),
-            Branch* parent = nullptr, float nBranchesFactor = 1, float splitAngleCorrection = 0, float cloneProb = 1,
-            float offsetInParent = 0, float radiusLimit = FLT_MAX);
+    explicit Branch(TreeSpecies& species, TurtleGraphics turtle = TurtleGraphics(), int depth = 0, int startIdx = 0,
+                    Branch* parent = nullptr, float treeScale = 0, float nBranchesFactor = 1,
+                    float splitAngleCorrection = 0, float cloneProb = 1, float offsetInTrunk = 0,
+                    float radiusLimit = FLT_MAX);
 
     vcl::mesh toMesh();
+
+    vcl::mesh toLeavesMesh();
 
 private:
     TreeSpecies &species;
@@ -25,14 +29,16 @@ private:
     BezierSpline spline;
     int depth;
     int startIdx;
-    std::vector<Branch> children;
+    std::vector<Branch> branches;
+    std::vector<Leaf> leaves;
     Branch* parent;
     float length;
     float radius;
+    float treeScale;
     float nBranchesFactor;
     float splitAngleCorrection;
     float cloneProb;
-    float offsetInParent;
+    float offsetInTrunk;
     float maxLengthChild;
     float radiusLimit;
 
@@ -42,8 +48,11 @@ private:
 
     void makeBranches(int segIdx, float branchesOnSeg, float prevRotationAngle);
 
-    void makeBranch(int branchIdx, int branchMode, float offset, float stemOffset, float prevRotationAngle,
-            int nBranchesInGroup = 0);
+    void makeBranch(int branchIdx, float offset, float offsetInParent, float prevRotationAngle, int nBranchesInGroup = 0);
+
+    void makeLeaves(int segIdx, float leavesOnSeg, float prevRotationAngle);
+
+    void makeLeaf(float offset, float offsetInParent, float prevRotationAngle);
 
     void makeClones(int segIdx, float nSplits, float curveAngle);
 
@@ -59,8 +68,9 @@ private:
 
     float calculateRotateAngle(float prevAngle);
 
-    int calculateNBranches();
+    int calculateNBranches() const;
 
+    int calculateNLeaves() const;
 };
 
 

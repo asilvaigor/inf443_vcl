@@ -130,24 +130,34 @@ void mesh::fill_color_uniform(const vec4& c)
 
 void mesh::add(mesh &m) {
     int s = position.size();
-    position.insert(position.end(), m.position.begin(), m.position.end());
-    normal.insert(normal.end(), m.normal.begin(), m.normal.end());
-    color.insert(color.end(), m.color.begin(), m.color.end());
+    if (!m.position.empty())
+        position.insert(position.end(), m.position.begin(), m.position.end());
+    if (!m.normal.empty())
+        normal.insert(normal.end(), m.normal.begin(), m.normal.end());
+    if (!m.color.empty())
+        color.insert(color.end(), m.color.begin(), m.color.end());
 
-    for (auto &c : m.connectivity) {
-        c[0] += s;
-        c[1] += s;
-        c[2] += s;
+    if (!m.connectivity.empty()) {
+        for (auto &c : m.connectivity) {
+            c[0] += s;
+            c[1] += s;
+            c[2] += s;
+        }
+        connectivity.insert(connectivity.end(), m.connectivity.begin(), m.connectivity.end());
     }
-    connectivity.insert(connectivity.end(), m.connectivity.begin(), m.connectivity.end());
 
-    auto t1 = texture_uv[texture_uv.size() - 1];
-    auto t2 = texture_uv[texture_uv.size() - 2];
-    auto tMax = t1 + (t1 - t2);
+    if (!m.texture_uv.empty()) {
+        vec2 tMax;
+        if (texture_uv.size() > 2) {
+            auto t1 = texture_uv[texture_uv.size() - 2];
+            auto t2 = texture_uv[texture_uv.size() - 1];
+            tMax = t2 + (t2 - t1);
+        }
 
-    for (auto &t : m.texture_uv)
-        t += tMax;
-    texture_uv.insert(texture_uv.end(), m.texture_uv.begin(), m.texture_uv.end());
+        for (auto &t : m.texture_uv)
+            t += tMax;
+        texture_uv.insert(texture_uv.end(), m.texture_uv.begin(), m.texture_uv.end());
+    }
 }
 
 vec3 center_of_mass(const mesh& shape)

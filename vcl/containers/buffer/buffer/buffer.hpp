@@ -42,6 +42,8 @@ struct buffer
 
     /** Container size similar to vector.size() */
     size_t size() const;
+    /** Empty similar to vector.empty() */
+    bool empty() const;
     /** Resize container to a new size (similar to vector.resize()) */
     void resize(size_t size);
     /** Reserve size in the container (similar to vector.reserve()) */
@@ -172,6 +174,12 @@ template <typename T>
 size_t buffer<T>::size() const
 {
     return data.size();
+}
+
+template <typename T>
+bool buffer<T>::empty() const
+{
+    return data.empty();
 }
 
 template <typename T>

@@ -21,6 +21,11 @@ public:
     float ratio;
     float ratioPow;
     float nakedSplits;
+    int leafBlosNum;
+    float leavesDist;
+    float leavesRotateAngle; // Rad
+    float leafHeight;
+    float leafBase;
 
     std::vector<int> nBranches;
     std::vector<int> nBranchesVar;
@@ -39,6 +44,9 @@ public:
     std::vector<float> splitAngle; // Rad
     std::vector<float> splitAngleVar; // Rad
     std::vector<float> branchDist;
+
+    vcl::vec4 leafColor;
+    vcl::vec4 leafColorVar;
 };
 
 
