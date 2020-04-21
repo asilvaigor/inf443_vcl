@@ -1,6 +1,7 @@
 #pragma once
 
 #include <random>
+#include "rand_generator.h"
 
 namespace vcl
 {
