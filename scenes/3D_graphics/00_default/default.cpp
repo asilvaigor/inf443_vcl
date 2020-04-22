@@ -17,7 +17,7 @@ void scene_model::setup_data(std::map<std::string,GLuint>& shaders, scene_struct
     // *************************************** //
     mesh quadrangle;
     // Fill position buffer to model a unit quadrangle
-    quadrangle.position = {{0,0,0}, {1,0,0}, {1,1,0}, {0,1,0}};
+    quadrangle.position = {{-5,-5,0}, {5,-5,0}, {5,5,0}, {-5,5,0}};
     // Set the connectivity (quadrangle made of two triangles)
     quadrangle.connectivity = {{0,1,2}, {0,2,3}};
 
@@ -32,7 +32,9 @@ void scene_model::setup_data(std::map<std::string,GLuint>& shaders, scene_struct
     surface.shader = shaders["mesh"];
 
     // Example of uniform parameter setting: color of the shape (used in the shader)
-    surface.uniform.color = {1.0f, 1.0f, 0.6f};
+    surface.uniform.color = {1.0f, 1.0f, 1.0f};
+    surface.uniform.shading = {0.4, 0.7, 0.0, 128};
+    surface.uniform.light = {10, 10, 10};
 
     TreeSpecies species = TreeSpecies::pine();
     tree.setupData(shaders, species);

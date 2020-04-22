@@ -23,6 +23,8 @@ public:
 
     vcl::mesh toLeavesMesh();
 
+    vcl::mesh toSnowyLeavesMesh();
+
 private:
     TreeSpecies &species;
     TurtleGraphics turtle;
@@ -31,6 +33,7 @@ private:
     int startIdx;
     std::vector<Branch> branches;
     std::vector<Leaf> leaves;
+    std::vector<Leaf> snowyLeaves;
     Branch* parent;
     float length;
     float radius;

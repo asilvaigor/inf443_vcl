@@ -18,8 +18,8 @@ TreeSpecies TreeSpecies::pine() {
     pine.leafBlosNum = 50;
     pine.leavesDist = 0.0f;
     pine.leavesRotateAngle = 2.44f;
-    pine.leafHeight = 0.06f;
-    pine.leafBase = 0.02f;
+    pine.leafHeight = 0.09f;
+    pine.leafBase = 0.03f;
 
     pine.nBranches = {1, 70};
     pine.nBranchesVar = {0, 7};

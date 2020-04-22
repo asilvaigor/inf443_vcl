@@ -104,6 +104,10 @@ float vec3::dist(vec3 &v) {
     return (float) hypot(hypot(x - v.x, y - v.y), z - v.z);
 }
 
+float vec3::angle(vec3 &v) {
+    return acosf((x * v.x + y * v.y + z * v.z) / (norm() * v.norm()));
+}
+
 vec3 cross(const vec3& a,const vec3& b)
 {
     return    { a.y*b.z-a.z*b.y,

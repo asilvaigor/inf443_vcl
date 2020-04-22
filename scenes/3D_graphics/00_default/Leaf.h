@@ -21,6 +21,7 @@ private:
     float scaleX;
     std::vector<std::pair<float, float>> description;
     vcl::buffer<vcl::uint3> connectivity;
+    vcl::buffer<vcl::vec2> texture_uv;
     vcl::vec4 color;
 };
 

@@ -20,7 +20,7 @@ uniform float diffuse  = 0.8;
 uniform float specular = 0.5;
 uniform int specular_exponent = 128;
 
-vec3 light = vec3(camera_position.x, camera_position.y, camera_position.z);
+uniform vec3 light = vec3(10, 10, 10);
 
 void main()
 {

@@ -17,8 +17,11 @@ public:
 private:
     vcl::mesh_drawable branchesDrawable;
     vcl::mesh_drawable leavesDrawable;
-    GLuint textureId;
-    GLuint textureWhiteId;
+    vcl::mesh_drawable snowyLeavesDrawable;
+    GLuint branchTextureId;
+    GLuint leafTextureId;
+    GLuint snowTextureId;
+    GLuint whiteTextureId;
     Leaf *leaf;
     vcl::mesh_drawable leafDrawable;
 };

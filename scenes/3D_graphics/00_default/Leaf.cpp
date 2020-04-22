@@ -16,18 +16,14 @@ Leaf::Leaf(TreeSpecies &species, TurtleGraphics &turtle, float treeScale) {
     const float alpha = atan2(height, base / 2);
     description = {{-M_PI / 2, base / 2}, {M_PI - alpha, side}, {2 * alpha, side}};
 
-    color = species.leafColor +
-            vcl::vec4(vcl::rand_interval(-1, 1) * species.leafColorVar[0],
-                      vcl::rand_interval(-1, 1) * species.leafColorVar[1],
-                      vcl::rand_interval(-1, 1) * species.leafColorVar[2],
-                      vcl::rand_interval(-1, 1) * species.leafColorVar[3]);
     connectivity = {{0, 1, 2}};
+    texture_uv = {{0, 0}, {0.1f, 1}, {0.2, 0}};
 }
 
 vcl::mesh Leaf::toMesh() {
     vcl::mesh mesh;
     auto origin = turtle.getPosition();
-    auto normal = vcl::cross(turtle.getDirection(), turtle.getRight());
+    auto normal = vcl::cross(turtle.getRight(), turtle.getDirection());
 
     for (auto &d : description) {
         turtle.turnRight(d.first);
@@ -36,10 +32,10 @@ vcl::mesh Leaf::toMesh() {
         auto delta = turtle.getPosition() - origin;
         delta *= scale;
         mesh.position.push_back(origin + delta);
-        mesh.color.push_back(color);
         mesh.normal.push_back(normal);
     }
 
     mesh.connectivity = connectivity;
+    mesh.texture_uv = texture_uv;
     return mesh;
 }

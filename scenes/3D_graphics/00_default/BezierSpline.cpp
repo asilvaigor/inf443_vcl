@@ -43,6 +43,7 @@ vcl::mesh BezierSpline::toMesh() {
     mesh.position.reserve((unsigned long) uMax * vMax + finishesInPoint);
     mesh.normal.reserve((unsigned long) uMax * vMax + finishesInPoint);
     mesh.texture_uv.reserve((unsigned long) uMax * vMax + finishesInPoint);
+    mesh.color.reserve((unsigned long) uMax * vMax + finishesInPoint);
     mesh.connectivity.reserve((unsigned long) uMax * (vMax - 1) * 2 + finishesInPoint * uMax);
 
     // Going through each point in the spline
@@ -79,12 +80,13 @@ vcl::mesh BezierSpline::toMesh() {
                     vcl::vec3 normal = std::cos(angle) * ort1 + std::sin(angle) * ort2;
                     mesh.position.push_back(center + r * normal);
                     mesh.normal.push_back(normal);
-                    mesh.texture_uv.push_back({1.0f * u / uMax, 1.0f * v / vMax});
+                    mesh.texture_uv.push_back({1.0f * u / uMax,
+                                               (1.0f * v / vMax) * pts[0].dist(pts.back()) / 0.5f});
                 }
             } else {
                 mesh.position.push_back(center);
                 mesh.normal.push_back(dir);
-                mesh.texture_uv.push_back({0, 1.0f * v / vMax});
+                mesh.texture_uv.push_back({0, (1.0f * v / vMax) * pts[0].dist(pts.back()) / 0.5f});
             }
 
             // Adjusting connectivity

@@ -56,6 +56,20 @@ vcl::mesh Branch::toLeavesMesh() {
     return mesh;
 }
 
+vcl::mesh Branch::toSnowyLeavesMesh() {
+    vcl::mesh mesh;
+    for (auto &l : snowyLeaves) {
+        auto m = l.toMesh();
+        mesh.add(m);
+    }
+
+    for (auto &s : branches) {
+        auto m = s.toSnowyLeavesMesh();
+        mesh.add(m);
+    }
+    return mesh;
+}
+
 void Branch::generate() {
     int curveResolution = species.curveResolution[depth];
     int segSplits = species.segSplits[depth];
@@ -210,7 +224,10 @@ void Branch::makeLeaf(float offset, float offsetInParent, float prevRotationAngl
 
     float scale = treeScale * (1.0f - 0.6f * offsetInTrunk / parent->length - 0.2f * offsetInParent / length);
 
-    leaves.emplace_back(Leaf(species, newTurtle, scale));
+    vcl::vec3 zAxis(0, 0, 1);
+    if (newTurtle.getDirection().angle(zAxis) > M_PI * 0.4)
+        leaves.emplace_back(Leaf(species, newTurtle, scale));
+    else snowyLeaves.emplace_back(Leaf(species, newTurtle, scale));
 }
 
 void Branch::makeClones(int segIdx, float nSplits, float curveAngle) {

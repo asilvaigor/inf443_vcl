@@ -69,6 +69,11 @@ template <> struct buffer_stack<float, 3> {
      */
     float dist(vec3 &v);
 
+    /**
+     * Angle to another vec3.
+     */
+    float angle(vec3 &v);
+
     friend inline std::ostream &operator<<(std::ostream &output, const vec3 &v) {
         output << "(" << v.x << ", " << v.y << ", " << v.z << ")";
         return output;
