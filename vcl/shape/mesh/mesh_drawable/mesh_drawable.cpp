@@ -5,7 +5,7 @@
 namespace vcl
 {
 
-
+GLuint mesh_drawable::shaderOverride = 0;
 
 mesh_drawable::mesh_drawable()
     :data(),uniform(),shader(0),texture_id(0)
@@ -30,6 +30,10 @@ void mesh_drawable::update_normal(const vcl::buffer<vec3>& new_normal)
     data.update_normal(new_normal);
 }
 
+void mesh_drawable::overrideShader(GLuint override) {
+    shaderOverride = override;
+}
+
 
 void draw(const mesh_drawable& drawable, const camera_scene& camera)
 {
@@ -44,6 +48,9 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
 
 void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id)
 {
+    if (mesh_drawable::shaderOverride != (GLuint) 0)
+        shader = mesh_drawable::shaderOverride;
+
     // If shader is, skip display
     if(shader==0)
         return ;

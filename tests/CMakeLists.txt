@@ -1,0 +1,6 @@
+add_executable(tree_test tree_test.cpp)
+if(UNIX)
+    target_link_libraries(tree_test src vcl third_party glfw dl -static-libstdc++)
+elseif(WIN32)
+    target_link_libraries(tree_test src vcl third_party ${GLFW_LIBRARIES})
+endif()

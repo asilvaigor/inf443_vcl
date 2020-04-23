@@ -36,12 +36,19 @@ public:
      * Warning: new_normal is expected to have the same size (or less) than the initialized one */
     void update_normal(const vcl::buffer<vec3>& new_normal);
 
+    /**
+     * Overrides all mesh_drawable's shader with this given shader. If 0, the shaders will not be overriden.
+     * @param override Shader id to override. If 0, the shades will not be overriden.
+     */
+    static void overrideShader(GLuint override);
+
 
     /** Data attributes: VAO and VBO as well as the number of triangle */
     mesh_drawable_gpu_data data;
     mesh_drawable_uniform uniform;
     GLuint shader;
     GLuint texture_id;
+    static GLuint shaderOverride;
 };
 
 void draw(const mesh_drawable& drawable, const camera_scene& camera);
