@@ -97,11 +97,16 @@ void Scene::setupScene() {
     shaders = Shaders::getInstance();
     showWireframe = false;
 
+    // Setting camera perspective
     int width = 0, height = 0;
     glfwGetWindowSize(window, &width, &height);
     const float aspect_ratio = (float) width / (float) height;
     camera.perspective = vcl::perspective_structure(
             40 * 3.14f / 180, aspect_ratio, 0.01f, 500.0f);
+
+    // Setting initial camera position
+    camera.apply_scaling(3);
+    camera.apply_rotation(0, 0, 0, 0.8);
 
     whiteTexture = std::make_shared<Texture>();
     sunPosition = {10, 10, 10};
@@ -117,13 +122,8 @@ void Scene::updateFps() {
 
 void Scene::updateGui() {
     vcl::imgui_create_frame();
-
-    ImGui::Begin("GUI", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-    ImGui::Text("Frame: ");
-    ImGui::SameLine();
+    ImGui::Begin("Options", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::Checkbox("Wireframe", &showWireframe);
-    ImGui::SameLine();
-
     shaders->showWireframe(showWireframe);
 }
 
