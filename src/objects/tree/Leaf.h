@@ -9,10 +9,23 @@
 #include "TreeSpecies.h"
 #include "utils/TurtleGraphics.h"
 
+/**
+ * Leaf object to be rendered. It consists of a triangle with two equal sides.
+ */
 class Leaf {
 public:
+    /**
+     * Generates a leaf given a turtle for its origin. The origin will be the center of the triangle's base.
+     * @param species
+     * @param turtle Origin of the leaf.
+     * @param treeScale Scale of the tree, calculated inside the Branch class.
+     */
     Leaf(TreeSpecies &species, TurtleGraphics &turtle, float treeScale);
 
+    /**
+     * Converts the leaf to a mesh.
+     * @return
+     */
     vcl::mesh toMesh();
 
 private:
@@ -21,7 +34,6 @@ private:
     std::vector<std::pair<float, float>> description;
     vcl::buffer<vcl::uint3> connectivity;
     vcl::buffer<vcl::vec2> texture_uv;
-    vcl::vec4 color;
 };
 
 

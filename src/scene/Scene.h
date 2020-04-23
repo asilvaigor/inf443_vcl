@@ -38,6 +38,12 @@ public:
     void addObject(std::shared_ptr<Object> &object);
 
     /**
+     * Sets the position of the light source.
+     * @param position
+     */
+     void setSunPosition(vcl::vec3 position);
+
+    /**
      * Activates the loop to display the scene in a window.
      * It will update the gui and draw all the objects in the scene.
      */
@@ -47,6 +53,7 @@ private:
     static bool exists;
     std::vector<std::shared_ptr<Object>> objects;
     std::shared_ptr<Shaders> shaders;
+    vcl::vec3 sunPosition;
 
     static vcl::camera_scene camera;
     static vcl::camera_control_glfw cameraControl;

@@ -37,6 +37,10 @@ void Scene::addObject(std::shared_ptr<Object> &object) {
     objects.push_back(object);
 }
 
+void Scene::setSunPosition(vcl::vec3 position) {
+    sunPosition = position;
+}
+
 void Scene::display() {
     while (!glfwWindowShouldClose(window)) {
         // Clears screen, updates gui and objects
@@ -45,7 +49,7 @@ void Scene::display() {
         opengl_debug();
         updateGui();
         for (auto &obj : objects) {
-            obj->draw(camera);
+            obj->draw(camera, sunPosition);
             whiteTexture->bind();
         }
         opengl_debug();
@@ -100,6 +104,7 @@ void Scene::setupScene() {
             40 * 3.14f / 180, aspect_ratio, 0.01f, 500.0f);
 
     whiteTexture = std::make_shared<Texture>();
+    sunPosition = {10, 10, 10};
 }
 
 void Scene::updateFps() {
