@@ -42,17 +42,17 @@ Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species) :
 //              leavesMesh.position.size() << " snowyLeaves " << snowyLeavesMesh.position.size() << std::endl;
 }
 
-void Tree::draw(const vcl::camera_scene &camera, vcl::vec3 &sunPosition) {
-    branchesDrawable.uniform.light = sunPosition;
+void Tree::draw(const vcl::camera_scene &camera, vcl::mat4 &sunMatrix) {
+    branchesDrawable.uniform.lightMatrix = sunMatrix;
     branchTexture.bind();
     vcl::draw(branchesDrawable, camera);
     if (hasLeaves) {
-        leavesDrawable.uniform.light = sunPosition;
+        leavesDrawable.uniform.lightMatrix = sunMatrix;
         leafTexture.bind();
         vcl::draw(leavesDrawable, camera);
     }
     if (hasSnow) {
-        snowyLeavesDrawable.uniform.light = sunPosition;
+        snowyLeavesDrawable.uniform.lightMatrix = sunMatrix;
         snowTexture.bind();
         vcl::draw(snowyLeavesDrawable, camera);
     }

@@ -37,10 +37,6 @@ void Scene::addObject(std::shared_ptr<Object> &object) {
     objects.push_back(object);
 }
 
-void Scene::setSunPosition(vcl::vec3 position) {
-    sunPosition = position;
-}
-
 void Scene::display() {
     while (!glfwWindowShouldClose(window)) {
         // Clears screen, updates gui and objects
@@ -48,10 +44,7 @@ void Scene::display() {
         clearScreen();
         opengl_debug();
         updateGui();
-        for (auto &obj : objects) {
-            obj->draw(camera, sunPosition);
-            whiteTexture->bind();
-        }
+        updateScene();
         opengl_debug();
 
         // Render gui and update window
@@ -82,8 +75,8 @@ void Scene::initializeInterface() {
 
     const int openglVersionMajor = 3;
     const int openglVersionMinor = 3;
-    const int windowWidth = 1280;
-    const int windowHeight = 1000;
+    windowWidth = 1280;
+    windowHeight = 1000;
     window = vcl::glfw_create_window(windowWidth, windowHeight, windowTitle, openglVersionMajor,
                                      openglVersionMinor);
 
@@ -108,8 +101,9 @@ void Scene::setupScene() {
     camera.apply_scaling(3);
     camera.apply_rotation(0, 0, 0, 0.8);
 
+    depthMap = vcl::create_depth_map();
     whiteTexture = std::make_shared<Texture>();
-    sunPosition = {10, 10, 10};
+    sunMatrix = vcl::light_source_matrix();
 }
 
 void Scene::updateFps() {
@@ -125,6 +119,27 @@ void Scene::updateGui() {
     ImGui::Begin("Options", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::Checkbox("Wireframe", &showWireframe);
     shaders->showWireframe(showWireframe);
+}
+
+void Scene::updateScene() {
+    // 1. first render to depth map
+    glViewport(0, 0, 1024, 1024);
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMap.first);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    for (auto &obj : objects) {
+        obj->draw(camera, sunMatrix);
+        whiteTexture->bind();
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // 2. Render scene as normal with shadow mapping
+    glViewport(0, 0, windowWidth, windowHeight);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindTexture(GL_TEXTURE_2D, depthMap.second);
+    for (auto &obj : objects) {
+        obj->draw(camera, sunMatrix);
+        whiteTexture->bind();
+    }
 }
 
 void Scene::windowSizeCallback(GLFWwindow *, int width, int height) {

@@ -23,9 +23,9 @@ public:
     /**
      * Draws the terrain in opengl;
      * @param camera
-     * @param sunPosition
+     * @param sunMatrix Matrix for the light source transformation.
      */
-    void draw(const vcl::camera_scene &camera, vcl::vec3 &sunPosition) override;
+    void draw(const vcl::camera_scene &camera, vcl::mat4 &sunMatrix) override;
 
 private:
     vcl::mesh_drawable terrain;

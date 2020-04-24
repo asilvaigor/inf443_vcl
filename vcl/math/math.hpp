@@ -5,3 +5,5 @@
 #include "transformation/transformation.hpp"
 #include "helper_functions/helper_functions.hpp"
 #include "quaternion/quaternion.hpp"
+#include "light_source/light_source.hpp"
+

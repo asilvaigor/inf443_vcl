@@ -5,7 +5,6 @@
 
 int main() {
     auto scene = Scene::getInstance("Winter Wonderland");
-    scene.setSunPosition({10, 10, 10});
 
     auto terrain = std::static_pointer_cast<Object>(std::make_shared<Terrain>(scene.getShaders()));
     scene.addObject(terrain);

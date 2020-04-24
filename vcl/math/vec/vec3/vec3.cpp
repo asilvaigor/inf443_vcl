@@ -105,7 +105,11 @@ float vec3::dist(vec3 &v) {
 }
 
 float vec3::angle(vec3 &v) {
-    return acosf((x * v.x + y * v.y + z * v.z) / (norm() * v.norm()));
+    return acosf(dot(*this, v) / (norm() * v.norm()));
+}
+
+float dot(const vec3& a,const vec3& b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z;
 }
 
 vec3 cross(const vec3& a,const vec3& b)

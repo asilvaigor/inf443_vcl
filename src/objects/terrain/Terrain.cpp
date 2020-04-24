@@ -16,8 +16,8 @@ Terrain::Terrain(Shaders &shaders) : snowTexture("snow") {
     terrain.uniform.shading = {0.5, 0.6, 0.1, 32};
 }
 
-void Terrain::draw(const vcl::camera_scene &camera, vcl::vec3 &sunPosition) {
-    terrain.uniform.light = sunPosition;
+void Terrain::draw(const vcl::camera_scene &camera, vcl::mat4 &sunMatrix) {
+    terrain.uniform.lightMatrix = sunMatrix;
     snowTexture.bind();
     vcl::draw(terrain, camera);
 }

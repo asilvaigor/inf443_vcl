@@ -20,7 +20,7 @@ uniform float diffuse  = 0.8;
 uniform float specular = 0.5;
 uniform int specular_exponent = 128;
 
-uniform vec3 light = vec3(10, 10, 10);
+uniform mat4 lightMatrix;
 
 void main()
 {

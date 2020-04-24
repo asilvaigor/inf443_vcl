@@ -80,6 +80,10 @@ template <> struct buffer_stack<float, 3> {
     }
 };
 
+/** Dot product between two vec3.
+ * \relates buffer_stack<float,3> */
+float dot(const vec3& a,const vec3& b);
+
 /** Cross product between two vec3.
  * \relates buffer_stack<float,3> */
 vec3 cross(const vec3& a,const vec3& b);

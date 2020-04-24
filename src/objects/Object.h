@@ -16,9 +16,9 @@ public:
     /**
      * Calls vcl::draw to draw the object in the scene.
      * @param camera
-     * @param sunPosition
+     * @param sunMatrix Matrix for the light source transformation.
      */
-    virtual void draw(const vcl::camera_scene &camera, vcl::vec3 &sunPosition) = 0;
+    virtual void draw(const vcl::camera_scene &camera, vcl::mat4 &sunMatrix) = 0;
 };
 
 

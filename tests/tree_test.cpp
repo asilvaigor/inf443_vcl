@@ -9,7 +9,6 @@
 
 int main() {
     auto scene = Scene::getInstance("Tree Test");
-    scene.setSunPosition({10, 10, 10});
 
     auto terrain = std::static_pointer_cast<Object>(std::make_shared<Terrain>(scene.getShaders()));
     scene.addObject(terrain);
