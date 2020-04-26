@@ -13,7 +13,8 @@ mesh_drawable::mesh_drawable()
 
 mesh_drawable::mesh_drawable(const mesh& mesh_arg, GLuint shader_arg, GLuint texture_id_arg)
     :data(mesh_arg),uniform(),shader(shader_arg),texture_id(texture_id_arg)
-{}
+{
+}
 
 void mesh_drawable::clear()
 {
@@ -67,6 +68,13 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
     if(shader!=GLuint(current_shader))
         glUseProgram(shader); opengl_debug();
 
+    // Associating textures
+    auto texture_sampler = glGetUniformLocation(shader, "texture_sampler");
+    auto shadow_map  = glGetUniformLocation(shader, "shadow_map");
+    glUseProgram(shader);
+    glUniform1i(texture_sampler, 0);
+    glUniform1i(shadow_map,  1);
+
     // Bind texture only if id != 0
     if(texture_id!=0) {
         assert(glIsTexture(texture_id));
@@ -89,7 +97,8 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
     uniform(shader, "diffuse", drawable.uniform.shading.diffuse);      opengl_debug();
     uniform(shader, "specular", drawable.uniform.shading.specular);    opengl_debug();
     uniform(shader, "specular_exponent", drawable.uniform.shading.specular_exponent); opengl_debug();
-    uniform(shader, "lightMatrix",drawable.uniform.lightMatrix);       opengl_debug();
+    uniform(shader, "light_matrix", drawable.uniform.light.matrix);    opengl_debug();
+    uniform(shader, "light_pos", drawable.uniform.light.pos);          opengl_debug();
 
     vcl::draw(drawable.data); opengl_debug();
 

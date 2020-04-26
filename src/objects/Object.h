@@ -13,12 +13,23 @@
  */
 class Object {
 public:
+    Object(bool movable);
+
     /**
      * Calls vcl::draw to draw the object in the scene.
      * @param camera
-     * @param sunMatrix Matrix for the light source transformation.
+     * @param light
      */
-    virtual void draw(const vcl::camera_scene &camera, vcl::mat4 &sunMatrix) = 0;
+    virtual void draw(const vcl::camera_scene &camera, vcl::light_source &light) = 0;
+
+    /**
+     * If the object contains some kind of animation, and moves. This is required to update shadows.
+     * @return True if the object moves.
+     */
+    bool isMovable();
+
+private:
+    const bool movable;
 };
 
 

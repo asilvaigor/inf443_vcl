@@ -45,10 +45,11 @@ public:
 
 private:
     static bool exists;
-    std::vector<std::shared_ptr<Object>> objects;
+    std::vector<std::shared_ptr<Object>> stillObjects;
+    std::vector<std::shared_ptr<Object>> movableObjects;
     std::shared_ptr<Shaders> shaders;
-    vcl::mat4 sunMatrix;
-    std::pair<GLuint, GLuint> depthMap;
+    vcl::light_source light;
+    std::shared_ptr<vcl::depth_map> depthMap;
 
     static vcl::camera_scene camera;
     static vcl::camera_control_glfw cameraControl;
@@ -86,6 +87,12 @@ private:
      * Updates gui frame.
      */
     void updateGui();
+
+    /**
+     * Updates the depth map of the scene, which render shadows.
+     * @param objects Objects to be considered in the update.
+     */
+    void updateDepthMap(std::vector<std::shared_ptr<Object>> &objects);
 
     /**
      * Updates the objects in the scene using a depth map.

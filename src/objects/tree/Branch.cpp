@@ -83,7 +83,7 @@ void Branch::generate() {
     int nLeaves = 0;
     float leavesOnSeg;
     float nBranches = 0;
-    float branchesOnSeg;
+    float branchesOnSeg = 0;
     if (depth == species.levels - 1 && species.leafBlosNum > 0) {
         nLeaves = calculateNLeaves();
         nLeaves *= 1 - startIdx / curveResolution;

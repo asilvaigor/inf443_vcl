@@ -35,9 +35,15 @@ Shaders::Shaders() {
     closedir(dp);
 }
 
-void Shaders::showWireframe(bool show) {
-    if (show)
+void Shaders::overrideWithWireframe(bool override) {
+    if (override)
         vcl::mesh_drawable::overrideShader(shaders["wireframe"]);
+    else vcl::mesh_drawable::overrideShader(0);
+}
+
+void Shaders::overrideWithDepth(bool override) {
+    if (override)
+        vcl::mesh_drawable::overrideShader(shaders["depth"]);
     else vcl::mesh_drawable::overrideShader(0);
 }
 

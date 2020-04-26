@@ -23,9 +23,15 @@ public:
 
     /**
      * Will activate the wireframe shader for all objects on the scene, overriding the current shaders.
-     * @param show
+     * @param override
      */
-    void showWireframe(bool show);
+    void overrideWithWireframe(bool override);
+
+    /**
+     * Will activate the depth shader for all objects on the scene, overriding the current shaders.
+     * @param override
+     */
+    void overrideWithDepth(bool override);
 
     /**
      * Works as map.

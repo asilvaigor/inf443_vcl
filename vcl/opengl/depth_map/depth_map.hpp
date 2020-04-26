@@ -9,7 +9,19 @@
 
 namespace vcl {
 
-std::pair<GLuint, GLuint> create_depth_map();
+class depth_map {
+public:
+    explicit depth_map(GLuint resolution = 1024);
+
+    void bind();
+
+    void unbind(int windowWidth, int windowHeight);
+
+private:
+    const GLuint resolution;
+    GLuint texture_id;
+    GLuint fbo;
+};
 
 }
 

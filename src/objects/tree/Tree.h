@@ -29,9 +29,9 @@ public:
     /**
      * Draws the tree on opengl.
      * @param camera
-     * @param sunMatrix Matrix for the light source transformation.
+     * @param light
      */
-    void draw(const vcl::camera_scene &camera, vcl::mat4 &sunMatrix) override;
+    void draw(const vcl::camera_scene &camera, vcl::light_source &light) override;
 
 private:
     TreeSpecies &species;

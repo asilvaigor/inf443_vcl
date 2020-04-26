@@ -4,7 +4,7 @@
 
 #include "Terrain.h"
 
-Terrain::Terrain(Shaders &shaders) : snowTexture("snow") {
+Terrain::Terrain(Shaders &shaders) : Object(false), snowTexture("snow") {
     vcl::vec3 p00 = {-10, -10, 0};
     vcl::vec3 p10 = {10, -10, 0};
     vcl::vec3 p11 = {10, 10, 0};
@@ -16,8 +16,8 @@ Terrain::Terrain(Shaders &shaders) : snowTexture("snow") {
     terrain.uniform.shading = {0.5, 0.6, 0.1, 32};
 }
 
-void Terrain::draw(const vcl::camera_scene &camera, vcl::mat4 &sunMatrix) {
-    terrain.uniform.lightMatrix = sunMatrix;
+void Terrain::draw(const vcl::camera_scene &camera, vcl::light_source &light) {
+    terrain.uniform.light = light;
     snowTexture.bind();
     vcl::draw(terrain, camera);
 }

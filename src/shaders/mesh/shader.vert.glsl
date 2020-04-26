@@ -11,6 +11,7 @@ out struct fragment_data
     vec4 normal;
     vec4 color;
     vec2 texture_uv;
+    vec4 light_ref_pos;
 } fragment;
 
 
@@ -25,6 +26,8 @@ uniform vec3 scaling_axis = vec3(1.0,1.0,1.0);                       // user def
 uniform mat4 view;
 // perspective matrix
 uniform mat4 perspective;
+
+uniform mat4 light_matrix;
 
 
 
@@ -44,6 +47,7 @@ void main()
     fragment.normal = R*normal;
     vec4 position_transformed = R*S*position + T;
 
+    fragment.light_ref_pos = light_matrix * position_transformed;
     fragment.position = position_transformed;
     gl_Position = perspective * view * position_transformed;
 }

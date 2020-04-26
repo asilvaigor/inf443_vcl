@@ -24,7 +24,7 @@ struct mesh_drawable_uniform {
     vec3 color;
     shading_mesh shading;
     float color_alpha;
-    mat4 lightMatrix;
+    light_source light;
 
 };
 

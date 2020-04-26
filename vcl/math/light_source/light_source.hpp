@@ -9,12 +9,24 @@
 
 namespace vcl {
 
-mat4 light_source_matrix();
+/**
+ * Light source implementation for shadow rendering.
+ * Check out <https://learnopengl.com/Advanced-Lighting/Shadows/Shadow-Mapping> for tutorial.
+ */
+class light_source {
+public:
+    explicit light_source(vec3 pos = {10, 10, 10});
 
-mat4 ortho(float const &left, float const &right, float const &bottom, float const &top, float const &zNear,
-           float const &zFar);
+    vec3 pos;
+    mat4 matrix;
+private:
+    mat4 to_matrix();
 
-mat4 lookAt(vec3 const &eye, vec3 const &center, vec3 const &up);
+    mat4 ortho(float const &left, float const &right, float const &bottom, float const &top, float const &zNear,
+               float const &zFar);
+
+    mat4 lookAt(vec3 const &center, vec3 const &up) const;
+};
 
 }
 

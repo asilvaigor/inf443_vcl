@@ -6,7 +6,7 @@
 #include "TreeSpecies.h"
 
 Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species) :
-        species(species), branchTexture("wood"), leafTexture("leaf"), snowTexture("snow") {
+        Object(false), species(species), branchTexture("wood"), leafTexture("leaf"), snowTexture("snow") {
     TurtleGraphics turtle(position);
     Branch trunk(species, turtle);
 
@@ -42,17 +42,17 @@ Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species) :
 //              leavesMesh.position.size() << " snowyLeaves " << snowyLeavesMesh.position.size() << std::endl;
 }
 
-void Tree::draw(const vcl::camera_scene &camera, vcl::mat4 &sunMatrix) {
-    branchesDrawable.uniform.lightMatrix = sunMatrix;
+void Tree::draw(const vcl::camera_scene &camera, vcl::light_source &light) {
+    branchesDrawable.uniform.light = light;
     branchTexture.bind();
     vcl::draw(branchesDrawable, camera);
     if (hasLeaves) {
-        leavesDrawable.uniform.lightMatrix = sunMatrix;
+        leavesDrawable.uniform.light = light;
         leafTexture.bind();
         vcl::draw(leavesDrawable, camera);
     }
     if (hasSnow) {
-        snowyLeavesDrawable.uniform.lightMatrix = sunMatrix;
+        snowyLeavesDrawable.uniform.light = light;
         snowTexture.bind();
         vcl::draw(snowyLeavesDrawable, camera);
     }

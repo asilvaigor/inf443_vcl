@@ -34,10 +34,15 @@ Shaders &Scene::getShaders() {
 }
 
 void Scene::addObject(std::shared_ptr<Object> &object) {
-    objects.push_back(object);
+    if (object->isMovable())
+        movableObjects.push_back(object);
+    else stillObjects.push_back(object);
 }
 
 void Scene::display() {
+    // Preprocessing the depth map for objects that do not move
+    updateDepthMap(stillObjects);
+
     while (!glfwWindowShouldClose(window)) {
         // Clears screen, updates gui and objects
         opengl_debug();
@@ -101,9 +106,10 @@ void Scene::setupScene() {
     camera.apply_scaling(3);
     camera.apply_rotation(0, 0, 0, 0.8);
 
-    depthMap = vcl::create_depth_map();
+    // Creating rendering stuff
     whiteTexture = std::make_shared<Texture>();
-    sunMatrix = vcl::light_source_matrix();
+    light = vcl::light_source({10, 0, 3});
+    depthMap = std::make_shared<vcl::depth_map>(2048);
 }
 
 void Scene::updateFps() {
@@ -118,26 +124,32 @@ void Scene::updateGui() {
     vcl::imgui_create_frame();
     ImGui::Begin("Options", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::Checkbox("Wireframe", &showWireframe);
-    shaders->showWireframe(showWireframe);
+    shaders->overrideWithWireframe(showWireframe);
+}
+
+void Scene::updateDepthMap(std::vector<std::shared_ptr<Object>> &objects) {
+    depthMap->bind();
+    shaders->overrideWithDepth(true);
+    for (auto &obj : objects) {
+        obj->draw(camera, light);
+        whiteTexture->bind();
+    }
+    shaders->overrideWithDepth(false);
+    depthMap->unbind(windowWidth, windowHeight);
 }
 
 void Scene::updateScene() {
-    // 1. first render to depth map
-    glViewport(0, 0, 1024, 1024);
-    glBindFramebuffer(GL_FRAMEBUFFER, depthMap.first);
-    glClear(GL_DEPTH_BUFFER_BIT);
-    for (auto &obj : objects) {
-        obj->draw(camera, sunMatrix);
+    // TODO
+//    updateDepthMap(movableObjects);
+    updateDepthMap(stillObjects);
+
+    for (auto
+    &obj : stillObjects) {
+        obj->draw(camera, light);
         whiteTexture->bind();
     }
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    // 2. Render scene as normal with shadow mapping
-    glViewport(0, 0, windowWidth, windowHeight);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glBindTexture(GL_TEXTURE_2D, depthMap.second);
-    for (auto &obj : objects) {
-        obj->draw(camera, sunMatrix);
+    for (auto &obj : movableObjects) {
+        obj->draw(camera, light);
         whiteTexture->bind();
     }
 }
