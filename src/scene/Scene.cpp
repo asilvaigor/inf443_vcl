@@ -21,7 +21,8 @@ Scene::Scene(std::string &windowTitle) {
 
     // Creating rendering stuff
     whiteTexture = std::make_shared<Texture>();
-    light = vcl::light_source({10, 0, 3});
+    light = vcl::light_source({5, 0, 6});
+    grid = std::make_shared<Grid>(*shaders);
     stillDepthMap = std::make_shared<vcl::depth_map>(1024);
     movableDepthMap = std::make_shared<vcl::depth_map>(1024);
 }
@@ -49,7 +50,9 @@ void Scene::display() {
 
 void Scene::updateScene() {
     updateDepthMap(false);
-    shaders->overrideWithWireframe(gui->showWireframe());
+    shaders->overrideWithWireframe(gui->showVertices());
+    if (gui->showGrid())
+        grid->draw(gui->getCamera(), light);
 
     whiteTexture->bind();
     for (auto &obj : stillObjects) {

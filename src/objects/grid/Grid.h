@@ -1,0 +1,35 @@
+//
+// Created by igor on 25/04/2020.
+//
+
+#ifndef PGM_BOX_H
+#define PGM_BOX_H
+
+#include "vcl.hpp"
+#include "objects/Object.h"
+#include "utils/Texture.h"
+
+/**
+ * Grid object.
+ */
+class Grid : public Object {
+public:
+    /**
+     * Generates the grid.
+     * @param shaders
+     */
+    explicit Grid(Shaders &shaders);
+
+    /**
+     * Draws the grid in opengl;
+     * @param camera
+     * @param light
+     */
+    void draw(const vcl::camera_scene &camera, vcl::light_source &light) override;
+
+private:
+    vcl::mesh_drawable grid;
+};
+
+
+#endif //PGM_BOX_H

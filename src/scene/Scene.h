@@ -52,6 +52,7 @@ private:
     std::shared_ptr<vcl::depth_map> stillDepthMap;
     std::shared_ptr<vcl::depth_map> movableDepthMap;
     std::shared_ptr<Texture> whiteTexture;
+    std::shared_ptr<Grid> grid;
 
     static bool exists; // Singleton bool
 

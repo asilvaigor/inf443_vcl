@@ -7,6 +7,7 @@
 
 #include <memory>
 #include "vcl.hpp"
+#include "objects/grid/Grid.h"
 #include <GLFW/glfw3.h>
 
 /**
@@ -43,9 +44,14 @@ public:
     bool isRunning();
 
     /**
-     * Wireframe checkbox in the gui.
+     * Vertices checkbox in the gui.
      */
-    bool showWireframe();
+    bool showVertices();
+
+    /**
+     * Grid checkbox in the gui.
+     */
+    bool showGrid();
 
     vcl::camera_scene &getCamera();
 
@@ -56,7 +62,8 @@ public:
 private:
     std::string windowTitle;
     vcl::glfw_fps_counter fpsCounter;
-    bool wireframeOn;
+    bool verticesOn;
+    bool gridOn;
 
     static std::shared_ptr<SceneGui> gui;
     static GLFWwindow *window;

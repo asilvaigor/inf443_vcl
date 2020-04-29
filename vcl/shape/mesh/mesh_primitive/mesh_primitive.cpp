@@ -372,5 +372,38 @@ mesh mesh_primitive_bar_grid(int Nu, int Nv , int Nw, const vec3& p0, const vec3
 
 }
 
+mesh mesh_primitive_grid_3d(unsigned int Nu, unsigned int Nv, unsigned int Nw, const vec3& p0,
+        const vec3& direction_u, const vec3& direction_v, const vec3& direction_w)
+{
+    mesh shape;
+
+    unsigned int cnt = 0;
+    for( unsigned int kv=0; kv<Nv; ++kv ) {
+        for( unsigned int ku=0; ku<Nu; ++ku ) {
+            for ( unsigned int kw=0; kw<Nw; ++kw ) {
+                const vec3 position = (float) ku * direction_u + (float) kv * direction_v +
+                        (float) kw * direction_w + p0;
+                shape.position.push_back(position);
+                if (kv > 0) shape.connectivity.push_back(
+                            {cnt, cnt, (kv - 1) * (Nu * Nw) + ku * Nw + kw});
+                if (kv < Nv - 1) shape.connectivity.push_back(
+                            {cnt, cnt, (kv + 1) * (Nu * Nw) + ku * Nw + kw});
+                if (ku > 0) shape.connectivity.push_back(
+                            {cnt, cnt, kv * (Nu * Nw) + (ku - 1) * Nw + kw});
+                if (ku < Nu - 1) shape.connectivity.push_back(
+                            {cnt, cnt, kv * (Nu * Nw) + (ku + 1) * Nw + kw});
+                if (kw > 0) shape.connectivity.push_back(
+                            {cnt, cnt, kv * (Nu * Nw) + ku * Nw + (kw - 1)});
+                if (kw < Nw - 1) shape.connectivity.push_back(
+                            {cnt, cnt, kv * (Nu * Nw) + ku * Nw + (kw + 1)});
+                cnt++;
+            }
+        }
+    }
+
+    return shape;
+
+}
+
 
 }

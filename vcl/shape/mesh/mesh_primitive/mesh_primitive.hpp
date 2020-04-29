@@ -35,5 +35,7 @@ mesh mesh_primitive_frame(float sphere_radius=0.15f, float cylinder_radius=0.05f
 
 mesh mesh_primitive_grid(size_t Nu=10, size_t Nv=10, const vec3& p0={0,0,0}, const vec3& direction_u={1,0,0}, const vec3& direction_v={0,1,0});
 mesh mesh_primitive_bar_grid(int Nu=10, int Nv=10, int Nw=10, const vec3& p0={-0.5,-0.5,-0.5}, const vec3& direction_u={1,0,0}, const vec3& direction_v={0,1,0}, const vec3& direction_w={0,0,1});
+mesh mesh_primitive_grid_3d(unsigned int Nu=10, unsigned int Nv=10, unsigned int Nw=10, const vec3& p0={0,0,0},
+        const vec3& direction_u={1,0,0}, const vec3& direction_v={0,1,0}, const vec3& direction_w={0,0,1});
 
 }

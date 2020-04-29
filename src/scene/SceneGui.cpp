@@ -34,7 +34,7 @@ SceneGui::SceneGui(std::string &windowTitle) : windowTitle(windowTitle) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     vcl::imgui_init(window);
 
-    wireframeOn = false;
+    verticesOn = false;
 
     // Initial camera parameters
     glfwGetWindowSize(window, &windowWidth, &windowHeight);
@@ -72,7 +72,8 @@ void SceneGui::update() {
     // Creates frame and checkbox
     vcl::imgui_create_frame();
     ImGui::Begin("Options", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-    ImGui::Checkbox("Wireframe", &wireframeOn);
+    ImGui::Checkbox("Vertices", &verticesOn);
+    ImGui::Checkbox("Grid", &gridOn);
 
     opengl_debug();
 }
@@ -91,8 +92,12 @@ bool SceneGui::isRunning() {
     return !glfwWindowShouldClose(window);
 }
 
-bool SceneGui::showWireframe() {
-    return wireframeOn;
+bool SceneGui::showVertices() {
+    return verticesOn;
+}
+
+bool SceneGui::showGrid() {
+    return gridOn;
 }
 
 vcl::camera_scene &SceneGui::getCamera() {
