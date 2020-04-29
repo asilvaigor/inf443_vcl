@@ -48,8 +48,8 @@ void Scene::display() {
 }
 
 void Scene::updateScene() {
-    shaders->overrideWithWireframe(gui->showWireframe());
     updateDepthMap(false);
+    shaders->overrideWithWireframe(gui->showWireframe());
 
     whiteTexture->bind();
     for (auto &obj : stillObjects) {

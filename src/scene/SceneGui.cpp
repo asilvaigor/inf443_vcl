@@ -37,13 +37,12 @@ SceneGui::SceneGui(std::string &windowTitle) : windowTitle(windowTitle) {
     wireframeOn = false;
 
     // Initial camera parameters
-    int width = 0, height = 0;
-    glfwGetWindowSize(window, &width, &height);
-    float aspectRatio = (float) width / (float) height;
+    glfwGetWindowSize(window, &windowWidth, &windowHeight);
+    float aspectRatio = (float) windowWidth / (float) windowHeight;
     camera.perspective = vcl::perspective_structure(
             40 * 3.14f / 180, aspectRatio, 0.01f, 500.0f);
-    camera.apply_scaling(3);
-    camera.apply_rotation(0, 0, 0, 0.8);
+    camera.apply_scaling(4);
+    camera.apply_rotation(0, 0, 0, 1.0);
 
     // Interaction callbacks
     glfwSetCursorPosCallback(window, cursorPositionCallback);
@@ -118,6 +117,8 @@ void SceneGui::updateFps() {
 
 void SceneGui::windowSizeCallback(GLFWwindow *, int width, int height) {
     glViewport(0, 0, width, height);
+    windowWidth = width;
+    windowHeight = height;
     camera.perspective.image_aspect = (float) width / (float) height;
 }
 
