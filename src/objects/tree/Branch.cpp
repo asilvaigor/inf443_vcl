@@ -81,7 +81,7 @@ void Branch::generate() {
 
     // Calculates number of branches/leaves
     int nLeaves = 0;
-    float leavesOnSeg;
+    float leavesOnSeg = 0;
     float nBranches = 0;
     float branchesOnSeg = 0;
     if (depth == species.levels - 1 && species.leafBlosNum > 0) {

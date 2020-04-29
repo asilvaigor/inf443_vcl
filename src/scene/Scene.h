@@ -10,11 +10,10 @@
 #include "objects/Object.h"
 #include "shaders/Shaders.h"
 #include "utils/Texture.h"
-#include <GLFW/glfw3.h>
-
+#include "SceneGui.h"
 
 /**
- * Singleton class which contains a scene with its gui and objects such as camera, light etc.
+ * Singleton class which contains a scene with its gui and objects such as shader, light etc.
  */
 class Scene {
 public:
@@ -44,55 +43,23 @@ public:
     void display();
 
 private:
-    static bool exists;
+    std::shared_ptr<SceneGui> gui;
     std::vector<std::shared_ptr<Object>> stillObjects;
     std::vector<std::shared_ptr<Object>> movableObjects;
     std::shared_ptr<Shaders> shaders;
     vcl::light_source light;
-    std::shared_ptr<vcl::depth_map> depthMap;
-
-    static vcl::camera_scene camera;
-    static vcl::camera_control_glfw cameraControl;
-    bool showWireframe;
-
-    static GLFWwindow *window;
-    std::string windowTitle;
-    int windowWidth;
-    int windowHeight;
-    vcl::glfw_fps_counter fpsCounter;
+    // WARNING: do not change the order of these depth maps, or it will break the draw function.
+    std::shared_ptr<vcl::depth_map> stillDepthMap;
+    std::shared_ptr<vcl::depth_map> movableDepthMap;
     std::shared_ptr<Texture> whiteTexture;
 
+    static bool exists; // Singleton bool
+
     /**
-     * Will initialize opengl, the window and the scene's camera and shaders.
+     * Will initialize gui, camera and shaders.
      * @param windowTitle
      */
     explicit Scene(std::string &windowTitle);
-
-    /**
-     * Called in the constructor, initializes opengl and the gui.
-     */
-    void initializeInterface();
-
-    /**
-     * Called in the constructor, initializes shaders and camera.
-     */
-    void setupScene();
-
-    /**
-     * Called in display loop, updates the fps text in the gui.
-     */
-    void updateFps();
-
-    /**
-     * Updates gui frame.
-     */
-    void updateGui();
-
-    /**
-     * Updates the depth map of the scene, which render shadows.
-     * @param objects Objects to be considered in the update.
-     */
-    void updateDepthMap(std::vector<std::shared_ptr<Object>> &objects);
 
     /**
      * Updates the objects in the scene using a depth map.
@@ -100,22 +67,10 @@ private:
     void updateScene();
 
     /**
-     * Clears opengl buffers and texture.
+     * Updates one of the depth maps of the scene, which render shadows.
+     * @param still If it is the still or the moving depth map.
      */
-    void clearScreen();
-
-    /**
-     * These functions will be passed to opengl for interactions with the scene.
-     */
-    static void windowSizeCallback(GLFWwindow *window, int width, int height);
-
-    static void cursorPositionCallback(GLFWwindow *window, double xpos, double ypos);
-
-    static void mouseClickCallback(GLFWwindow *window, int button, int action, int mods);
-
-    static void mouseScrollCallback(GLFWwindow *window, double xoffset, double yoffset);
-
-    static void keyboardInputCallback(GLFWwindow *window, int key, int scancode, int action, int mods);
+    void updateDepthMap(bool still);
 };
 
 

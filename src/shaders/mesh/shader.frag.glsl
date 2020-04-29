@@ -10,7 +10,8 @@ in struct fragment_data
 } fragment;
 
 uniform sampler2D texture_sampler;
-uniform sampler2D shadow_map;
+uniform sampler2D shadow_map_still;
+uniform sampler2D shadow_map_movable;
 
 out vec4 FragColor;
 
@@ -31,15 +32,16 @@ float shadowCalc(vec4 light_ref_pos, float epsilon) {
     if (pos.z > 1.0)
         return 0.0;
 
-    float closest_depth = texture(shadow_map, pos.xy).r;
     float current_depth = pos.z;
-
+    vec2 texel_size_still = 1.0 / textureSize(shadow_map_still, 0);
+    vec2 texel_size_movable = 1.0 / textureSize(shadow_map_movable, 0);
     float shadow = 0.0;
-    vec2 texel_size = 1.0 / textureSize(shadow_map, 0);
     for(int x = -1; x <= 1; ++x) {
         for(int y = -1; y <= 1; ++y) {
-            float pcf_depth = texture(shadow_map, pos.xy + vec2(x, y) * texel_size).r;
-            shadow += current_depth - epsilon > pcf_depth ? 1.0 : 0.0;
+            float pcf_depth_still = texture(shadow_map_still, pos.xy + vec2(x, y) * texel_size_still).r;
+            float pcf_depth_movable = texture(shadow_map_movable, pos.xy + vec2(x, y) * texel_size_movable).r;
+            shadow += (current_depth - epsilon > pcf_depth_still ||
+                       current_depth - epsilon > pcf_depth_movable) ? 1.0 : 0.0;
         }
     }
     shadow /= 9.0;

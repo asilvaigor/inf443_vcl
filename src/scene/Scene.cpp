@@ -6,9 +6,6 @@
 #include "utils/SingletonException.h"
 
 bool Scene::exists = false;
-vcl::camera_scene Scene::camera;
-vcl::camera_control_glfw Scene::cameraControl;
-GLFWwindow *Scene::window;
 
 Scene &Scene::getInstance(std::string windowTitle) {
     if (exists)
@@ -18,15 +15,15 @@ Scene &Scene::getInstance(std::string windowTitle) {
     return instance;
 }
 
-Scene::Scene(std::string &windowTitle) : windowTitle(windowTitle) {
-    initializeInterface();
-    setupScene();
+Scene::Scene(std::string &windowTitle) {
+    gui = SceneGui::getInstance(windowTitle);
+    shaders = Shaders::getInstance();
 
-    glfwSetCursorPosCallback(window, cursorPositionCallback);
-    glfwSetMouseButtonCallback(window, mouseClickCallback);
-    glfwSetScrollCallback(window, mouseScrollCallback);
-    glfwSetKeyCallback(window, keyboardInputCallback);
-    glfwSetWindowSizeCallback(window, windowSizeCallback);
+    // Creating rendering stuff
+    whiteTexture = std::make_shared<Texture>();
+    light = vcl::light_source({10, 0, 3});
+    stillDepthMap = std::make_shared<vcl::depth_map>(1024);
+    movableDepthMap = std::make_shared<vcl::depth_map>(1024);
 }
 
 Shaders &Scene::getShaders() {
@@ -41,137 +38,45 @@ void Scene::addObject(std::shared_ptr<Object> &object) {
 
 void Scene::display() {
     // Preprocessing the depth map for objects that do not move
-    updateDepthMap(stillObjects);
+    updateDepthMap(true);
 
-    while (!glfwWindowShouldClose(window)) {
-        // Clears screen, updates gui and objects
-        opengl_debug();
-        clearScreen();
-        opengl_debug();
-        updateGui();
+    while (gui->isRunning()) {
+        gui->update();
         updateScene();
-        opengl_debug();
-
-        // Render gui and update window
-        ImGui::End();
-        cameraControl.update = !(ImGui::IsAnyWindowFocused());
-        vcl::imgui_render_frame(window);
-        updateFps();
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-        opengl_debug();
+        gui->render();
     }
-
-    vcl::imgui_cleanup();
-    glfwDestroyWindow(window);
-    glfwTerminate();
-}
-
-void Scene::clearScreen() {
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClear(GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
-    whiteTexture->bind();
-}
-
-void Scene::initializeInterface() {
-    vcl::glfw_init();
-
-    const int openglVersionMajor = 3;
-    const int openglVersionMinor = 3;
-    windowWidth = 1280;
-    windowHeight = 1000;
-    window = vcl::glfw_create_window(windowWidth, windowHeight, windowTitle, openglVersionMajor,
-                                     openglVersionMinor);
-
-    vcl::glad_init();
-    vcl::opengl_debug_print_version();
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    vcl::imgui_init(window);
-}
-
-void Scene::setupScene() {
-    shaders = Shaders::getInstance();
-    showWireframe = false;
-
-    // Setting camera perspective
-    int width = 0, height = 0;
-    glfwGetWindowSize(window, &width, &height);
-    const float aspect_ratio = (float) width / (float) height;
-    camera.perspective = vcl::perspective_structure(
-            40 * 3.14f / 180, aspect_ratio, 0.01f, 500.0f);
-
-    // Setting initial camera position
-    camera.apply_scaling(3);
-    camera.apply_rotation(0, 0, 0, 0.8);
-
-    // Creating rendering stuff
-    whiteTexture = std::make_shared<Texture>();
-    light = vcl::light_source({10, 0, 3});
-    depthMap = std::make_shared<vcl::depth_map>(2048);
-}
-
-void Scene::updateFps() {
-    if (fpsCounter.update()) {
-        const std::string new_window_title = windowTitle + " (" + std::to_string(fpsCounter.fps()) + " fps)";
-        glfwSetWindowTitle(window, new_window_title.c_str());
-        fpsCounter.reset();
-    }
-}
-
-void Scene::updateGui() {
-    vcl::imgui_create_frame();
-    ImGui::Begin("Options", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-    ImGui::Checkbox("Wireframe", &showWireframe);
-    shaders->overrideWithWireframe(showWireframe);
-}
-
-void Scene::updateDepthMap(std::vector<std::shared_ptr<Object>> &objects) {
-    depthMap->bind();
-    shaders->overrideWithDepth(true);
-    for (auto &obj : objects) {
-        obj->draw(camera, light);
-        whiteTexture->bind();
-    }
-    shaders->overrideWithDepth(false);
-    depthMap->unbind(windowWidth, windowHeight);
 }
 
 void Scene::updateScene() {
-    // TODO
-//    updateDepthMap(movableObjects);
-    updateDepthMap(stillObjects);
+    shaders->overrideWithWireframe(gui->showWireframe());
+    updateDepthMap(false);
 
-    for (auto
-    &obj : stillObjects) {
-        obj->draw(camera, light);
+    whiteTexture->bind();
+    for (auto &obj : stillObjects) {
+        obj->draw(gui->getCamera(), light);
         whiteTexture->bind();
     }
     for (auto &obj : movableObjects) {
-        obj->draw(camera, light);
+        obj->draw(gui->getCamera(), light);
         whiteTexture->bind();
     }
 }
 
-void Scene::windowSizeCallback(GLFWwindow *, int width, int height) {
-    glViewport(0, 0, width, height);
-    camera.perspective.image_aspect = (float) width / (float) height;
-}
+void Scene::updateDepthMap(bool still) {
+    if (still) stillDepthMap->bind();
+    else movableDepthMap->bind();
 
-void Scene::cursorPositionCallback(GLFWwindow *w, double xpos, double ypos) {
-    cameraControl.update_mouse_move(camera, w, float(xpos), float(ypos));
-}
+    shaders->overrideWithDepth(true);
 
-void Scene::mouseClickCallback(GLFWwindow *, int button, int action, int mods) {
-    ImGui::SetWindowFocus(nullptr);
-    cameraControl.update_mouse_click(camera, window, button, action, mods);
-}
+    auto &objects = movableObjects;
+    if (still) objects = stillObjects;
+    for (auto &obj : objects) {
+        obj->draw(gui->getCamera(), light);
+        whiteTexture->bind();
+    }
 
-void Scene::mouseScrollCallback(GLFWwindow *, double xoffset, double yoffset) {
-    cameraControl.update_mouse_scroll(camera, window, xoffset, yoffset);
-}
+    shaders->overrideWithDepth(false);
 
-void Scene::keyboardInputCallback(GLFWwindow *, int, int, int, int) {
-
+    if (still) stillDepthMap->unbind(gui->getWindowWidth(), gui->getWindowHeight());
+    else movableDepthMap->unbind(gui->getWindowWidth(), gui->getWindowHeight());
 }

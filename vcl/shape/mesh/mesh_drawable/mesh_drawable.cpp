@@ -70,10 +70,12 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
 
     // Associating textures
     auto texture_sampler = glGetUniformLocation(shader, "texture_sampler");
-    auto shadow_map  = glGetUniformLocation(shader, "shadow_map");
+    auto shadow_map_still  = glGetUniformLocation(shader, "shadow_map_still");
+    auto shadow_map_movable  = glGetUniformLocation(shader, "shadow_map_movable");
     glUseProgram(shader);
     glUniform1i(texture_sampler, 0);
-    glUniform1i(shadow_map,  1);
+    glUniform1i(shadow_map_still, 1);
+    glUniform1i(shadow_map_movable, 2);
 
     // Bind texture only if id != 0
     if(texture_id!=0) {
