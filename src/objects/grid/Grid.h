@@ -2,8 +2,8 @@
 // Created by igor on 25/04/2020.
 //
 
-#ifndef PGM_BOX_H
-#define PGM_BOX_H
+#ifndef PGM_GRID_H
+#define PGM_GRID_H
 
 #include "vcl.hpp"
 #include "objects/Object.h"
@@ -32,4 +32,4 @@ private:
 };
 
 
-#endif //PGM_BOX_H
+#endif //PGM_GRID_H

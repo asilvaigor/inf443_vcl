@@ -90,6 +90,9 @@ template <> struct mat<4,4> {
 
 };
 
+float det(const mat4& m);
+mat4 inverse(const mat4& m);
+
 
 
 

@@ -364,6 +364,44 @@ mat4 mat4::from_mat3_vec3(const vcl::mat3& linear_block, const vcl::vec3& transl
     return M;
 }
 
+float det(const mat4& m) {
+    return m.ww*m.xx*m.yy*m.zz - m.ww*m.xx*m.yz*m.zy - m.ww*m.xy*m.yx*m.zz +
+           m.ww*m.xy*m.yz*m.zx + m.ww*m.xz*m.yx*m.zy - m.ww*m.xz*m.yy*m.zx -
+           m.wx*m.xw*m.yy*m.zz + m.wx*m.xw*m.yz*m.zy + m.wx*m.xy*m.yw*m.zz -
+           m.wx*m.xy*m.yz*m.zw - m.wx*m.xz*m.yw*m.zy + m.wx*m.xz*m.yy*m.zw +
+           m.wy*m.xw*m.yx*m.zz - m.wy*m.xw*m.yz*m.zx - m.wy*m.xx*m.yw*m.zz +
+           m.wy*m.xx*m.yz*m.zw + m.wy*m.xz*m.yw*m.zx - m.wy*m.xz*m.yx*m.zw -
+           m.wz*m.xw*m.yx*m.zy + m.wz*m.xw*m.yy*m.zx + m.wz*m.xx*m.yw*m.zy -
+           m.wz*m.xx*m.yy*m.zw - m.wz*m.xy*m.yw*m.zx + m.wz*m.xy*m.yx*m.zw;
+}
+mat4 inverse(const mat4& m) {
+    float d = det(m);
+    assert(std::abs(d)>1e-6f);
 
+    float xx = (m.ww*m.yy*m.zz - m.ww*m.yz*m.zy - m.wy*m.yw*m.zz + m.wy*m.yz*m.zw + m.wz*m.yw*m.zy - m.wz*m.yy*m.zw) / d;
+    float xy = -(m.ww*m.xy*m.zz - m.ww*m.xz*m.zy - m.wy*m.xw*m.zz + m.wy*m.xz*m.zw + m.wz*m.xw*m.zy - m.wz*m.xy*m.zw) / d;
+    float xz = (m.ww*m.xy*m.yz - m.ww*m.xz*m.yy - m.wy*m.xw*m.yz + m.wy*m.xz*m.yw + m.wz*m.xw*m.yy - m.wz*m.xy*m.yw) / d;
+    float xw = -(m.xw*m.yy*m.zz - m.xw*m.yz*m.zy - m.xy*m.yw*m.zz + m.xy*m.yz*m.zw + m.xz*m.yw*m.zy - m.xz*m.yy*m.zw) / d;
+
+    float yx = -(m.ww*m.yx*m.zz - m.ww*m.yz*m.zx - m.wx*m.yw*m.zz + m.wx*m.yz*m.zw + m.wz*m.yw*m.zx - m.wz*m.yx*m.zw) /d;
+    float yy = (m.ww*m.xx*m.zz - m.ww*m.xz*m.zx - m.wx*m.xw*m.zz + m.wx*m.xz*m.zw + m.wz*m.xw*m.zx - m.wz*m.xx*m.zw) / d;
+    float yz = -(m.ww*m.xx*m.yz - m.ww*m.xz*m.yx - m.wx*m.xw*m.yz + m.wx*m.xz*m.yw + m.wz*m.xw*m.yx - m.wz*m.xx*m.yw) / d;
+    float yw = (m.xw*m.yx*m.zz - m.xw*m.yz*m.zx - m.xx*m.yw*m.zz + m.xx*m.yz*m.zw + m.xz*m.yw*m.zx - m.xz*m.yx*m.zw) / d;
+
+    float zx = (m.ww*m.yx*m.zy - m.ww*m.yy*m.zx - m.wx*m.yw*m.zy + m.wx*m.yy*m.zw + m.wy*m.yw*m.zx - m.wy*m.yx*m.zw) / d;
+    float zy = (m.ww*m.xy*m.zx - m.ww*m.xx*m.zy + m.wx*m.xw*m.zy - m.wx*m.xy*m.zw - m.wy*m.xw*m.zx + m.wy*m.xx*m.zw) / d;
+    float zz = (m.ww*m.xx*m.yy - m.ww*m.xy*m.yx - m.wx*m.xw*m.yy + m.wx*m.xy*m.yw + m.wy*m.xw*m.yx - m.wy*m.xx*m.yw) / d;
+    float zw = (m.xw*m.yy*m.zx - m.xw*m.yx*m.zy + m.xx*m.yw*m.zy - m.xx*m.yy*m.zw - m.xy*m.yw*m.zx + m.xy*m.yx*m.zw) / d;
+
+    float wx = (m.wx*m.yz*m.zy - m.wx*m.yy*m.zz + m.wy*m.yx*m.zz - m.wy*m.yz*m.zx - m.wz*m.yx*m.zy + m.wz*m.yy*m.zx) / d;
+    float wy = (m.wx*m.xy*m.zz - m.wx*m.xz*m.zy - m.wy*m.xx*m.zz + m.wy*m.xz*m.zx + m.wz*m.xx*m.zy - m.wz*m.xy*m.zx) / d;
+    float wz = (m.wx*m.xz*m.yy - m.wx*m.xy*m.yz + m.wy*m.xx*m.yz - m.wy*m.xz*m.yx - m.wz*m.xx*m.yy + m.wz*m.xy*m.yx) / d;
+    float ww = (m.xx*m.yy*m.zz - m.xx*m.yz*m.zy - m.xy*m.yx*m.zz + m.xy*m.yz*m.zx + m.xz*m.yx*m.zy - m.xz*m.yy*m.zx) / d;
+
+    return {xx, xy, xz, xw,
+            yx, yy, yz, yw,
+            zx, zy, zz, zw,
+            wx, wy, wz, ww};
+}
 
 }
