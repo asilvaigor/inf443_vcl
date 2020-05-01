@@ -99,8 +99,8 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
     uniform(shader, "diffuse", drawable.uniform.shading.diffuse);      opengl_debug();
     uniform(shader, "specular", drawable.uniform.shading.specular);    opengl_debug();
     uniform(shader, "specular_exponent", drawable.uniform.shading.specular_exponent); opengl_debug();
-    uniform(shader, "light_matrix", drawable.uniform.light.matrix);    opengl_debug();
-    uniform(shader, "light_pos", drawable.uniform.light.pos);          opengl_debug();
+    uniform(shader, "light_matrix", drawable.uniform.light.get_matrix(camera));    opengl_debug();
+    uniform(shader, "light_pos", drawable.uniform.light.get_pos());          opengl_debug();
 
     vcl::draw(drawable.data); opengl_debug();
 

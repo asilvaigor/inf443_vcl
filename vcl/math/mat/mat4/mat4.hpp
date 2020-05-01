@@ -87,7 +87,10 @@ template <> struct mat<4,4> {
     vcl::vec3 vec3() const;
     mat4& set_vec3(const vcl::vec3& tr);
 
-
+    void rotate_x(float ang);
+    void rotate_y(float ang);
+    void rotate_z(float ang);
+    void translate(const vcl::vec3 &v);
 };
 
 float det(const mat4& m);

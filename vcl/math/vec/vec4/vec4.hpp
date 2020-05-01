@@ -24,6 +24,8 @@ template <> struct buffer_stack<float, 4> {
     /** Direct constructor.
      * vec4(x,y,z,w), or vec4{x,y,z,w}, or vec4 p = {x,y,z,w}; */
     buffer_stack<float, 4>(float x,float y,float z,float w);
+
+    buffer_stack<float, 4>(buffer_stack<float, 3> &v,float w);
     ///@}
 
     /** Return 4 */

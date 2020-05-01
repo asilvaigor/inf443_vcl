@@ -52,6 +52,9 @@ struct camera_scene
     void apply_translation_orthogonal_to_screen_plane(float tr);
     void apply_rotation(float p0x, float p0y, float p1x, float p1y);
     void apply_scaling(float s);
+
+    /** Calculates the frustum corners. */
+    std::vector<vec3> calculate_frustum(float z_near, float z_far) const;
 };
 
 

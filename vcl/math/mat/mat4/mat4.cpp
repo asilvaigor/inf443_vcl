@@ -364,6 +364,29 @@ mat4 mat4::from_mat3_vec3(const vcl::mat3& linear_block, const vcl::vec3& transl
     return M;
 }
 
+void mat4::rotate_x(const float ang) {
+    float sin = std::sin(ang);
+    float cos = std::cos(ang);
+    mat4 r(1, 0, 0, 0, 0, cos, -sin, 0, 0, sin, cos, 0, 0, 0, 0, 1);
+    (*this) = r * (*this);
+}
+void mat4::rotate_y(const float ang) {
+    float sin = std::sin(ang);
+    float cos = std::cos(ang);
+    mat4 r(cos, 0, -sin, 0, 0, 1, 0, 0, sin, 0, cos, 0, 0, 0, 0, 1);
+    (*this) = r * (*this);
+}
+void mat4::rotate_z(const float ang) {
+    float sin = std::sin(ang);
+    float cos = std::cos(ang);
+    mat4 r(cos, -sin, 0, 0, sin, cos, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1);
+    (*this) = r * (*this);
+}
+void mat4::translate(const vcl::vec3 &v) {
+    mat4 t(1, 0, 0, v.x, 0, 1, 0, v.y, 0, 0, 1, v.z, 0, 0, 0, 1);
+    (*this) = (*this) * t;
+}
+
 float det(const mat4& m) {
     return m.ww*m.xx*m.yy*m.zz - m.ww*m.xx*m.yz*m.zy - m.ww*m.xy*m.yx*m.zz +
            m.ww*m.xy*m.yz*m.zx + m.ww*m.xz*m.yx*m.zy - m.ww*m.xz*m.yy*m.zx -

@@ -40,7 +40,7 @@ SceneGui::SceneGui(std::string &windowTitle) : windowTitle(windowTitle) {
     glfwGetWindowSize(window, &windowWidth, &windowHeight);
     float aspectRatio = (float) windowWidth / (float) windowHeight;
     camera.perspective = vcl::perspective_structure(
-            40 * 3.14f / 180, aspectRatio, 0.01f, 500.0f);
+            40 * 3.14f / 180, aspectRatio, 0.01f, 25.0f);
     camera.apply_scaling(4);
     camera.apply_rotation(0, 0, 0, 1.0);
 

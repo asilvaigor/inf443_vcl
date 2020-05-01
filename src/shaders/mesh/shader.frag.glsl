@@ -61,7 +61,7 @@ void main()
     float diffuse_value  = diffuse * clamp(un, 0.0, 1.0);
     float specular_value = specular * pow(clamp(dot(r, t), 0.0, 1.0), specular_exponent);
 
-    float epsilon = max(0.01 * (1.0 - un), 0.001);
+    float epsilon = max(0.05 * (1.0 - un), 0.005);
     float shadow = shadowCalc(fragment.light_ref_pos, epsilon);
 
     vec3 white = vec3(1.0);

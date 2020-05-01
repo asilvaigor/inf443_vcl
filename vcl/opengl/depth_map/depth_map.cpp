@@ -49,7 +49,7 @@ void depth_map::unbind(int windowWidth, int windowHeight) {
     glViewport(0, 0, windowWidth, windowHeight);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Passing the depth map to texture at layout=1
+    // Passing the depth map to texture
     glActiveTexture(GL_TEXTURE0 + layout);
     glBindTexture(GL_TEXTURE_2D, texture_id);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);

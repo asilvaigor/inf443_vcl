@@ -21,10 +21,10 @@ Scene::Scene(std::string &windowTitle) {
 
     // Creating rendering stuff
     whiteTexture = std::make_shared<Texture>();
-    light = vcl::light_source({5, 0, 6});
+    light = vcl::light_source({100, 0, 100}, {1, 0, 1});
     grid = std::make_shared<Grid>(*shaders);
-    stillDepthMap = std::make_shared<vcl::depth_map>(1024);
-    movableDepthMap = std::make_shared<vcl::depth_map>(1024);
+    stillDepthMap = std::make_shared<vcl::depth_map>(4000);
+    movableDepthMap = std::make_shared<vcl::depth_map>(4000);
 }
 
 Shaders &Scene::getShaders() {

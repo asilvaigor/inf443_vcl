@@ -13,6 +13,11 @@ vec4::buffer_stack(float x_arg, float y_arg, float z_arg,float w_arg)
     :x(x_arg),y(y_arg),z(z_arg),w(w_arg)
 {}
 
+vec4::buffer_stack(buffer_stack<float, 3> &v,float w_arg)
+    :x(v[0]), y(v[1]), z(v[2]), w(w_arg)
+{}
+
+
 const float& vec4::operator[](std::size_t index) const
 {
     switch(index) {
