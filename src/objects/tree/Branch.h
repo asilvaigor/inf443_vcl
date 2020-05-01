@@ -7,6 +7,7 @@
 
 #include <memory>
 #include "TreeSpecies.h"
+#include "utils/BoundingBox.h"
 #include "utils/TurtleGraphics.h"
 #include "utils/BezierSpline.h"
 #include "Leaf.h"
@@ -22,6 +23,7 @@ public:
      * Will generate the branch and all its children, by setting up variables and calling generate().
      * @param species TreeSpecies
      * @param turtle Turtle for the origin of the branch.
+     * @param treeBoundingBox Tree's bounding box.
      * @param depth Current depth in the tree.
      * @param startIdx The start segment of this branch's parent's bezier spline, used for splitting.
      * @param parent Pointer to the parent branch.
@@ -32,10 +34,10 @@ public:
      * @param offsetInTrunk Branch's Offset in the trunk's height.
      * @param radiusLimit Maximum value for the branch's radius.
      */
-    explicit Branch(TreeSpecies& species, TurtleGraphics turtle = TurtleGraphics(), int depth = 0, int startIdx = 0,
-                    Branch* parent = nullptr, float treeScale = 0, float nBranchesFactor = 1,
-                    float splitAngleCorrection = 0, float splitProb = 1, float offsetInTrunk = 0,
-                    float radiusLimit = FLT_MAX);
+    explicit Branch(TreeSpecies &species, TurtleGraphics turtle, BoundingBox &treeBoundingBox,
+                    int depth = 0, int startIdx = 0, Branch *parent = nullptr, float treeScale = 0,
+                    float nBranchesFactor = 1, float splitAngleCorrection = 0, float splitProb = 1,
+                    float offsetInTrunk = 0, float radiusLimit = FLT_MAX);
 
     /**
      * Calculates the mesh for the branch parts.
@@ -58,13 +60,14 @@ public:
 private:
     TreeSpecies &species;
     TurtleGraphics turtle;
+    BoundingBox &treeBoundingBox;
     BezierSpline spline;
     int depth;
     int startIdx;
     std::vector<Branch> branches;
     std::vector<Leaf> leaves;
     std::vector<Leaf> snowyLeaves;
-    Branch* parent;
+    Branch *parent;
     float length;
     float radius;
     float treeScale;
@@ -91,7 +94,8 @@ private:
     /**
      * Makes a single branch.
      */
-    void makeBranch(int branchIdx, float offset, float offsetInParent, float prevRotationAngle, int nBranchesInGroup = 0);
+    void
+    makeBranch(int branchIdx, float offset, float offsetInParent, float prevRotationAngle, int nBranchesInGroup = 0);
 
     /**
      * Makes leaves on the current segment.

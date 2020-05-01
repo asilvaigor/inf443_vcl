@@ -6,6 +6,7 @@
 
 Box::Box(Shaders &shaders) : Object(false) {
     auto mesh = vcl::mesh_primitive_parallelepiped({-0.5, -0.5, 0});
+    boundingBox = BoundingBox(-0.5, 0.5, -0.5, 0.5, 0, 1.0);
     box = vcl::mesh_drawable(mesh);
     box.shader = shaders["mesh"];
 }

@@ -13,10 +13,10 @@ uniform sampler2D texture_sampler;
 
 uniform int shadow_map_id;
 uniform sampler2D shadow_map_still_1;
-uniform sampler2D shadow_map_still_2;
-uniform sampler2D shadow_map_still_3;
 uniform sampler2D shadow_map_movable_1;
+uniform sampler2D shadow_map_still_2;
 uniform sampler2D shadow_map_movable_2;
+uniform sampler2D shadow_map_still_3;
 uniform sampler2D shadow_map_movable_3;
 
 out vec4 FragColor;
@@ -104,7 +104,8 @@ void main()
     float diffuse_value  = diffuse * clamp(un, 0.0, 1.0);
     float specular_value = specular * pow(clamp(dot(r, t), 0.0, 1.0), specular_exponent);
 
-    float epsilon = max(0.05 * (1.0 - un), 0.005);
+    float light_dist = length(fragment.light_ref_pos);
+    float epsilon = max((0.01 / light_dist) * (1.0 - un), 0.001 / light_dist);
     float shadow = shadowCalc(fragment.light_ref_pos, epsilon);
 
     vec3 white = vec3(1.0);

@@ -37,6 +37,8 @@ struct camera_scene
     vec3 translation = {};
     mat3 orientation = {};
     perspective_structure perspective = {};
+    std::vector<vec3> frustumCorners;
+    std::vector<vec4> frustumPlanes;
 
     /** Compute the view matrix to be multiplied to vertices */
     mat4 view_matrix() const;
@@ -55,8 +57,14 @@ struct camera_scene
     void apply_rotation(float p0x, float p0y, float p1x, float p1y);
     void apply_scaling(float s);
 
-    /** Calculates the frustum corners. */
-    std::vector<vec3> calculate_frustum(float z_near, float z_far) const;
+    /** Calculates the frustum corners, given both z planes. */
+    std::vector<vec3> &calculate_frustum_corners(float z_near, float z_far);
+
+    /** Calculates the frustum planes using the camera's z planes. */
+    std::vector<vec4> &calculate_frustum_planes();
+
+    /** Checks if a point is inside the frustum */
+    bool is_inside_frustum(vec3 &pt);
 };
 
 

@@ -7,9 +7,9 @@
 
 vcl::rand_generator Branch::rand(false);
 
-Branch::Branch(TreeSpecies &s, TurtleGraphics turtle, int depth, int startIdx, Branch *parent, float treeScale,
-               float nBranchesFactor, float splitAngleCorrection, float splitProb, float offsetInTrunk,
-               float radiusLimit) : species(s) {
+Branch::Branch(TreeSpecies &s, TurtleGraphics turtle, BoundingBox &treeBoundingBox, int depth, int startIdx,
+               Branch *parent, float treeScale, float nBranchesFactor, float splitAngleCorrection, float splitProb,
+               float offsetInTrunk, float radiusLimit) : species(s), treeBoundingBox(treeBoundingBox) {
     this->depth = depth;
     this->startIdx = startIdx;
     this->parent = parent;
@@ -159,6 +159,7 @@ void Branch::generate() {
         }
 
         turtle.move(segLength);
+        treeBoundingBox.update(turtle.getPosition());
     }
 }
 
@@ -203,7 +204,7 @@ void Branch::makeBranch(int branchIdx, float offset, float offsetInParent, float
     newTurtle.pitchDown(calculateDownAngle(offsetInParent));
     newTurtle.move(r);
 
-    branches.emplace_back(Branch(species, newTurtle, depth + 1, 0, this, treeScale,
+    branches.emplace_back(Branch(species, newTurtle, treeBoundingBox, depth + 1, 0, this, treeScale,
                                  1, 0, 1, offsetInParent, r));
 }
 
@@ -237,8 +238,8 @@ void Branch::makeLeaf(float offset, float offsetInParent, float prevRotationAngl
 
     vcl::vec3 zAxis(0, 0, 1);
     if (newTurtle.getDirection().angle(zAxis) > species.snowyLeafMaxAngle)
-        leaves.emplace_back(Leaf(species, newTurtle, scale));
-    else snowyLeaves.emplace_back(Leaf(species, newTurtle, scale));
+        leaves.emplace_back(Leaf(species, newTurtle, treeBoundingBox, scale));
+    else snowyLeaves.emplace_back(Leaf(species, newTurtle, treeBoundingBox, scale));
 }
 
 void Branch::makeSplits(int segIdx, float nSplits, float curveAngle) {
@@ -251,8 +252,8 @@ void Branch::makeSplits(int segIdx, float nSplits, float curveAngle) {
         auto newTurtle = turtle;
         newTurtle.turnLeft(effCurveAngle);
 
-        branches.emplace_back(Branch(species, newTurtle, depth, segIdx, parent, treeScale, nBranchesFactor,
-                                     splitAngleCorrection, splitProb, offsetInTrunk, radiusLimit));
+        branches.emplace_back(Branch(species, newTurtle, treeBoundingBox, depth, segIdx, parent, treeScale,
+                                     nBranchesFactor, splitAngleCorrection, splitProb, offsetInTrunk, radiusLimit));
     }
 }
 

@@ -9,31 +9,50 @@
 #include "vcl.hpp"
 #include "objects/Object.h"
 
+/**
+ * Handles the calculation and rendering of shadows, using the cascade shadowing technique.
+ * This technique consists of multiple depth maps, and the correct use of them for objects at different distances.
+ * Code based on <https://ahbejarano.gitbook.io/lwjglgamedev/chapter26>.
+ */
 class CascadeShadow {
 public:
+    /**
+     * Initializes its variables.
+     * @param light
+     * @param mapResolution
+     */
     CascadeShadow(vcl::light_source &light, int mapResolution);
 
-    void startup(std::vector<std::shared_ptr<Object>> &movableObjects,
-                 std::vector<std::shared_ptr<Object>> &stillObjects,
-                 vcl::camera_scene &camera, std::shared_ptr<Shaders> &shaders,
-                 unsigned int windowWidth, unsigned int windowHeight);
-
+    /**
+     * Updates the lights and renders shadows, if the camera has changed significantly. This method always ensured that
+     * at most one depth map will be rendered per frame, placing pended updates in a stack.
+     * TODO: Implement update if an object has moved.
+     * @param movableObjects
+     * @param stillObjects
+     * @param camera
+     * @param shaders
+     * @param windowWidth
+     * @param windowHeight
+     */
     void update(std::vector<std::shared_ptr<Object>> &movableObjects,
                 std::vector<std::shared_ptr<Object>> &stillObjects,
                 vcl::camera_scene &camera, std::shared_ptr<Shaders> &shaders,
-                unsigned int windowWidth, unsigned int windowHeight);
+                int windowWidth, int windowHeight);
 
 private:
     const int nCascades;
-    std::vector<vcl::depth_map> maps;
+    std::shared_ptr<vcl::depth_maps> maps;
     std::vector<vcl::camera_scene> cameraLastUpdate;
     std::vector<double> timeLastUpdate;
     std::vector<std::shared_ptr<vcl::light_source>> lights;
     int lastUpdated;
 
-    void render(vcl::depth_map &map, std::vector<std::shared_ptr<Object>> &objects, vcl::camera_scene &camera,
-                std::shared_ptr<vcl::light_source> &light, std::shared_ptr<Shaders> &shaders, unsigned int windowWidth,
-                unsigned int windowHeight);
+    /**
+     * Renders the shadows in the scene, using only the objects that are at the camera frustum.
+     * @param objects
+     * @param camera
+     */
+    void render(std::vector<std::shared_ptr<Object>> &objects, vcl::camera_scene &camera);
 };
 
 

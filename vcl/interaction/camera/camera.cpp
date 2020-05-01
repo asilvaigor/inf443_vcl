@@ -169,13 +169,13 @@ vec3 camera_scene::camera_position() const
 }
 
 vec3 camera_scene::camera_direction() const {
-    return (orientation * vec3(0, 0, 1)).normalized();
+    return vec3(-orientation.xz, -orientation.yz, -orientation.zz).normalized();
 }
 
-std::vector<vec3> camera_scene::calculate_frustum(float z_near, float z_far) const {
+std::vector<vec3> &camera_scene::calculate_frustum_corners(float z_near, float z_far) {
     auto proj = transpose(perspective_matrix(perspective.angle_of_view, perspective.image_aspect, z_near, z_far) *
             view_matrix());
-    std::vector<vec3> corners;
+    frustumCorners.clear();
 
     std::vector<std::vector<int>> signs({{ 1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1},
                                          {-1, -1, -1, -1,  1,  1,  1,  1,  1,  1,  1,  1},
@@ -186,38 +186,53 @@ std::vector<vec3> camera_scene::calculate_frustum(float z_near, float z_far) con
                                          { 1,  1,  1,  1, -1, -1, -1, -1, -1, -1, -1, -1},
                                          {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1}});
     for (int i = 0; i < 8; i++) {
-        float n1x = proj.xw + signs[i][0] * proj.xx;
-        float n1y = proj.yw + signs[i][1] * proj.yx;
-        float n1z = proj.zw + signs[i][2] * proj.zx;
-        float d1 = proj.ww + signs[i][3] * proj.wx;
-        float n2x = proj.xw + signs[i][4] * proj.xy;
-        float n2y = proj.yw + signs[i][5] * proj.yy;
-        float n2z = proj.zw + signs[i][6] * proj.zy;
-        float d2 = proj.ww + signs[i][7] * proj.wy;
-        float n3x = proj.xw + signs[i][8] * proj.xz;
-        float n3y = proj.yw + signs[i][9] * proj.yz;
-        float n3z = proj.zw + signs[i][10] * proj.zz;
-        float d3 = proj.ww + signs[i][11] * proj.wz;
+        vec3 n1(proj.xw + signs[i][0] * proj.xx, proj.yw + signs[i][1] * proj.yx, proj.zw + signs[i][2] * proj.zx);
+        vec3 n2(proj.xw + signs[i][4] * proj.xy, proj.yw + signs[i][5] * proj.yy, proj.zw + signs[i][6] * proj.zy);
+        vec3 n3(proj.xw + signs[i][8] * proj.xz, proj.yw + signs[i][9] * proj.yz, proj.zw + signs[i][10] * proj.zz);
+        vec3 d(proj.ww + signs[i][3] * proj.wx, proj.ww + signs[i][7] * proj.wy, proj.ww + signs[i][11] * proj.wz);
 
-        float c23x = n2y * n3z - n2z * n3y;
-        float c23y = n2z * n3x - n2x * n3z;
-        float c23z = n2x * n3y - n2y * n3x;
-        float c31x = n3y * n1z - n3z * n1y;
-        float c31y = n3z * n1x - n3x * n1z;
-        float c31z = n3x * n1y - n3y * n1x;
-        float c12x = n1y * n2z - n1z * n2y;
-        float c12y = n1z * n2x - n1x * n2z;
-        float c12z = n1x * n2y - n1y * n2x;
+        vec3 c23 = cross(n2, n3);
+        mat3 m(c23, cross(n3, n1), cross(n1, n2));
+        float invDot = 1.0f / (n1.x * c23.x + n1.y * c23.y + n1.z * c23.z);
+        vec3 point = -m * d * invDot;
 
-        float invDot = 1.0f / (n1x * c23x + n1y * c23y + n1z * c23z);
-        vec3 point;
-        point.x = (-c23x * d1 - c31x * d2 - c12x * d3) * invDot;
-        point.y = (-c23y * d1 - c31y * d2 - c12y * d3) * invDot;
-        point.z = (-c23z * d1 - c31z * d2 - c12z * d3) * invDot;
-        corners.push_back(point);
+        frustumCorners.push_back(point);
     }
 
-    return corners;
+    return frustumCorners;
+}
+
+std::vector<vec4> &camera_scene::calculate_frustum_planes() {
+    frustumPlanes.clear();
+    vec3 center = camera_position() + camera_direction() * (perspective.z_near + perspective.z_far) / 2.0f;
+    auto corners = calculate_frustum_corners(perspective.z_near, perspective.z_far);
+
+    std::vector<std::vector<int>> planesIdx({{0, 1, 2}, {0, 1, 4}, {0, 3, 5},
+                                             {1, 2, 4}, {2, 3, 6}, {4, 5, 6}});
+    vec4 center4(center, 1.0f);
+    for (int i = 0; i < 6; i++) {
+        vec3 &a = frustumCorners[planesIdx[i][0]];
+        vec3 ab = frustumCorners[planesIdx[i][1]] - a;
+        vec3 ac = frustumCorners[planesIdx[i][2]] - a;
+        vec3 cross = vcl::cross(ab, ac);
+        vec4 plane(cross, -vcl::dot(cross, a));
+
+        // Placing the planes with the correct orientation
+        if (vcl::dot(plane, center4) < 0)
+            frustumPlanes.push_back(-plane);
+        else frustumPlanes.push_back(plane);
+    }
+
+    return frustumPlanes;
+}
+
+bool camera_scene::is_inside_frustum(vec3 &pt) {
+    bool inside = true;
+    vec4 pt4(pt, 1.0f);
+    for (auto &plane : frustumPlanes) {
+        inside &= vcl::dot(plane, pt4) > 0;
+    }
+    return inside;
 }
 
 }

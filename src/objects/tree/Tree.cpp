@@ -8,7 +8,8 @@
 Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species) :
         Object(false), species(species), branchTexture("wood"), leafTexture("leaf"), snowTexture("snow") {
     TurtleGraphics turtle(position);
-    Branch trunk(species, turtle);
+    boundingBox = BoundingBox(position.x, position.x, position.y, position.y, position.z, position.z);
+    Branch trunk(species, turtle, boundingBox);
 
     auto branchesMesh = trunk.toBranchMesh();
     branchesDrawable = vcl::mesh_drawable(branchesMesh);

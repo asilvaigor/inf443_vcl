@@ -56,6 +56,9 @@ template <> struct buffer_stack<float, 4> {
     ///@}
 };
 
+/** Dot product between two vec4.
+ * \relates buffer_stack<float,4> */
+float dot(const vec4& a,const vec4& b);
 
 
 }

@@ -8,16 +8,16 @@ namespace vcl {
 
 light_source::light_source() = default;
 
-light_source::light_source(vec3 pos, vec3 dir, float z_near, float z_far, int shadow_map_id) {
+light_source::light_source(vec3 pos, vec3 dir, float camera_z_near, float camera_z_far, int shadow_map_id) {
     this->pos = pos;
     this->dir = dir.normalized();
-    this->z_near = z_near;
-    this->z_far = z_far;
+    this->camera_z_near = camera_z_near;
+    this->camera_z_far = camera_z_far;
     this->shadow_map_id = shadow_map_id;
 }
 
-void light_source::update(const camera_scene &camera) {
-    auto corners = camera.calculate_frustum(z_near, z_far);
+void light_source::update(camera_scene &camera) {
+    auto corners = camera.calculate_frustum_corners(camera_z_near, camera_z_far);
     vec3 centroid;
     float min_z = std::numeric_limits<float>::max();
     float max_z = std::numeric_limits<float>::min();
@@ -49,11 +49,11 @@ vec3 light_source::get_dir() const {
 }
 
 float light_source::get_z_near() const {
-    return z_near;
+    return camera_z_near;
 }
 
 float light_source::get_z_far() const {
-    return z_far;
+    return camera_z_far;
 }
 
 int light_source::get_shadow_map_id() const {

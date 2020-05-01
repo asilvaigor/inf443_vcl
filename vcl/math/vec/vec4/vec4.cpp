@@ -73,4 +73,8 @@ float const* vec4::cbegin() const {return &x;}
 float const* vec4::cend() const {return &w+1;}
 
 
+float dot(const vec4& a,const vec4& b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+}
+
 }
