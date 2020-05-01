@@ -10,6 +10,6 @@ Grid::Grid(Shaders &shaders) : Object(false) {
     grid.shader = shaders["wireframe"];
 }
 
-void Grid::draw(const vcl::camera_scene &camera, vcl::light_source &) {
+void Grid::draw(const vcl::camera_scene &camera) {
     vcl::draw(grid, camera);
 }

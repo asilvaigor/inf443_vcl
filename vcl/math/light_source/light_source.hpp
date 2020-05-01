@@ -18,15 +18,29 @@ class light_source {
 public:
     light_source();
 
-    light_source(vec3 pos, vec3 dir);
+    light_source(vec3 pos, vec3 dir, float z_near = 0.01f, float z_far = 25.0f, int shadow_map_id = 1);
 
-    mat4 get_matrix(const camera_scene &camera, float z_near = 0.01f, float z_far = 25.0f) const;
+    void update(const camera_scene &camera);
+
+    mat4 get_matrix() const;
 
     vec3 get_pos() const;
+
+    vec3 get_dir() const;
+
+    float get_z_near() const;
+
+    float get_z_far() const;
+
+    int get_shadow_map_id() const;
 
 private:
     vec3 dir;
     vec3 pos;
+    mat4 matrix;
+    float z_near;
+    float z_far;
+    int shadow_map_id;
 
     mat4 calculate_view_matrix(vec3 const &pos) const;
 

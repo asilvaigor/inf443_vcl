@@ -8,12 +8,15 @@ namespace vcl {
 
 light_source::light_source() = default;
 
-light_source::light_source(vec3 pos, vec3 dir) {
+light_source::light_source(vec3 pos, vec3 dir, float z_near, float z_far, int shadow_map_id) {
     this->pos = pos;
     this->dir = dir.normalized();
+    this->z_near = z_near;
+    this->z_far = z_far;
+    this->shadow_map_id = shadow_map_id;
 }
 
-mat4 light_source::get_matrix(const camera_scene &camera, float z_near, float z_far) const {
+void light_source::update(const camera_scene &camera) {
     auto corners = camera.calculate_frustum(z_near, z_far);
     vec3 centroid;
     float min_z = std::numeric_limits<float>::max();
@@ -30,20 +33,40 @@ mat4 light_source::get_matrix(const camera_scene &camera, float z_near, float z_
     mat4 view = calculate_view_matrix(virtual_pos);
     mat4 ortho = calculate_ortho_matrix(corners, view);
 
-    return ortho * view;
+    matrix = ortho * view;
+}
+
+mat4 light_source::get_matrix() const {
+    return matrix;
 }
 
 vec3 light_source::get_pos() const {
     return pos;
 }
 
-mat4 light_source::calculate_view_matrix(vec3 const &pos) const {
+vec3 light_source::get_dir() const {
+    return dir;
+}
+
+float light_source::get_z_near() const {
+    return z_near;
+}
+
+float light_source::get_z_far() const {
+    return z_far;
+}
+
+int light_source::get_shadow_map_id() const {
+    return shadow_map_id;
+}
+
+mat4 light_source::calculate_view_matrix(vec3 const &virtual_pos) const {
     vec3 xaxis = cross({0, 0, 1}, dir).normalized();
     vec3 yaxis = cross(dir, xaxis).normalized();
 
-    mat4 m(xaxis.x, xaxis.y, xaxis.z, -pos.x,
-           yaxis.x, yaxis.y, yaxis.z, -pos.y,
-           dir.x, dir.y, dir.z, -pos.z,
+    mat4 m(xaxis.x, xaxis.y, xaxis.z, -virtual_pos.x,
+           yaxis.x, yaxis.y, yaxis.z, -virtual_pos.y,
+           dir.x, dir.y, dir.z, -virtual_pos.z,
            0, 0, 0, 1);
 
     return m;

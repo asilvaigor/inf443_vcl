@@ -21,10 +21,10 @@ Scene::Scene(std::string &windowTitle) {
 
     // Creating rendering stuff
     whiteTexture = std::make_shared<Texture>();
-    light = vcl::light_source({100, 0, 100}, {1, 0, 1});
     grid = std::make_shared<Grid>(*shaders);
-    stillDepthMap = std::make_shared<vcl::depth_map>(4000);
-    movableDepthMap = std::make_shared<vcl::depth_map>(4000);
+
+    vcl::light_source light({100, 0, 100}, {1, 0, 1}, 0.01f, 1000.0f);
+    cascadeShadow = std::make_shared<CascadeShadow>(light, 4000);
 }
 
 Shaders &Scene::getShaders() {
@@ -38,9 +38,8 @@ void Scene::addObject(std::shared_ptr<Object> &object) {
 }
 
 void Scene::display() {
-    // Preprocessing the depth map for objects that do not move
-    updateDepthMap(true);
-
+    cascadeShadow->startup(movableObjects, stillObjects, gui->getCamera(), shaders,
+                           gui->getWindowWidth(), gui->getWindowHeight());
     while (gui->isRunning()) {
         gui->update();
         updateScene();
@@ -49,37 +48,19 @@ void Scene::display() {
 }
 
 void Scene::updateScene() {
-    updateDepthMap(false);
+    cascadeShadow->update(movableObjects, stillObjects, gui->getCamera(), shaders,
+            gui->getWindowWidth(), gui->getWindowHeight());
     shaders->overrideWithWireframe(gui->showVertices());
     if (gui->showGrid())
-        grid->draw(gui->getCamera(), light);
+        grid->draw(gui->getCamera());
 
     whiteTexture->bind();
     for (auto &obj : stillObjects) {
-        obj->draw(gui->getCamera(), light);
+        obj->draw(gui->getCamera());
         whiteTexture->bind();
     }
     for (auto &obj : movableObjects) {
-        obj->draw(gui->getCamera(), light);
+        obj->draw(gui->getCamera());
         whiteTexture->bind();
     }
-}
-
-void Scene::updateDepthMap(bool still) {
-    if (still) stillDepthMap->bind();
-    else movableDepthMap->bind();
-
-    shaders->overrideWithDepth(true);
-
-    auto &objects = movableObjects;
-    if (still) objects = stillObjects;
-    for (auto &obj : objects) {
-        obj->draw(gui->getCamera(), light);
-        whiteTexture->bind();
-    }
-
-    shaders->overrideWithDepth(false);
-
-    if (still) stillDepthMap->unbind(gui->getWindowWidth(), gui->getWindowHeight());
-    else movableDepthMap->unbind(gui->getWindowWidth(), gui->getWindowHeight());
 }

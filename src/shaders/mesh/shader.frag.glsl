@@ -10,8 +10,14 @@ in struct fragment_data
 } fragment;
 
 uniform sampler2D texture_sampler;
-uniform sampler2D shadow_map_still;
-uniform sampler2D shadow_map_movable;
+
+uniform int shadow_map_id;
+uniform sampler2D shadow_map_still_1;
+uniform sampler2D shadow_map_still_2;
+uniform sampler2D shadow_map_still_3;
+uniform sampler2D shadow_map_movable_1;
+uniform sampler2D shadow_map_movable_2;
+uniform sampler2D shadow_map_movable_3;
 
 out vec4 FragColor;
 
@@ -33,13 +39,50 @@ float shadowCalc(vec4 light_ref_pos, float epsilon) {
         return 0.0;
 
     float current_depth = pos.z;
-    vec2 texel_size_still = 1.0 / textureSize(shadow_map_still, 0);
-    vec2 texel_size_movable = 1.0 / textureSize(shadow_map_movable, 0);
+    vec2 texel_size_still;
+    vec2 texel_size_movable;
+    switch(shadow_map_id) {
+        case 1:
+            texel_size_still = 1.0 / textureSize(shadow_map_still_1, 0);
+            texel_size_movable = 1.0 / textureSize(shadow_map_movable_1, 0);
+            break;
+        case 2:
+            texel_size_still = 1.0 / textureSize(shadow_map_still_2, 0);
+            texel_size_movable = 1.0 / textureSize(shadow_map_movable_2, 0);
+            break;
+        case 3:
+            texel_size_still = 1.0 / textureSize(shadow_map_still_3, 0);
+            texel_size_movable = 1.0 / textureSize(shadow_map_movable_3, 0);
+            break;
+        default:
+            texel_size_still = vec2(0, 0);
+            texel_size_movable = vec2(0, 0);
+            break;
+    }
     float shadow = 0.0;
     for(int x = -1; x <= 1; ++x) {
         for(int y = -1; y <= 1; ++y) {
-            float pcf_depth_still = texture(shadow_map_still, pos.xy + vec2(x, y) * texel_size_still).r;
-            float pcf_depth_movable = texture(shadow_map_movable, pos.xy + vec2(x, y) * texel_size_movable).r;
+            float pcf_depth_still;
+            float pcf_depth_movable;
+            switch (shadow_map_id) {
+                case 1:
+                    pcf_depth_still = texture(shadow_map_still_1, pos.xy + vec2(x, y) * texel_size_still).r;
+                    pcf_depth_movable = texture(shadow_map_movable_1, pos.xy + vec2(x, y) * texel_size_movable).r;
+                    break;
+                case 2:
+                    pcf_depth_still = texture(shadow_map_still_2, pos.xy + vec2(x, y) * texel_size_still).r;
+                    pcf_depth_movable = texture(shadow_map_movable_2, pos.xy + vec2(x, y) * texel_size_movable).r;
+                    break;
+                case 3:
+                    pcf_depth_still = texture(shadow_map_still_3, pos.xy + vec2(x, y) * texel_size_still).r;
+                    pcf_depth_movable = texture(shadow_map_movable_3, pos.xy + vec2(x, y) * texel_size_movable).r;
+                    break;
+                default:
+                    pcf_depth_still = 0;
+                    pcf_depth_movable = 0;
+                    break;
+            }
+
             shadow += (current_depth - epsilon > pcf_depth_still ||
                        current_depth - epsilon > pcf_depth_movable) ? 1.0 : 0.0;
         }

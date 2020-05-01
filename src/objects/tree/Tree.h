@@ -29,9 +29,8 @@ public:
     /**
      * Draws the tree on opengl.
      * @param camera
-     * @param light
      */
-    void draw(const vcl::camera_scene &camera, vcl::light_source &light) override;
+    void draw(const vcl::camera_scene &camera) override;
 
 private:
     TreeSpecies &species;

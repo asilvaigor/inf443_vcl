@@ -10,7 +10,7 @@ Box::Box(Shaders &shaders) : Object(false) {
     box.shader = shaders["mesh"];
 }
 
-void Box::draw(const vcl::camera_scene &camera, vcl::light_source &light) {
-    box.uniform.light = light;
+void Box::draw(const vcl::camera_scene &camera) {
+    box.uniform.light = *light;
     vcl::draw(box, camera);
 }

@@ -57,7 +57,7 @@ template <> struct buffer_stack<float, 3> {
     /**
      * Norm of the vec3.
      */
-    float norm();
+    float norm() const;
 
     /**
      * Normalized vec3, its norm will now be 1.
@@ -67,12 +67,12 @@ template <> struct buffer_stack<float, 3> {
     /**
      * Distance to another vec3.
      */
-    float dist(vec3 &v);
+    float dist(const vec3 &v);
 
     /**
      * Angle to another vec3.
      */
-    float angle(vec3 &v);
+    float angle(const vec3 &v);
 
     friend inline std::ostream &operator<<(std::ostream &output, const vec3 &v) {
         output << "(" << v.x << ", " << v.y << ", " << v.z << ")";

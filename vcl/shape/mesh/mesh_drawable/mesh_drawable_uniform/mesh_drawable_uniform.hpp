@@ -25,6 +25,7 @@ struct mesh_drawable_uniform {
     shading_mesh shading;
     float color_alpha;
     light_source light;
+    int shadow_map_id;
 
 };
 

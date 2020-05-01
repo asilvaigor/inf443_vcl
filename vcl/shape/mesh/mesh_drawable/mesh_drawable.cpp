@@ -70,12 +70,20 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
 
     // Associating textures
     auto texture_sampler = glGetUniformLocation(shader, "texture_sampler");
-    auto shadow_map_still  = glGetUniformLocation(shader, "shadow_map_still");
-    auto shadow_map_movable  = glGetUniformLocation(shader, "shadow_map_movable");
+    auto shadow_map_still_1 = glGetUniformLocation(shader, "shadow_map_still_1");
+    auto shadow_map_movable_1 = glGetUniformLocation(shader, "shadow_map_movable_1");
+    auto shadow_map_still_2 = glGetUniformLocation(shader, "shadow_map_still_2");
+    auto shadow_map_movable_2 = glGetUniformLocation(shader, "shadow_map_movable_2");
+    auto shadow_map_still_3 = glGetUniformLocation(shader, "shadow_map_still_3");
+    auto shadow_map_movable_3 = glGetUniformLocation(shader, "shadow_map_movable_3");
     glUseProgram(shader);
     glUniform1i(texture_sampler, 0);
-    glUniform1i(shadow_map_still, 1);
-    glUniform1i(shadow_map_movable, 2);
+    glUniform1i(shadow_map_still_1, 1);
+    glUniform1i(shadow_map_movable_1, 2);
+    glUniform1i(shadow_map_still_2, 3);
+    glUniform1i(shadow_map_movable_2, 4);
+    glUniform1i(shadow_map_still_3, 5);
+    glUniform1i(shadow_map_movable_3, 6);
 
     // Bind texture only if id != 0
     if(texture_id!=0) {
@@ -99,8 +107,10 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
     uniform(shader, "diffuse", drawable.uniform.shading.diffuse);      opengl_debug();
     uniform(shader, "specular", drawable.uniform.shading.specular);    opengl_debug();
     uniform(shader, "specular_exponent", drawable.uniform.shading.specular_exponent); opengl_debug();
-    uniform(shader, "light_matrix", drawable.uniform.light.get_matrix(camera));    opengl_debug();
-    uniform(shader, "light_pos", drawable.uniform.light.get_pos());          opengl_debug();
+
+    uniform(shader, "light_matrix", drawable.uniform.light.get_matrix()); opengl_debug();
+    uniform(shader, "light_pos", drawable.uniform.light.get_pos());     opengl_debug();
+    uniform(shader, "shadow_map_id", drawable.uniform.light.get_shadow_map_id()); opengl_debug();
 
     vcl::draw(drawable.data); opengl_debug();
 

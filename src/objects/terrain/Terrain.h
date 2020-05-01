@@ -23,9 +23,8 @@ public:
     /**
      * Draws the terrain in opengl;
      * @param camera
-     * @param light
      */
-    void draw(const vcl::camera_scene &camera, vcl::light_source &light) override;
+    void draw(const vcl::camera_scene &camera) override;
 
 private:
     vcl::mesh_drawable terrain;

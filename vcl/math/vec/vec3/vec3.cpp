@@ -91,7 +91,7 @@ float const* vec3::cend() const
     return &z+1;
 }
 
-float vec3::norm() {
+float vec3::norm() const {
     return (float) hypot(hypot(x, y), z);
 }
 
@@ -100,11 +100,11 @@ vec3 vec3::normalized() {
     return {x / n, y / n, z / n};
 }
 
-float vec3::dist(vec3 &v) {
+float vec3::dist(const vec3 &v) {
     return (float) hypot(hypot(x - v.x, y - v.y), z - v.z);
 }
 
-float vec3::angle(vec3 &v) {
+float vec3::angle(const vec3 &v) {
     return acosf(dot(*this, v) / (norm() * v.norm()));
 }
 

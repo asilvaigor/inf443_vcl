@@ -18,9 +18,14 @@ public:
     /**
      * Calls vcl::draw to draw the object in the scene.
      * @param camera
+     */
+    virtual void draw(const vcl::camera_scene &camera) = 0;
+
+    /**
+     * Sets the light object that the object will be rendered with.
      * @param light
      */
-    virtual void draw(const vcl::camera_scene &camera, vcl::light_source &light) = 0;
+    void setLight(std::shared_ptr<vcl::light_source> &light);
 
     /**
      * If the object contains some kind of animation, and moves. This is required to update shadows.
@@ -28,8 +33,9 @@ public:
      */
     bool isMovable();
 
-private:
+protected:
     const bool movable;
+    std::shared_ptr<vcl::light_source> light;
 };
 
 

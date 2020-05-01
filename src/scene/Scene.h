@@ -11,6 +11,7 @@
 #include "shaders/Shaders.h"
 #include "utils/Texture.h"
 #include "SceneGui.h"
+#include "CascadeShadow.h"
 
 /**
  * Singleton class which contains a scene with its gui and objects such as shader, light etc.
@@ -47,12 +48,9 @@ private:
     std::vector<std::shared_ptr<Object>> stillObjects;
     std::vector<std::shared_ptr<Object>> movableObjects;
     std::shared_ptr<Shaders> shaders;
-    vcl::light_source light;
-    // WARNING: do not change the order of these depth maps, or it will break the draw function.
-    std::shared_ptr<vcl::depth_map> stillDepthMap;
-    std::shared_ptr<vcl::depth_map> movableDepthMap;
     std::shared_ptr<Texture> whiteTexture;
     std::shared_ptr<Grid> grid;
+    std::shared_ptr<CascadeShadow> cascadeShadow;
 
     static bool exists; // Singleton bool
 
@@ -66,12 +64,6 @@ private:
      * Updates the objects in the scene using a depth map.
      */
     void updateScene();
-
-    /**
-     * Updates one of the depth maps of the scene, which render shadows.
-     * @param still If it is the still or the moving depth map.
-     */
-    void updateDepthMap(bool still);
 };
 
 

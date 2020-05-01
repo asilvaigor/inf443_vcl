@@ -165,7 +165,11 @@ void camera_scene::apply_scaling(float s)
 
 vec3 camera_scene::camera_position() const
 {
-    return orientation*vec3{0,0,scale} - translation;;
+    return orientation*vec3{0,0,scale} - translation;
+}
+
+vec3 camera_scene::camera_direction() const {
+    return (orientation * vec3(0, 0, 1)).normalized();
 }
 
 std::vector<vec3> camera_scene::calculate_frustum(float z_near, float z_far) const {

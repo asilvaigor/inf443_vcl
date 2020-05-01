@@ -44,6 +44,8 @@ struct camera_scene
     /** Return the corresponding center of camera */
     vec3 camera_position() const;
 
+    vec3 camera_direction() const;
+
     camera_control_type camera_type = camera_control_trackball;
     vec2 spherical_coordinates = {0,0};
 
