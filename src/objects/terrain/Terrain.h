@@ -26,9 +26,16 @@ public:
      */
     void draw(const vcl::camera_scene &camera) override;
 
+    void setLight2(std::shared_ptr<vcl::light_source> &light);
+
+    void setLight3(std::shared_ptr<vcl::light_source> &light);
+
 private:
     vcl::mesh_drawable terrain;
     const Texture snowTexture;
+    // Terrain has extra lights
+    std::shared_ptr<vcl::light_source> light2;
+    std::shared_ptr<vcl::light_source> light3;
 };
 
 

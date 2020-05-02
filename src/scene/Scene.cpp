@@ -25,7 +25,7 @@ Scene::Scene(std::string &windowTitle) {
 
     vcl::light_source light({100, 0, 100}, {1, 0, 1},
             gui->getCamera().perspective.z_near, gui->getCamera().perspective.z_far);
-    cascadeShadow = std::make_shared<CascadeShadow>(light, 4000);
+    cascadeShadow = std::make_shared<CascadeShadow>(light, 3072);
 }
 
 Shaders &Scene::getShaders() {

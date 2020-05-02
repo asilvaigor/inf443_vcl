@@ -17,8 +17,9 @@ public:
     /**
      * Generates the box.
      * @param shaders
+     * @param base
      */
-    explicit Box(Shaders &shaders);
+    explicit Box(Shaders &shaders, vcl::vec3 base = {0, 0, 0});
 
     /**
      * Draws the box in opengl;

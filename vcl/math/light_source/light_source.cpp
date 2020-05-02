@@ -19,16 +19,11 @@ light_source::light_source(vec3 pos, vec3 dir, float camera_z_near, float camera
 void light_source::update(camera_scene &camera) {
     auto corners = camera.calculate_frustum_corners(camera_z_near, camera_z_far);
     vec3 centroid;
-    float min_z = std::numeric_limits<float>::max();
-    float max_z = std::numeric_limits<float>::min();
-    for (auto &c : corners) {
+    for (auto &c : corners)
         centroid += c;
-        min_z = std::min(min_z, c.z);
-        max_z = std::max(max_z, c.z);
-    }
     centroid /= 8.0f;
 
-    vec3 virtual_pos = centroid + dir * (max_z - min_z);
+    vec3 virtual_pos = centroid + dir * (camera_z_far - camera_z_near);
 
     mat4 view = calculate_view_matrix(virtual_pos);
     mat4 ortho = calculate_ortho_matrix(corners, view);

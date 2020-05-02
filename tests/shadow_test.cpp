@@ -13,7 +13,16 @@ int main() {
     auto terrain = std::static_pointer_cast<Object>(std::make_shared<Terrain>(scene.getShaders()));
     scene.addObject(terrain);
 
-    auto box = std::static_pointer_cast<Object>(std::make_shared<Box>(scene.getShaders()));
+    auto box = std::static_pointer_cast<Object>(std::make_shared<Box>(Box(scene.getShaders(), {-8, 0, 0})));
+    scene.addObject(box);
+
+    box = std::static_pointer_cast<Object>(std::make_shared<Box>(Box(scene.getShaders(), {8, 0, 0})));
+    scene.addObject(box);
+
+    box = std::static_pointer_cast<Object>(std::make_shared<Box>(Box(scene.getShaders(), {0, -8, 0})));
+    scene.addObject(box);
+
+    box = std::static_pointer_cast<Object>(std::make_shared<Box>(Box(scene.getShaders(), {0, 8, 0})));
     scene.addObject(box);
 
     scene.display();

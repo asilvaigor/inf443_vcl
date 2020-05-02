@@ -2,6 +2,7 @@
 // Created by igor on 30/04/2020.
 //
 
+#include "objects/terrain/Terrain.h"
 #include "CascadeShadow.h"
 
 CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
@@ -22,7 +23,6 @@ CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
     }
 }
 
-bool already = false;
 void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects,
                            std::vector<std::shared_ptr<Object> > &stillObjects,
                            vcl::camera_scene &camera, std::shared_ptr<Shaders> &shaders,
@@ -61,7 +61,15 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
     maps->bind(lastUpdated);
     camera.calculate_frustum_planes();
     for (auto &obj : objects) {
-        if (obj->getBoundingBox().isInFrustum(camera, *lights[lastUpdated])) {
+        auto* t = dynamic_cast<Terrain*> (obj.get());
+        if (t != nullptr) {
+            if (lastUpdated / 2 == 0)
+                t->setLight(lights[lastUpdated]);
+            else if (lastUpdated / 2 == 1)
+                t->setLight2(lights[lastUpdated]);
+            else t->setLight3(lights[lastUpdated]);
+            obj->draw(camera);
+        } else if (obj->getBoundingBox().isInFrustum(camera, *lights[lastUpdated])) {
             obj->setLight(lights[lastUpdated]);
             obj->draw(camera);
         }

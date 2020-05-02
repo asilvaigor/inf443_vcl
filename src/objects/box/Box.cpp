@@ -4,9 +4,10 @@
 
 #include "Box.h"
 
-Box::Box(Shaders &shaders) : Object(false) {
-    auto mesh = vcl::mesh_primitive_parallelepiped({-0.5, -0.5, 0});
-    boundingBox = BoundingBox(-0.5, 0.5, -0.5, 0.5, 0, 1.0);
+Box::Box(Shaders &shaders, vcl::vec3 base) : Object(false) {
+    auto mesh = vcl::mesh_primitive_parallelepiped({base.x - 0.5f, base.y - 0.5f, 0});
+    boundingBox = BoundingBox(base.x - 0.5, base.x + 0.5, base.y - 0.5,
+                              base.y + 0.5, base.z, base.z + 1.0);
     box = vcl::mesh_drawable(mesh);
     box.shader = shaders["mesh"];
 }
