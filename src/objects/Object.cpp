@@ -12,6 +12,10 @@ void Object::setLight(std::shared_ptr<vcl::light_source> &l) {
     light = l;
 }
 
+std::shared_ptr<vcl::light_source> & Object::getLight() {
+    return light;
+}
+
 bool Object::isMovable() const {
     return movable;
 }

@@ -28,7 +28,7 @@ int BoundingBox::isInFrustum(vcl::camera_scene &camera, vcl::light_source &light
     vcl::vec3 base((minX + maxX) / 2.0f, (minY + maxY) / 2.0f, minZ);
     if (camera.is_inside_frustum(base)) {
         float d = std::fabs(vcl::dot(camera.camera_direction(), (base - camera.camera_position())));
-        return light.get_z_near() <= d && d <= light.get_z_far();
+        return light.get_z_near() < d && d < light.get_z_far();
     }
     return false;
 }

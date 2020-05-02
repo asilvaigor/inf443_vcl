@@ -7,7 +7,7 @@
 
 CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
         : nCascades(3) {
-    lastUpdated = -1;
+    lastUpdated = 0;
     maps = std::make_shared<vcl::depth_maps>(2 * nCascades, mapResolution);
     for (int i = 0; i < 2 * nCascades; i++) {
         cameraLastUpdate.emplace_back(vcl::camera_scene());
@@ -17,7 +17,7 @@ CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
     float zF = light.get_z_near();
     for (int i = 0; i < nCascades; i++) {
         zN = zF;
-        zF = light.get_z_far() / std::max(1.0f, (5.0f * (float) (nCascades - i - 1)));
+        zF = light.get_z_far() / std::max(1.0f, (4.0f * (float) (nCascades - i - 1)));
         lights.emplace_back(std::make_shared<vcl::light_source>(light.get_pos(), light.get_dir(), zN, zF, i + 1));
         lights.emplace_back(std::make_shared<vcl::light_source>(light.get_pos(), light.get_dir(), zN, zF, i + 1));
     }
@@ -27,17 +27,20 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
                            std::vector<std::shared_ptr<Object> > &stillObjects,
                            vcl::camera_scene &camera, std::shared_ptr<Shaders> &shaders,
                            int windowWidth, int windowHeight) {
-    int startIdx = lastUpdated;
-    lastUpdated = (lastUpdated + 1) % (2 * nCascades);
     shaders->overrideWithDepth(true);
 
-    while (lastUpdated != startIdx) {
+    int startIdx = lastUpdated;
+    bool firstTime = true;
+    while (firstTime || lastUpdated != startIdx) {
+        firstTime = false;
         bool mustUpdate = false;
         vcl::camera_scene &lastCamera = cameraLastUpdate[lastUpdated];
         mustUpdate |= std::fabs(lastCamera.perspective.image_aspect - camera.perspective.image_aspect) > 1e-6;
         mustUpdate |= lastCamera.camera_position().dist(camera.camera_position()) > 1.0f;
         mustUpdate |= lastCamera.camera_direction().angle(camera.camera_direction()) > 1e-2f;
         // TODO: Add condition for moving objects.
+
+        // If camera has changed or objects have moved, update the objects
         if (mustUpdate) {
             lights[lastUpdated]->update(camera);
 
@@ -54,13 +57,14 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
 
     shaders->overrideWithDepth(false);
     maps->unbind_all(windowWidth, windowHeight);
-    lastUpdated = (lastUpdated + 1) % (2 * nCascades);
 }
 
 void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::camera_scene &camera) {
     maps->bind(lastUpdated);
     camera.calculate_frustum_planes();
+
     for (auto &obj : objects) {
+        // If it is the terrain, it will be in all cascades
         auto* t = dynamic_cast<Terrain*> (obj.get());
         if (t != nullptr) {
             if (lastUpdated / 2 == 0)
@@ -69,7 +73,9 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
                 t->setLight2(lights[lastUpdated]);
             else t->setLight3(lights[lastUpdated]);
             obj->draw(camera);
-        } else if (obj->getBoundingBox().isInFrustum(camera, *lights[lastUpdated])) {
+        // A normal object must be in the correct frustum to be rendered
+        } else if (obj->getLight()->get_shadow_map_id() == lastUpdated / 2 + 1 ||
+                   obj->getBoundingBox().isInFrustum(camera, *lights[lastUpdated])) {
             obj->setLight(lights[lastUpdated]);
             obj->draw(camera);
         }

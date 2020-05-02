@@ -29,6 +29,12 @@ public:
     void setLight(std::shared_ptr<vcl::light_source> &light);
 
     /**
+     * Gets the light object that the object will be rendered with.
+     * @param light
+     */
+    std::shared_ptr<vcl::light_source> &getLight();
+
+    /**
      * If the object contains some kind of animation, and moves. This is required to update shadows.
      * @return True if the object moves.
      */
