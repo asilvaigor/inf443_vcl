@@ -41,6 +41,9 @@ struct mesh
 
     /** Appends two meshes together */
     void add(mesh &m);
+
+    /* Checks if the mesh is empty */
+    bool empty() const;
 };
 
 /** Compute per-vertex normals given a set of position coordinates and triangle index connectivity */

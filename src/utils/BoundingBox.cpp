@@ -25,15 +25,16 @@ void BoundingBox::update(const vcl::vec3 &point) {
 }
 
 int BoundingBox::isInCameraFrustum(vcl::camera_scene &camera) {
-    bool is = false;
     for (int i = 0; i < 8; i++) {
         float &x = i / 4 == 0 ? minX : maxX;
         float &y = (i / 2) % 2 == 0 ? minY : maxY;
         float &z = i % 2 == 0 ? minZ : maxZ;
         vcl::vec3 pt(x, y, z);
-        is |= camera.is_inside_frustum(pt);
+        if (camera.is_inside_frustum(pt))
+            return true;
     }
-    return is;
+    vcl::vec3 pt(0.5f * (minX + maxX), 0.5f * (minY + maxY), 0.5f * (minZ + maxZ));
+    return camera.is_inside_frustum(pt);
 }
 
 int BoundingBox::isInLightFrustum(vcl::camera_scene &camera, vcl::light_source &light) {

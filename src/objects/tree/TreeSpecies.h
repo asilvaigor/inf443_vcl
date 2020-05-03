@@ -19,6 +19,8 @@ public:
 
     static TreeSpecies pine();
 
+    static TreeSpecies blackTupelo();
+
     int levels{}; // >=1, Number of levels in the branches recursion.
     // 1 is only trunk, 2 is trunk with branches on it, 3 these branches will have branches etc.
     // Determines the size of all the std::vector variables below.
@@ -33,12 +35,13 @@ public:
     float leafHeightVar{}; // >=0, Leaf height variance.
     float leafBase{}; // >=0, Base of the leaf triangle.
     float leafBaseVar{}; // >=0, Leaf base variance.
-    float snowyLeafMaxAngle{}; // >=0, Angle the snowy leaves make with the z axis. If 0, no leaves ill be snowy.
 
     vcl::shading_mesh branchShading; // Shading for the branch mesh.
+    vcl::shading_mesh snowyBranchShading; // Shading for the snowy branch mesh.
     vcl::shading_mesh leafShading; // Shading for the leaf mesh.
     vcl::shading_mesh snowyLeafShading; // Shading for the snowy leaf mesh.
     vcl::vec4 branchColor; // Color for the branch mesh.
+    vcl::vec4 snowyBranchColor; // Color for the snowy branch mesh.
     vcl::vec4 leafColor; // Color for the leaf mesh.
     vcl::vec4 snowyLeafColor; // Color for the snowy leaf mesh.
 

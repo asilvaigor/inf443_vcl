@@ -13,9 +13,16 @@ int main() {
     auto terrain = std::static_pointer_cast<Object>(std::make_shared<Terrain>(scene.getShaders()));
     scene.addObject(terrain);
 
-    TreeSpecies species = TreeSpecies::pine();
+    TreeSpecies pineSpecies = TreeSpecies::pine();
     vcl::vec3 pos(0, 0, 0);
-    auto tree = std::static_pointer_cast<Object>(std::make_shared<Tree>(scene.getShaders(), pos, species));
+    auto tree = std::static_pointer_cast<Object>(
+            std::make_shared<Tree>(scene.getShaders(), pos, pineSpecies, 0.4, true));
+    scene.addObject(tree);
+
+    TreeSpecies blackSpecies = TreeSpecies::blackTupelo();
+    pos = {5, 0, 0};
+    tree = std::static_pointer_cast<Object>(
+            std::make_shared<Tree>(scene.getShaders(), pos, blackSpecies, 0.4, true));
     scene.addObject(tree);
 
     scene.display();

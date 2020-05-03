@@ -19,7 +19,7 @@ void BezierSpline::addPoint(vcl::vec3 pos, float r, vcl::vec3 lH, vcl::vec3 rH) 
 vcl::mesh BezierSpline::toMesh() {
     vcl::mesh mesh;
 
-    if (nPoints < 2)
+    if (nPoints < 2 || radius[0] < FLT_EPSILON)
         return mesh;
 
     const float circleResolution = 64;
@@ -64,12 +64,7 @@ vcl::mesh BezierSpline::toMesh() {
             float r = radius[i] * (1.0f - b) + radius[i + 1] * b;
 
             // Direction of the curve
-            vcl::vec3 dir = (center - lastCenter).normalized();
-            if (j == 0) {
-                float nextA = 1.0f / (float) (nCircles - 1);
-                vcl::vec3 nextCenter = position(i, nextA);
-                dir = (nextCenter - center).normalized();
-            }
+            vcl::vec3 dir = tangent(i, a);
 
             // If it is not a point
             if (r > FLT_EPSILON) {
@@ -95,7 +90,7 @@ vcl::mesh BezierSpline::toMesh() {
             // Adjusting connectivity
             if (i != 0 || j != 0) {
                 if (!finishesInPoint || (i != nPoints - 2 || j != nCircles - 1)) {
-                    for (int k1 = 0, k2 = 0; k1 < uMax + 1 && k2 < uMax + 1; k1++, k2++) {
+                    for (int k1 = 0, k2 = 0; k1 < uMax && k2 < uMax; k1++, k2++) {
                         auto i0 = (unsigned int) (mesh.position.size() - uMax);
                         auto j0 = (unsigned int) (mesh.position.size() - 2 * uMax);
 
@@ -108,7 +103,7 @@ vcl::mesh BezierSpline::toMesh() {
                     }
                 } else {
                     // If it ends in a point, adding only one triangle
-                    for (int k1 = 0; k1 < uMax + 1; k1++) {
+                    for (int k1 = 0; k1 < uMax; k1++) {
                         auto i0 = (unsigned int) (mesh.position.size() - uMax - 1);
                         auto j0 = (unsigned int) (mesh.position.size() - 1);
                         auto i1 = i0 + (unsigned int) k1 % uMax;

@@ -160,6 +160,10 @@ void mesh::add(mesh &m) {
     }
 }
 
+bool mesh::empty() const {
+    return position.empty();
+}
+
 vec3 center_of_mass(const mesh& shape)
 {
     return center_of_mass(shape.position, shape.connectivity);

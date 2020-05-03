@@ -23,8 +23,11 @@ public:
      * @param shaders Shaders instance.
      * @param position Position of the base of the tree.
      * @param species TreeSpecies.
+     * @param snowCoverage Controls how much snow will be in the tree.
+     * @param verbose It will data while generating tree.
      */
-    Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species);
+    Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species, float snowCoverage = 0.4,
+            bool verbose = false);
 
     /**
      * Draws the tree on opengl.
@@ -35,10 +38,12 @@ public:
 private:
     TreeSpecies &species;
     vcl::mesh_drawable branchesDrawable;
+    vcl::mesh_drawable snowyBranchesDrawable;
     vcl::mesh_drawable leavesDrawable;
     vcl::mesh_drawable snowyLeavesDrawable;
+    bool hasSnowyBranches;
     bool hasLeaves;
-    bool hasSnow;
+    bool hasSnowyLeaves;
     const Texture branchTexture;
     const Texture leafTexture;
     const Texture snowTexture;

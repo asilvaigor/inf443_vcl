@@ -24,6 +24,7 @@ public:
      * @param species TreeSpecies
      * @param turtle Turtle for the origin of the branch.
      * @param treeBoundingBox Tree's bounding box.
+     * @param snowCoverage Controls how much snow there is in the tree.
      * @param depth Current depth in the tree.
      * @param startIdx The start segment of this branch's parent's bezier spline, used for splitting.
      * @param parent Pointer to the parent branch.
@@ -34,7 +35,7 @@ public:
      * @param offsetInTrunk Branch's Offset in the trunk's height.
      * @param radiusLimit Maximum value for the branch's radius.
      */
-    explicit Branch(TreeSpecies &species, TurtleGraphics turtle, BoundingBox &treeBoundingBox,
+    explicit Branch(TreeSpecies &species, TurtleGraphics turtle, BoundingBox &treeBoundingBox, float &snowCoverage,
                     int depth = 0, int startIdx = 0, Branch *parent = nullptr, float treeScale = 0,
                     float nBranchesFactor = 1, float splitAngleCorrection = 0, float splitProb = 1,
                     float offsetInTrunk = 0, float radiusLimit = FLT_MAX);
@@ -44,6 +45,12 @@ public:
      * @return
      */
     vcl::mesh toBranchMesh();
+
+    /**
+     * Calculates the mesh for the branches covered with snow.
+     * @return
+     */
+    vcl::mesh toSnowyBranchMesh();
 
     /**
      * Calculates the mesh for the leaves.
@@ -61,6 +68,7 @@ private:
     TreeSpecies &species;
     TurtleGraphics turtle;
     BoundingBox &treeBoundingBox;
+    float &snowCoverage;
     BezierSpline spline;
     int depth;
     int startIdx;
@@ -89,23 +97,23 @@ private:
     /**
      * Makes branches on the current segment.
      */
-    void makeBranches(int segIdx, float branchesOnSeg, float prevRotationAngle);
+    void makeBranches(int segIdx, float branchesOnSeg, float &prevRotationAngle);
 
     /**
      * Makes a single branch.
      */
-    void
-    makeBranch(int branchIdx, float offset, float offsetInParent, float prevRotationAngle, int nBranchesInGroup = 0);
+    void makeBranch(int branchIdx, float offset, float offsetInParent, float &prevRotationAngle,
+            int nBranchesInGroup = 0);
 
     /**
      * Makes leaves on the current segment.
      */
-    void makeLeaves(int segIdx, float leavesOnSeg, float prevRotationAngle);
+    void makeLeaves(int segIdx, float leavesOnSeg, float &prevRotationAngle);
 
     /**
      * Makes a single leaf.
      */
-    void makeLeaf(float offset, float offsetInParent, float prevRotationAngle);
+    void makeLeaf(float offset, float offsetInParent, float &prevRotationAngle);
 
     /**
      * Splits the current branch.
@@ -122,7 +130,7 @@ private:
 
     float calculateDownAngle(float stemOffset);
 
-    float calculateRotateAngle(float prevAngle);
+    float calculateRotateAngle(float prevAngle, int depth = -1);
 
     float calculateNBranches() const;
 
