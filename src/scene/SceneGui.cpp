@@ -34,6 +34,7 @@ SceneGui::SceneGui(std::string &windowTitle) : windowTitle(windowTitle) {
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     vcl::imgui_init(window);
 
+    sunAngle = 0.25 * M_PI;
     verticesOn = false;
 
     // Initial camera parameters
@@ -74,6 +75,7 @@ void SceneGui::update() {
     ImGui::Begin("Options", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::Checkbox("Vertices", &verticesOn);
     ImGui::Checkbox("Grid", &gridOn);
+    ImGui::SliderAngle("Sun Angle", &sunAngle, -180, 180);
 
     opengl_debug();
 }
@@ -110,6 +112,10 @@ int SceneGui::getWindowWidth() {
 
 int SceneGui::getWindowHeight() {
     return windowHeight;
+}
+
+float SceneGui::getSunAngle() {
+    return sunAngle;
 }
 
 void SceneGui::updateFps() {

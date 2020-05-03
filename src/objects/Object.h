@@ -20,7 +20,7 @@ public:
      * Calls vcl::draw to draw the object in the scene.
      * @param camera
      */
-    virtual void draw(const vcl::camera_scene &camera) = 0;
+    virtual void draw(vcl::camera_scene &camera) = 0;
 
     /**
      * Sets the light object that the object will be rendered with.

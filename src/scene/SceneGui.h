@@ -59,9 +59,12 @@ public:
 
     int getWindowHeight();
 
+    float getSunAngle();
+
 private:
     std::string windowTitle;
     vcl::glfw_fps_counter fpsCounter;
+    float sunAngle;
     bool verticesOn;
     bool gridOn;
 

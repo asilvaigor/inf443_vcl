@@ -30,7 +30,7 @@ public:
      * Draws the tree on opengl.
      * @param camera
      */
-    void draw(const vcl::camera_scene &camera) override;
+    void draw(vcl::camera_scene &camera) override;
 
 private:
     TreeSpecies &species;

@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include <memory>
 #include "vcl/math/math.hpp"
 
 namespace vcl
@@ -24,9 +24,9 @@ struct mesh_drawable_uniform {
     vec3 color;
     shading_mesh shading;
     float color_alpha;
-    light_source light;
-    light_source light2;
-    light_source light3;
+    std::shared_ptr<light_source> light;
+    std::shared_ptr<light_source> light2;
+    std::shared_ptr<light_source> light3;
     int shadow_map_id;
 
 };

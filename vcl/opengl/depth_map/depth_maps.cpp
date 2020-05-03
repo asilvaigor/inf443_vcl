@@ -71,6 +71,10 @@ void depth_maps::unbind(int i, int windowWidth, int windowHeight) {
     // Binding the texture to be used
     glActiveTexture(GL_TEXTURE0 + layouts[i]);
     glBindTexture(GL_TEXTURE_2D, texture_ids[i]);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
     glActiveTexture(GL_TEXTURE0);
 
     if (nBinded == 0) {

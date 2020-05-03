@@ -7,6 +7,7 @@
 
 #include <memory>
 #include "vcl.hpp"
+#include "SceneGui.h"
 #include "objects/Object.h"
 
 /**
@@ -29,21 +30,19 @@ public:
      * TODO: Implement update if an object has moved.
      * @param movableObjects
      * @param stillObjects
-     * @param camera
+     * @param gui Contains info on camera, light and windows.
      * @param shaders
-     * @param windowWidth
-     * @param windowHeight
      */
     void update(std::vector<std::shared_ptr<Object>> &movableObjects,
                 std::vector<std::shared_ptr<Object>> &stillObjects,
-                vcl::camera_scene &camera, std::shared_ptr<Shaders> &shaders,
-                int windowWidth, int windowHeight);
+                std::shared_ptr<SceneGui> &gui, std::shared_ptr<Shaders> &shaders);
 
 private:
     const int nCascades;
     std::shared_ptr<vcl::depth_maps> maps;
-    std::vector<vcl::camera_scene> cameraLastUpdate;
-    std::vector<double> timeLastUpdate;
+    std::vector<vcl::camera_scene> lastCamera;
+    std::vector<float> lastSunAngle;
+    std::vector<double> lastTime;
     std::vector<std::shared_ptr<vcl::light_source>> lights;
     int lastUpdated;
 

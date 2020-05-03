@@ -23,7 +23,7 @@ Scene::Scene(std::string &windowTitle) {
     whiteTexture = std::make_shared<Texture>();
     grid = std::make_shared<Grid>(*shaders);
 
-    vcl::light_source light({100, 0, 100}, {1, 0, 1},
+    vcl::light_source light({100, 0, 100}, {-1, 0, -1},
             gui->getCamera().perspective.z_near, gui->getCamera().perspective.z_far);
     cascadeShadow = std::make_shared<CascadeShadow>(light, 3072);
 }
@@ -47,8 +47,7 @@ void Scene::display() {
 }
 
 void Scene::updateScene() {
-    cascadeShadow->update(movableObjects, stillObjects, gui->getCamera(), shaders,
-            gui->getWindowWidth(), gui->getWindowHeight());
+    cascadeShadow->update(movableObjects, stillObjects, gui, shaders);
     shaders->overrideWithWireframe(gui->showVertices());
     if (gui->showGrid())
         grid->draw(gui->getCamera());

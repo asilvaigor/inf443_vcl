@@ -25,7 +25,7 @@ public:
      * @param camera
      * @param light
      */
-    void draw(const vcl::camera_scene &camera) override;
+    void draw(vcl::camera_scene &camera) override;
 
 private:
     vcl::mesh_drawable grid;

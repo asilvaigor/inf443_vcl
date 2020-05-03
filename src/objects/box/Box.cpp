@@ -12,7 +12,9 @@ Box::Box(Shaders &shaders, vcl::vec3 base) : Object(false) {
     box.shader = shaders["mesh"];
 }
 
-void Box::draw(const vcl::camera_scene &camera) {
-    box.uniform.light = *light;
-    vcl::draw(box, camera);
+void Box::draw(vcl::camera_scene &camera) {
+    if (boundingBox.isInCameraFrustum(camera)) {
+        box.uniform.light = light;
+        vcl::draw(box, camera);
+    }
 }

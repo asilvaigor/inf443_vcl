@@ -24,12 +24,19 @@ public:
     void update(const vcl::vec3 &point);
 
     /**
-     * Calculates if the box is in the camera frustum, and if the given light covers it.
+     * Calculates if the box is in the camera frustum.
+     * @param camera
+     * @return True if the object is in the camera frustum.
+     */
+    int isInCameraFrustum(vcl::camera_scene &camera);
+
+    /**
+     * Calculates if the box is in the light frustum.
      * @param camera
      * @param light Light in the shadow cascade.
      * @return True if the object's shadow should be rendered.
      */
-    int isInFrustum(vcl::camera_scene &camera, vcl::light_source &light);
+    int isInLightFrustum(vcl::camera_scene &camera, vcl::light_source &light);
 
     float minX;
     float maxX;

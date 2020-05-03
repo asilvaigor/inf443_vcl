@@ -4,17 +4,19 @@
 
 #include "Terrain.h"
 
-Terrain::Terrain(Shaders &shaders) : Object(false), snowTexture("snow") {
+Terrain::Terrain(Shaders &shaders) : Object(false), snowTexture("snow_ground") {
     light2 = std::make_shared<vcl::light_source>();
     light3 = std::make_shared<vcl::light_source>();
 
-    vcl::vec3 p00 = {-10, -10, 0};
-    vcl::vec3 p10 = {10, -10, 0};
-    vcl::vec3 p11 = {10, 10, 0};
-    vcl::vec3 p01 = {-10, 10, 0};
+    float size = 140.0;
+    vcl::vec3 p00 = {-size, -size, 0};
+    vcl::vec3 p10 = {size, -size, 0};
+    vcl::vec3 p11 = {size, size, 0};
+    vcl::vec3 p01 = {-size, size, 0};
     vcl::mesh mesh = vcl::mesh_primitive_quad(p00, p10, p11, p01);
+    mesh.texture_uv = {{0, 0}, {size, 0}, {size, size}, {0, size}};
 
-    boundingBox = BoundingBox(-10, 10, -10, 10, 0, 0);
+    boundingBox = BoundingBox(-size, size, -size, size, 0, 0);
 
     terrain = vcl::mesh_drawable(mesh);
     terrain.shader = shaders["terrain_mesh"];
@@ -22,10 +24,10 @@ Terrain::Terrain(Shaders &shaders) : Object(false), snowTexture("snow") {
     terrain.uniform.shading = {0.5, 0.6, 0.1, 32};
 }
 
-void Terrain::draw(const vcl::camera_scene &camera) {
-    terrain.uniform.light = *light;
-    terrain.uniform.light2 = *light2;
-    terrain.uniform.light3 = *light3;
+void Terrain::draw(vcl::camera_scene &camera) {
+    terrain.uniform.light = light;
+    terrain.uniform.light2 = light2;
+    terrain.uniform.light3 = light3;
     snowTexture.bind();
     vcl::draw(terrain, camera);
 }

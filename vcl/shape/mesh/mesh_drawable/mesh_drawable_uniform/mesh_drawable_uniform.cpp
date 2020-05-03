@@ -10,7 +10,11 @@ shading_mesh::shading_mesh(float ambiant_arg, float diffuse_arg, float specular_
 
 mesh_drawable_uniform::mesh_drawable_uniform()
     :transform(), color({1,1,1}), shading(), color_alpha(1.0f), shadow_map_id(0)
-{}
+{
+    light = std::make_shared<light_source>();
+    light2 = std::make_shared<light_source>();
+    light3 = std::make_shared<light_source>();
+}
 
 
 

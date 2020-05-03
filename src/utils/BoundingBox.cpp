@@ -24,11 +24,20 @@ void BoundingBox::update(const vcl::vec3 &point) {
     maxZ = std::max(maxZ, point.z);
 }
 
-int BoundingBox::isInFrustum(vcl::camera_scene &camera, vcl::light_source &light) {
-    vcl::vec3 base((minX + maxX) / 2.0f, (minY + maxY) / 2.0f, minZ);
-    if (camera.is_inside_frustum(base)) {
-        float d = std::fabs(vcl::dot(camera.camera_direction(), (base - camera.camera_position())));
-        return light.get_z_near() < d && d < light.get_z_far();
+int BoundingBox::isInCameraFrustum(vcl::camera_scene &camera) {
+    bool is = false;
+    for (int i = 0; i < 8; i++) {
+        float &x = i / 4 == 0 ? minX : maxX;
+        float &y = (i / 2) % 2 == 0 ? minY : maxY;
+        float &z = i % 2 == 0 ? minZ : maxZ;
+        vcl::vec3 pt(x, y, z);
+        is |= camera.is_inside_frustum(pt);
     }
-    return false;
+    return is;
+}
+
+int BoundingBox::isInLightFrustum(vcl::camera_scene &camera, vcl::light_source &light) {
+    vcl::vec3 base((minX + maxX) / 2.0f, (minY + maxY) / 2.0f, minZ);
+    float d = std::fabs(vcl::dot(camera.camera_direction(), (base - camera.camera_position())));
+    return light.get_z_near() < d && d < light.get_z_far();
 }

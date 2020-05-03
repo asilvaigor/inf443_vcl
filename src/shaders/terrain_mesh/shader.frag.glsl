@@ -65,15 +65,15 @@ float shadowCalc(vec4 light_ref_pos_1, float epsilon_1, vec4 light_ref_pos_2,
             float pcf_depth_still_3 = texture(shadow_map_still_3, pos_3.xy + vec2(x, y) * texel_size_still_3).r;
             float pcf_depth_movable_3 = texture(shadow_map_movable_3, pos_3.xy + vec2(x, y) * texel_size_movable_3).r;
 
-            shadow += (current_depth_1 <= 1.0 &&
-                       (current_depth_1 - epsilon_1 > pcf_depth_still_1 ||
-                        current_depth_1 - epsilon_1 > pcf_depth_movable_1) ||
-                       current_depth_2 <= 1.0 &&
-                       (current_depth_2 - epsilon_2 > pcf_depth_still_2 ||
-                        current_depth_2 - epsilon_2 > pcf_depth_movable_2) ||
-                       current_depth_3 <= 1.0 &&
-                       (current_depth_3 - epsilon_3 > pcf_depth_still_3 ||
-                        current_depth_3 - epsilon_3 > pcf_depth_movable_3)) ? 1.0 : 0.0;
+            shadow += ((current_depth_1 <= 1.0 &&
+                        (current_depth_1 - epsilon_1 > pcf_depth_still_1 ||
+                         current_depth_1 - epsilon_1 > pcf_depth_movable_1)) ||
+                       (current_depth_2 <= 1.0 &&
+                        (current_depth_2 - epsilon_2 > pcf_depth_still_2 ||
+                         current_depth_2 - epsilon_2 > pcf_depth_movable_2)) ||
+                       (current_depth_3 <= 1.0 &&
+                        (current_depth_3 - epsilon_3 > pcf_depth_still_3 ||
+                         current_depth_3 - epsilon_3 > pcf_depth_movable_3))) ? 1.0 : 0.0;
         }
     }
     shadow /= 9.0;

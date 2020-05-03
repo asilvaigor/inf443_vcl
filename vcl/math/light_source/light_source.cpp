@@ -16,14 +16,21 @@ light_source::light_source(vec3 pos, vec3 dir, float camera_z_near, float camera
     this->shadow_map_id = shadow_map_id;
 }
 
-void light_source::update(camera_scene &camera) {
+void light_source::update(camera_scene &camera, vec3 &p, vec3 &d) {
+    pos = p;
+    dir = d;
     auto corners = camera.calculate_frustum_corners(camera_z_near, camera_z_far);
     vec3 centroid;
-    for (auto &c : corners)
+    float z_min = std::numeric_limits<float>::max();
+    float z_max = std::numeric_limits<float>::min();
+    for (auto &c : corners) {
         centroid += c;
+        z_min = std::min(z_min, c.z);
+        z_max = std::max(z_max, c.z);
+    }
     centroid /= 8.0f;
 
-    vec3 virtual_pos = centroid + dir * (camera_z_far - camera_z_near);
+    vec3 virtual_pos = centroid - dir * (z_max - z_min);
 
     mat4 view = calculate_view_matrix(virtual_pos);
     mat4 ortho = calculate_ortho_matrix(corners, view);
@@ -57,11 +64,11 @@ int light_source::get_shadow_map_id() const {
 
 mat4 light_source::calculate_view_matrix(vec3 const &virtual_pos) const {
     vec3 xaxis = cross({0, 0, 1}, dir).normalized();
-    vec3 yaxis = cross(dir, xaxis).normalized();
+    vec3 yaxis = cross(-dir, xaxis).normalized();
 
     mat4 m(xaxis.x, xaxis.y, xaxis.z, -virtual_pos.x,
            yaxis.x, yaxis.y, yaxis.z, -virtual_pos.y,
-           dir.x, dir.y, dir.z, -virtual_pos.z,
+           -dir.x, -dir.y, -dir.z, -virtual_pos.z,
            0, 0, 0, 1);
 
     return m;
