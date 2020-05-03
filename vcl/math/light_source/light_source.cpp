@@ -14,11 +14,13 @@ light_source::light_source(vec3 pos, vec3 dir, float camera_z_near, float camera
     this->camera_z_near = camera_z_near;
     this->camera_z_far = camera_z_far;
     this->shadow_map_id = shadow_map_id;
+    calculate_color();
 }
 
 void light_source::update(camera_scene &camera, vec3 &p, vec3 &d) {
     pos = p;
     dir = d;
+    calculate_color();
     auto corners = camera.calculate_frustum_corners(camera_z_near, camera_z_far);
     vec3 centroid;
     float z_min = std::numeric_limits<float>::max();
@@ -60,6 +62,10 @@ float light_source::get_z_far() const {
 
 int light_source::get_shadow_map_id() const {
     return shadow_map_id;
+}
+
+vec3 light_source::get_color() const {
+    return color;
 }
 
 mat4 light_source::calculate_view_matrix(vec3 const &virtual_pos) const {
@@ -105,6 +111,33 @@ mat4 light_source::ortho(float const &left, float const &right, float const &bot
     result(1, 3) = -(top + bottom) / (top - bottom);
     result(2, 3) = -(zFar + zNear) / (zFar - zNear);
     return result;
+}
+
+void light_source::calculate_color() {
+    float angle = std::atan2(pos.z, hypotf(pos.x, pos.y));
+    float sunAngle = std::fabs((float) M_PI_2 - angle);
+
+    vec3 white(1, 1, 1);
+    vec3 yellow(0.99, 0.88, 0.24);
+    vec3 red(0.92, 0.32, 0.14);
+
+    float angles[] = {M_PI / 4, 1.75 * M_PI / 4, M_PI / 2};
+
+    // Moon color
+    if (angle < 0)
+        color = {1, 1, 1};
+    // Sun in the sky color
+    else if (sunAngle < angles[0])
+        color = white;
+    // Sunset color
+    else if (sunAngle < angles[1]) {
+        auto lambda = (float) ((sunAngle - angles[0]) / (angles[1] - angles[0]));
+        color = (1 - lambda) * white + lambda * yellow;
+    }
+    else {
+        auto lambda = (float) ((sunAngle - angles[1]) / (angles[2] - angles[1]));
+        color = (1 - lambda) * yellow + lambda * red;
+    }
 }
 
 }

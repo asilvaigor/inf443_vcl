@@ -34,6 +34,8 @@ public:
 
     int get_shadow_map_id() const;
 
+    vec3 get_color() const;
+
 private:
     vec3 dir;
     vec3 pos;
@@ -41,6 +43,7 @@ private:
     float camera_z_near;
     float camera_z_far;
     int shadow_map_id;
+    vec3 color;
 
     mat4 calculate_view_matrix(vec3 const &pos) const;
 
@@ -48,6 +51,8 @@ private:
 
     static mat4 ortho(float const &left, float const &right, float const &bottom, float const &top,
                       float const &zNear, float const &zFar);
+
+    void calculate_color();
 };
 
 }

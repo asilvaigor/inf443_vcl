@@ -32,6 +32,7 @@ uniform float specular = 0.5;
 uniform int specular_exponent = 128;
 
 uniform vec3 light_pos;
+uniform vec3 light_color;
 
 float shadowCalc(vec4 light_ref_pos_1, float epsilon_1, vec4 light_ref_pos_2,
                  float epsilon_2, vec4 light_ref_pos_3, float epsilon_3) {
@@ -102,10 +103,9 @@ void main()
                               epsilon_2, fragment.light_ref_pos_3, epsilon_3);
 
     // Setting color
-    vec3 white = vec3(1.0);
     vec4 color_texture = texture(texture_sampler, fragment.texture_uv);
     vec3 color = color.rgb * fragment.color.rgb * color_texture.rgb;
-    vec3 c = (ambiant + (1 - shadow) * (diffuse_value + specular_value * white)) * color;
+    vec3 c = (ambiant + (1 - shadow) * light_color * (diffuse_value + specular_value)) * color;
 //    vec3 c = (ambiant + diffuse_value) * color.rgb * fragment.color.rgb * color_texture.rgb + specular_value * white;
 
     FragColor = vec4(c, color_texture.a * fragment.color.a * color_alpha);
