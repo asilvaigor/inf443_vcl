@@ -9,7 +9,10 @@ uniform mat3 rotation = mat3(1.0, 0.0, 0.0,                          // user def
 uniform float scaling = 1.0;                                           // user defined scaling
 uniform vec3 scaling_axis = vec3(1.0, 1.0, 1.0);                       // user defined scaling
 
+uniform int current_light;
 uniform mat4 light_matrix;
+uniform mat4 light_matrix_2;
+uniform mat4 light_matrix_3;
 
 void main()
 {
@@ -24,5 +27,15 @@ void main()
     vec4 T = vec4(translation, 0.0);
 
     vec4 position_transformed = R * S * position + T;
-    gl_Position = light_matrix * position_transformed;
+    switch (current_light) {
+        case 1:
+            gl_Position = light_matrix * position_transformed;
+            break;
+        case 2:
+            gl_Position = light_matrix_2 * position_transformed;
+            break;
+        default:
+            gl_Position = light_matrix_3 * position_transformed;
+            break;
+    }
 }

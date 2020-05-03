@@ -26,9 +26,12 @@ public:
      */
     void draw(vcl::camera_scene &camera) override;
 
-    void setLight2(std::shared_ptr<vcl::light_source> &light);
-
-    void setLight3(std::shared_ptr<vcl::light_source> &light);
+    /**
+     * Sets a new light to the terrain.
+     * @param light
+     * @param idx
+     */
+    void setLight(std::shared_ptr<vcl::light_source> &light, int idx);
 
 private:
     vcl::mesh_drawable terrain;

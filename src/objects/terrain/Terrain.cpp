@@ -32,10 +32,17 @@ void Terrain::draw(vcl::camera_scene &camera) {
     vcl::draw(terrain, camera);
 }
 
-void Terrain::setLight2(std::shared_ptr<vcl::light_source> &light) {
-    light2 = light;
-}
-
-void Terrain::setLight3(std::shared_ptr<vcl::light_source> &light) {
-    light3 = light;
+void Terrain::setLight(std::shared_ptr<vcl::light_source> &light, int idx) {
+    switch (idx) {
+        case 1:
+            this->light = light;
+            break;
+        case 2:
+            light2 = light;
+            break;
+        default:
+            light3 = light;
+            break;
+    }
+    terrain.uniform.current_light = idx;
 }

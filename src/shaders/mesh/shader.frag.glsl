@@ -29,7 +29,6 @@ uniform float diffuse  = 0.8;
 uniform float specular = 0.5;
 uniform int specular_exponent = 128;
 
-uniform mat4 light_matrix;
 uniform vec3 light_pos;
 
 float shadowCalc(vec4 light_ref_pos, float epsilon) {

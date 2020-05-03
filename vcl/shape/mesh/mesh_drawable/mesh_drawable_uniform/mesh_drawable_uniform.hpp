@@ -27,7 +27,7 @@ struct mesh_drawable_uniform {
     std::shared_ptr<light_source> light;
     std::shared_ptr<light_source> light2;
     std::shared_ptr<light_source> light3;
-    int shadow_map_id;
+    int current_light;
 
 };
 

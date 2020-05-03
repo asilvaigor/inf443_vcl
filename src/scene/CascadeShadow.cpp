@@ -75,15 +75,11 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
         // If it is the terrain, it will be in all cascades
         auto *t = dynamic_cast<Terrain *> (obj.get());
         if (t != nullptr) {
-            if (lastUpdated / 2 == 0)
-                t->setLight(lights[lastUpdated]);
-            else if (lastUpdated / 2 == 1)
-                t->setLight2(lights[lastUpdated]);
-            else t->setLight3(lights[lastUpdated]);
-            obj->draw(camera);
+            t->setLight(lights[lastUpdated], lastUpdated / 2 + 1);
+            t->draw(camera);
             // A normal object must be in the correct frustum to be rendered
         } else if (obj->getLight()->get_shadow_map_id() == lastUpdated / 2 + 1 ||
-                    obj->getBoundingBox().isInLightFrustum(camera, *lights[lastUpdated])) {
+                   obj->getBoundingBox().isInLightFrustum(camera, *lights[lastUpdated])) {
             obj->setLight(lights[lastUpdated]);
             obj->draw(camera);
         }

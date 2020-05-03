@@ -108,6 +108,7 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
     uniform(shader, "specular", drawable.uniform.shading.specular);    opengl_debug();
     uniform(shader, "specular_exponent", drawable.uniform.shading.specular_exponent); opengl_debug();
 
+    uniform(shader, "current_light", drawable.uniform.current_light);  opengl_debug();
     uniform(shader, "light_matrix", drawable.uniform.light->get_matrix()); opengl_debug();
     uniform(shader, "light_matrix_2", drawable.uniform.light2->get_matrix()); opengl_debug();
     uniform(shader, "light_matrix_3", drawable.uniform.light3->get_matrix()); opengl_debug();
