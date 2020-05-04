@@ -7,7 +7,7 @@
 
 #include "vcl.hpp"
 #include "shaders/Shaders.h"
-#include "utils/BoundingBox.h"
+#include "utils/BoundingSphere.h"
 
 /**
  * Abstract object class to be placed in a scene.
@@ -41,15 +41,15 @@ public:
     bool isMovable() const;
 
     /**
-     * Minimum box parallel to the axis that contains the whole object.
+     * Sphere that covers the whole object.
      * @return
      */
-    BoundingBox &getBoundingBox();
+    BoundingSphere &getBoundingSphere();
 
 protected:
     const bool movable;
     std::shared_ptr<vcl::light_source> light;
-    BoundingBox boundingBox;
+    BoundingSphere boundingSphere;
 };
 
 

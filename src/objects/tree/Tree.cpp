@@ -7,22 +7,13 @@
 
 Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species, float snowCoverage, bool verbose) :
         Object(false), species(species), branchTexture("wood"), leafTexture("leaf"), snowTexture("snow") {
-    boundingBox = BoundingBox(position.x, position.x, position.y, position.y, position.z, position.z);
+    this->verbose = verbose;
     createMeshes(position, snowCoverage);
     createDrawables(shaders);
-
-    if (verbose) {
-        std::cout << "Number of vertices: branches " << branchesMesh.position.size();
-        if ((int) leavesMesh.position.size() > 0)
-            std::cout << " leaves " << leavesMesh.position.size();
-        if ((int) snowyLeavesMesh.position.size() > 0)
-            std::cout << " snowyLeaves " << snowyLeavesMesh.position.size();
-        std::cout << std::endl;
-    }
 }
 
 void Tree::draw(vcl::camera_scene &camera) {
-    if (boundingBox.isInCameraFrustum(camera)) {
+    if (boundingSphere.isInCameraFrustum(camera)) {
         if (!branchesMesh.empty()) {
             branchesDrawable.uniform.light = light;
             branchTexture.bind();
@@ -47,7 +38,9 @@ void Tree::draw(vcl::camera_scene &camera) {
 }
 
 void Tree::createMeshes(vcl::vec3 &position, float &snowCoverage) {
-    for (int i = 0; i < species.nBranches[0]; i++) {
+    std::vector<vcl::vec3 *> vertices;
+    int nBranches = species.nBranches[0] + (int) (vcl::rand_interval(-1, 1) * species.nBranchesVar[0]);
+    for (int i = 0; i < nBranches; i++) {
         vcl::vec3 p = position;
         if (species.nBranches[0] > 1) {
             // Placing stems uniformly in a circle
@@ -56,7 +49,7 @@ void Tree::createMeshes(vcl::vec3 &position, float &snowCoverage) {
             p += vcl::vec3(r * std::cos(ang), r * std::sin(ang), 0);
         }
         TurtleGraphics turtle(p);
-        Branch trunk(species, turtle, boundingBox, snowCoverage);
+        Branch trunk(species, turtle, snowCoverage);
 
         auto m = trunk.toBranchMesh();
         branchesMesh.add(m);
@@ -69,6 +62,33 @@ void Tree::createMeshes(vcl::vec3 &position, float &snowCoverage) {
 
         m = trunk.toSnowyLeavesMesh();
         snowyLeavesMesh.add(m);
+    }
+
+    // Creating bounding sphere
+    int nB = (int) branchesMesh.position.size();
+    int nSB = (int) snowyBranchesMesh.position.size();
+    int nL = (int) leavesMesh.position.size();
+    int nSL = (int) snowyLeavesMesh.position.size();
+    int nVertices = nB + nSB + nL + nSL;
+    vertices.reserve(nVertices);
+
+    for (auto &pt : branchesMesh.position)
+        vertices.push_back(&pt);
+    for (auto &pt : snowyBranchesMesh.position)
+        vertices.push_back(&pt);
+    for (auto &pt : leavesMesh.position)
+        vertices.push_back(&pt);
+    for (auto &pt : snowyLeavesMesh.position)
+        vertices.push_back(&pt);
+    boundingSphere = BoundingSphere(vertices);
+
+    if (verbose) {
+        std::cout << "Number of vertices: total " << nVertices;
+        if (nB > 0) std::cout << " branches " << nB;
+        if (nSB > 0) std::cout << " snowyBranches " << nSB;
+        if (nL > 0) std::cout << " leaves " << nL;
+        if (nSL > 0) std::cout << " snowyLeaves " << nSL;
+        std::cout << std::endl;
     }
 }
 

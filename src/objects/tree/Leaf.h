@@ -8,7 +8,7 @@
 #include "vcl.hpp"
 #include "TreeSpecies.h"
 #include "utils/TurtleGraphics.h"
-#include "utils/BoundingBox.h"
+#include "utils/BoundingSphere.h"
 
 /**
  * Leaf object to be rendered. It consists of a triangle with two equal sides.
@@ -19,10 +19,9 @@ public:
      * Generates a leaf given a turtle for its origin. The origin will be the center of the triangle's base.
      * @param species
      * @param turtle Origin of the leaf.
-     * @param treeBoundingBox Tree's bounding box.
      * @param treeScale Scale of the tree, calculated inside the Branch class.
      */
-    Leaf(TreeSpecies &species, TurtleGraphics &turtle, BoundingBox &treeBoundingBox, float treeScale);
+    Leaf(TreeSpecies &species, TurtleGraphics &turtle, float treeScale);
 
     /**
      * Converts the leaf to a mesh.
@@ -32,7 +31,6 @@ public:
 
 private:
     TurtleGraphics turtle;
-    BoundingBox &treeBoundingBox;
     float scale;
     std::vector<std::pair<float, float>> description;
     vcl::buffer<vcl::uint3> connectivity;

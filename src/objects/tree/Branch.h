@@ -7,7 +7,7 @@
 
 #include <memory>
 #include "TreeSpecies.h"
-#include "utils/BoundingBox.h"
+#include "utils/BoundingSphere.h"
 #include "utils/TurtleGraphics.h"
 #include "utils/BezierSpline.h"
 #include "Leaf.h"
@@ -23,7 +23,6 @@ public:
      * Will generate the branch and all its children, by setting up variables and calling generate().
      * @param species TreeSpecies
      * @param turtle Turtle for the origin of the branch.
-     * @param treeBoundingBox Tree's bounding box.
      * @param snowCoverage Controls how much snow there is in the tree.
      * @param depth Current depth in the tree.
      * @param startIdx The start segment of this branch's parent's bezier spline, used for splitting.
@@ -35,7 +34,7 @@ public:
      * @param offsetInTrunk Branch's Offset in the trunk's height.
      * @param radiusLimit Maximum value for the branch's radius.
      */
-    explicit Branch(TreeSpecies &species, TurtleGraphics turtle, BoundingBox &treeBoundingBox, float &snowCoverage,
+    explicit Branch(TreeSpecies &species, TurtleGraphics turtle, float &snowCoverage,
                     int depth = 0, int startIdx = 0, Branch *parent = nullptr, float treeScale = 0,
                     float nBranchesFactor = 1, float splitAngleCorrection = 0, float splitProb = 1,
                     float offsetInTrunk = 0, float radiusLimit = FLT_MAX);
@@ -67,7 +66,6 @@ public:
 private:
     TreeSpecies &species;
     TurtleGraphics turtle;
-    BoundingBox &treeBoundingBox;
     float &snowCoverage;
     BezierSpline spline;
     int depth;

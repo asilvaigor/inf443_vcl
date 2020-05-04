@@ -16,7 +16,7 @@ Terrain::Terrain(Shaders &shaders) : Object(false), snowTexture("snow_ground") {
     vcl::mesh mesh = vcl::mesh_primitive_quad(p00, p10, p11, p01);
     mesh.texture_uv = {{0, 0}, {size, 0}, {size, size}, {0, size}};
 
-    boundingBox = BoundingBox(-size, size, -size, size, 0, 0);
+    boundingSphere = BoundingSphere(mesh);
 
     terrain = vcl::mesh_drawable(mesh);
     terrain.shader = shaders["terrain_mesh"];

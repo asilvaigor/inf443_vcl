@@ -45,6 +45,7 @@ private:
     vcl::mesh_drawable snowyBranchesDrawable;
     vcl::mesh_drawable leavesDrawable;
     vcl::mesh_drawable snowyLeavesDrawable;
+    bool verbose;
     const Texture branchTexture;
     const Texture leafTexture;
     const Texture snowTexture;

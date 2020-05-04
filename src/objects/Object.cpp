@@ -20,6 +20,6 @@ bool Object::isMovable() const {
     return movable;
 }
 
-BoundingBox &Object::getBoundingBox() {
-    return boundingBox;
+BoundingSphere &Object::getBoundingSphere() {
+    return boundingSphere;
 }

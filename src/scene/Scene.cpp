@@ -54,11 +54,15 @@ void Scene::updateScene() {
 
     whiteTexture->bind();
     for (auto &obj : stillObjects) {
-        obj->draw(gui->getCamera());
-        whiteTexture->bind();
+        if (obj->getBoundingSphere().isInCameraFrustum(gui->getCamera())) {
+            obj->draw(gui->getCamera());
+            whiteTexture->bind();
+        }
     }
     for (auto &obj : movableObjects) {
-        obj->draw(gui->getCamera());
-        whiteTexture->bind();
+        if (obj->getBoundingSphere().isInCameraFrustum(gui->getCamera())) {
+            obj->draw(gui->getCamera());
+            whiteTexture->bind();
+        }
     }
 }

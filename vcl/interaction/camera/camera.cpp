@@ -207,8 +207,8 @@ std::vector<vec4> &camera_scene::calculate_frustum_planes() {
     vec3 center = camera_position() + camera_direction() * (perspective.z_near + perspective.z_far) / 2.0f;
     auto corners = calculate_frustum_corners(perspective.z_near, perspective.z_far);
 
-    std::vector<std::vector<int>> planesIdx({{0, 1, 2}, {0, 1, 4}, {0, 3, 5},
-                                             {1, 2, 4}, {2, 3, 6}, {4, 5, 6}});
+    std::vector<std::vector<int>> planesIdx({{0, 1, 2}, {0, 1, 4}, {1, 2, 4},
+                                             {2, 3, 6}, {3, 0, 5}, {4, 5, 6}});
     vec4 center4(center, 1.0f);
     for (int i = 0; i < 6; i++) {
         vec3 &a = frustumCorners[planesIdx[i][0]];
