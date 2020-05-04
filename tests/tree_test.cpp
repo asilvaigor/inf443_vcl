@@ -25,10 +25,16 @@ int main() {
             std::make_shared<Tree>(scene.getShaders(), pos, blackSpecies, 0.4, true));
     scene.addObject(tree);
 
-    TreeSpecies bush = TreeSpecies::bush();
-    pos = {0, -5, 0};
+    TreeSpecies bush1 = TreeSpecies::bush1();
+    pos = {0, -3, 0};
     tree = std::static_pointer_cast<Object>(
-            std::make_shared<Tree>(scene.getShaders(), pos, bush, 0.4, true));
+            std::make_shared<Tree>(scene.getShaders(), pos, bush1, 0.4, true));
+    scene.addObject(tree);
+
+    TreeSpecies bush2 = TreeSpecies::bush2();
+    pos = {0, 3, 0};
+    tree = std::static_pointer_cast<Object>(
+            std::make_shared<Tree>(scene.getShaders(), pos, bush2, 0.4, true));
     scene.addObject(tree);
 
     scene.display();

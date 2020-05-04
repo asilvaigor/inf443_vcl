@@ -87,11 +87,11 @@ TreeSpecies TreeSpecies::blackTupelo() {
     return s;
 }
 
-TreeSpecies TreeSpecies::bush() {
+TreeSpecies TreeSpecies::bush1() {
     TreeSpecies s;
     s.levels = 1;
-    s.scale = 1.0f;
-    s.scaleVar = 0.3f;
+    s.scale = 0.9f;
+    s.scaleVar = 0.2f;
     s.flare = 0.0f;
     s.ratio = 0.015f;
     s.ratioPow = 1.3f;
@@ -104,8 +104,8 @@ TreeSpecies TreeSpecies::bush() {
     s.snowyBranchColor = {1.0f, 1.0f, 1.0f, 1.0f};
 
     s.nBranches = {20};
-    s.nBranchesVar = {2};
-    s.bezierResolution = {5};
+    s.nBranchesVar = {10};
+    s.bezierResolution = {4};
     s.segSplits = {0};
     s.nakedRatio = {0.2f};
     s.length = {1.0f};
@@ -117,6 +117,43 @@ TreeSpecies TreeSpecies::bush() {
     s.curve = {1.57f};
     s.curveVar = {3.14f};
     s.bendVar = {3.14f};
+    s.splitAngle = {0.0f};
+    s.splitAngleVar = {0.0f};
+    s.branchDist = {0.0f};
+
+    return s;
+}
+
+TreeSpecies TreeSpecies::bush2() {
+    TreeSpecies s;
+    s.levels = 1;
+    s.scale = 0.3f;
+    s.scaleVar = 0.1f;
+    s.flare = 0.0f;
+    s.ratio = 0.015f;
+    s.ratioPow = 1.3f;
+    s.stemSpacing = 0.3f;
+    s.leafBlosNum = 0;
+
+    s.branchShading = {0.3f, 0.6f, 0.0f, 128};
+    s.branchColor = {1.0f, 1.0f, 1.0f, 1.0f};
+    s.snowyBranchShading = {0.3f, 0.6f, 0.0f, 128};
+    s.snowyBranchColor = {1.0f, 1.0f, 1.0f, 1.0f};
+
+    s.nBranches = {40};
+    s.nBranchesVar = {4};
+    s.bezierResolution = {2};
+    s.segSplits = {0};
+    s.nakedRatio = {0.2f};
+    s.length = {1.0f};
+    s.lengthVar = {0.0f};
+    s.downAngle = {1.05f};
+    s.downAngleVar = {-0.79f};
+    s.rotateAngle = {0.0f};
+    s.rotateAngleVar = {0.0f};
+    s.curve = {0.7f};
+    s.curveVar = {1.57f};
+    s.bendVar = {1.57f};
     s.splitAngle = {0.0f};
     s.splitAngleVar = {0.0f};
     s.branchDist = {0.0f};

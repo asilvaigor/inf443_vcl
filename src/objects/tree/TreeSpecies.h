@@ -21,7 +21,9 @@ public:
 
     static TreeSpecies blackTupelo();
 
-    static TreeSpecies bush();
+    static TreeSpecies bush1();
+
+    static TreeSpecies bush2();
 
     int levels{}; // >=1, Number of levels in the branches recursion.
     // 1 is only trunk, 2 is trunk with branches on it, 3 these branches will have branches etc.
