@@ -10,6 +10,7 @@ file(GLOB_RECURSE src_files
         shaders/*.glsl
         )
 add_library(src ${src_files})
+target_link_libraries(src glfw)
 
 add_executable(main main/main.cpp)
 if (UNIX)

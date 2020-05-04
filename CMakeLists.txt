@@ -26,9 +26,11 @@ include_directories(src)
 
 file(GLOB_RECURSE vcl_files vcl/*.[ch]pp)
 add_library(vcl ${vcl_files})
+target_link_libraries(vcl glfw)
 
 file(GLOB_RECURSE third_party_files third_party/*.[ch]pp third_party/*.[ch])
 add_library(third_party ${third_party_files})
+target_link_libraries(third_party glfw)
 
 add_subdirectory(src)
 add_subdirectory(tests)
