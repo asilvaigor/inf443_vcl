@@ -20,9 +20,15 @@ int main() {
     scene.addObject(tree);
 
     TreeSpecies blackSpecies = TreeSpecies::blackTupelo();
-    pos = {5, 0, 0};
+    pos = {0, 5, 0};
     tree = std::static_pointer_cast<Object>(
             std::make_shared<Tree>(scene.getShaders(), pos, blackSpecies, 0.4, true));
+    scene.addObject(tree);
+
+    TreeSpecies bush = TreeSpecies::bush();
+    pos = {0, -5, 0};
+    tree = std::static_pointer_cast<Object>(
+            std::make_shared<Tree>(scene.getShaders(), pos, bush, 0.4, true));
     scene.addObject(tree);
 
     scene.display();

@@ -127,7 +127,7 @@ void SceneGui::updateFps() {
     }
 }
 
-void SceneGui::windowSizeCallback(GLFWwindow *, int width, int height) {
+void SceneGui::windowSizeCallback(GLFWwindow *, int, int) {
     glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
 
     camera.perspective.image_aspect = (float) windowWidth / (float) windowHeight;

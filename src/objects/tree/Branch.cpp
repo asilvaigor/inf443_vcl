@@ -34,6 +34,9 @@ Branch::Branch(TreeSpecies &s, TurtleGraphics turtle, BoundingBox &treeBoundingB
     length = calculateLength();
     radius = calculateRadius();
 
+    // Giving a random angle to begin with
+    this->turtle.rollCw(rand.rand(-M_PI, M_PI));
+
     generate();
 }
 
