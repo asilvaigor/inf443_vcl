@@ -30,7 +30,8 @@ Branch::Branch(TreeSpecies &s, TurtleGraphics turtle, float &snowCoverage, int d
     if (depth == 0)
         this->treeScale = species.scale + rand.rand() * species.scaleVar;
 
-    maxLengthChild = species.length[depth + 1] + rand.rand() * species.lengthVar[depth + 1];
+    int dp = std::min(species.levels - 1, depth + 1);
+    maxLengthChild = species.length[dp] + rand.rand() * species.lengthVar[dp];
     length = calculateLength();
     radius = calculateRadius();
 
@@ -118,7 +119,7 @@ void Branch::generate() {
 
     // Starting with a random rotation
     float rotationAngle = 0.0f;
-    if (species.rotateAngle[depth + 1] > FLT_EPSILON)
+    if (species.rotateAngle[std::min(species.levels - 1, depth + 1)] > FLT_EPSILON)
         rotationAngle = rand.rand(0, (float) (2 * M_PI));
 
     // Iterating through the segments in the bezier spline

@@ -2,6 +2,7 @@
 // Created by igor on 29/04/2020.
 //
 
+#include <unistd.h>
 #include "SceneGui.h"
 #include "utils/SingletonException.h"
 #include "utils/Constants.h"
@@ -37,6 +38,7 @@ SceneGui::SceneGui(std::string &windowTitle) : windowTitle(windowTitle) {
 
     sunAngle = 0.25 * M_PI;
     verticesOn = false;
+    gridOn = false;
 
     // Initial camera parameters
     glfwGetFramebufferSize(window, &windowWidth, &windowHeight);

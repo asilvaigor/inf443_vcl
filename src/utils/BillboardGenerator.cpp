@@ -45,13 +45,15 @@ BillboardGenerator::BillboardGenerator(Shaders &shaders, Object *object) {
 }
 
 BillboardGenerator::~BillboardGenerator() {
-    std::cout << "Why am I here?" << std::endl;
-    if (fbos != nullptr)
-        delete[]fbos;
-//    if (textures != nullptr)
+    if (!empty()) {
+        // FIXME: Opengl throwing multiple errors when deleting these, not sure why.
+//        glDeleteTextures(2, textures);
+//        glDeleteRenderbuffers(2, depths);
+//        glDeleteFramebuffers(2, fbos);
 //        delete[]textures;
-    if (depths != nullptr)
-        delete[]depths;
+//        delete[]depths;
+//        delete[]fbos;
+    }
 }
 
 void BillboardGenerator::draw(vcl::camera_scene &camera, std::shared_ptr<vcl::light_source> &light) {
@@ -137,7 +139,7 @@ void BillboardGenerator::generateQuads(std::vector<vcl::vec3> &corners) {
     mesh = vcl::mesh_primitive_quad(q3, q1, q2, q4);
     quad2 = vcl::mesh_drawable(mesh);
     quad2.shader = shaders->operator[]("mesh");
-    quad2.uniform.shading = {0.8f, 0.3f, 0.0, 32};
+    quad2.uniform.shading = quad1.uniform.shading;
 }
 
 void BillboardGenerator::generateBuffers() {
