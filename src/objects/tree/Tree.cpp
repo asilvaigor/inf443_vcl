@@ -10,30 +10,29 @@ Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species, float sn
     this->verbose = verbose;
     createMeshes(position, snowCoverage);
     createDrawables(shaders);
+    billboard = BillboardGenerator(shaders, this);
 }
 
-void Tree::draw(vcl::camera_scene &camera) {
-    if (boundingSphere.isInCameraFrustum(camera)) {
-        if (!branchesMesh.empty()) {
-            branchesDrawable.uniform.light = light;
-            branchTexture.bind();
-            vcl::draw(branchesDrawable, camera);
-        }
-        if (!snowyBranchesMesh.empty()) {
-            snowyBranchesDrawable.uniform.light = light;
-            snowTexture.bind();
-            vcl::draw(snowyBranchesDrawable, camera);
-        }
-        if (!leavesMesh.empty()) {
-            leavesDrawable.uniform.light = light;
-            leafTexture.bind();
-            vcl::draw(leavesDrawable, camera);
-        }
-        if (!snowyLeavesMesh.empty()) {
-            snowyLeavesDrawable.uniform.light = light;
-            snowTexture.bind();
-            vcl::draw(snowyLeavesDrawable, camera);
-        }
+void Tree::drawMesh(vcl::camera_scene &camera) {
+    if (!branchesMesh.empty()) {
+        branchesDrawable.uniform.light = light;
+        branchTexture.bind();
+        vcl::draw(branchesDrawable, camera);
+    }
+    if (!snowyBranchesMesh.empty()) {
+        snowyBranchesDrawable.uniform.light = light;
+        snowTexture.bind();
+        vcl::draw(snowyBranchesDrawable, camera);
+    }
+    if (!leavesMesh.empty()) {
+        leavesDrawable.uniform.light = light;
+        leafTexture.bind();
+        vcl::draw(leavesDrawable, camera);
+    }
+    if (!snowyLeavesMesh.empty()) {
+        snowyLeavesDrawable.uniform.light = light;
+        snowTexture.bind();
+        vcl::draw(snowyLeavesDrawable, camera);
     }
 }
 
@@ -64,7 +63,7 @@ void Tree::createMeshes(vcl::vec3 &position, float &snowCoverage) {
         snowyLeavesMesh.add(m);
     }
 
-    // Creating bounding sphere
+    // Creating bounding sphere and box
     int nB = (int) branchesMesh.position.size();
     int nSB = (int) snowyBranchesMesh.position.size();
     int nL = (int) leavesMesh.position.size();
@@ -72,14 +71,22 @@ void Tree::createMeshes(vcl::vec3 &position, float &snowCoverage) {
     int nVertices = nB + nSB + nL + nSL;
     vertices.reserve(nVertices);
 
-    for (auto &pt : branchesMesh.position)
+    for (auto &pt : branchesMesh.position) {
         vertices.push_back(&pt);
-    for (auto &pt : snowyBranchesMesh.position)
+        boundingBox.update(pt);
+    }
+    for (auto &pt : snowyBranchesMesh.position) {
         vertices.push_back(&pt);
-    for (auto &pt : leavesMesh.position)
+        boundingBox.update(pt);
+    }
+    for (auto &pt : leavesMesh.position) {
         vertices.push_back(&pt);
-    for (auto &pt : snowyLeavesMesh.position)
+        boundingBox.update(pt);
+    }
+    for (auto &pt : snowyLeavesMesh.position) {
         vertices.push_back(&pt);
+        boundingBox.update(pt);
+    }
     boundingSphere = BoundingSphere(vertices);
 
     if (verbose) {

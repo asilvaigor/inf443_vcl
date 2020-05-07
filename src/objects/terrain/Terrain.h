@@ -24,7 +24,7 @@ public:
      * Draws the terrain in opengl;
      * @param camera
      */
-    void draw(vcl::camera_scene &camera) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
     /**
      * Sets a new light to the terrain.

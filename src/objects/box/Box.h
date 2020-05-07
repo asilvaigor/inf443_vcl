@@ -25,7 +25,7 @@ public:
      * Draws the box in opengl;
      * @param camera
      */
-    void draw(vcl::camera_scene &camera) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
 private:
     vcl::mesh_drawable box;

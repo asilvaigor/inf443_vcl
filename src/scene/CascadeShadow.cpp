@@ -27,7 +27,7 @@ CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
 void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects,
                            std::vector<std::shared_ptr<Object> > &stillObjects,
                            std::shared_ptr<SceneGui> &gui, std::shared_ptr<Shaders> &shaders) {
-    shaders->overrideWithDepth(true);
+    shaders->override("depth", true);
 
     int startIdx = lastUpdated;
     bool firstTime = true;
@@ -63,7 +63,7 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
         lastUpdated = (lastUpdated + 1) % (2 * nCascades);
     }
 
-    shaders->overrideWithDepth(false);
+    shaders->override("depth", false);
     maps->unbind_all(gui->getWindowWidth(), gui->getWindowHeight());
 }
 
@@ -78,9 +78,8 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
             t->setLight(lights[lastUpdated], lastUpdated / 2 + 1);
             t->draw(camera);
             // A normal object must be in the correct frustum to be rendered
-        } else if (obj->getBoundingSphere().isInCameraFrustum(camera) && (
-                obj->getLight()->get_shadow_map_id() == lastUpdated / 2 + 1 ||
-                obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated]))) {
+        } else if (obj->getLight()->get_shadow_map_id() == lastUpdated / 2 + 1 ||
+                obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated])) {
             obj->setLight(lights[lastUpdated]);
             obj->draw(camera);
         }

@@ -4,6 +4,7 @@
 
 #include "SceneGui.h"
 #include "utils/SingletonException.h"
+#include "utils/Constants.h"
 
 std::shared_ptr<SceneGui> SceneGui::gui;
 GLFWwindow *SceneGui::window;
@@ -41,8 +42,8 @@ SceneGui::SceneGui(std::string &windowTitle) : windowTitle(windowTitle) {
     glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
 
     float aspectRatio = (float) windowWidth / (float) windowHeight;
-    camera.perspective = vcl::perspective_structure(
-            40 * 3.14f / 180, aspectRatio, 0.01f, 400.0f);
+    camera.perspective = vcl::perspective_structure(Constants::CAMERA_ANGLE, aspectRatio, Constants::CAMERA_Z_NEAR,
+            Constants::CAMERA_Z_FAR);
     camera.apply_scaling(4);
     camera.apply_rotation(0, 0, 0, 1.0);
 

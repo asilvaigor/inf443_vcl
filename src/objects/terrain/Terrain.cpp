@@ -24,7 +24,7 @@ Terrain::Terrain(Shaders &shaders) : Object(false), snowTexture("snow_ground") {
     terrain.uniform.shading = {0.5, 0.6, 0.1, 32};
 }
 
-void Terrain::draw(vcl::camera_scene &camera) {
+void Terrain::drawMesh(vcl::camera_scene &camera) {
     terrain.uniform.light = light;
     terrain.uniform.light2 = light2;
     terrain.uniform.light3 = light3;

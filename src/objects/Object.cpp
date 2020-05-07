@@ -3,9 +3,18 @@
 //
 
 #include "Object.h"
+#include "utils/Constants.h"
 
 Object::Object(bool movable) : movable(movable) {
-    light = std::make_shared<vcl::light_source>();
+    light = std::make_shared<vcl::light_source>(vcl::vec3(500, 0, 500), vcl::vec3(-1, 0, -1));
+}
+
+void Object::draw(vcl::camera_scene &camera) {
+    if (boundingSphere.isInCameraFrustum(camera)) {
+        if (boundingBox.relativeSize(camera) > Constants::BILLBOARD_RATIO_THRESHOLD || billboard.empty())
+            drawMesh(camera);
+        else billboard.draw(camera, light);
+    }
 }
 
 void Object::setLight(std::shared_ptr<vcl::light_source> &l) {
@@ -22,4 +31,8 @@ bool Object::isMovable() const {
 
 BoundingSphere &Object::getBoundingSphere() {
     return boundingSphere;
+}
+
+BoundingBox &Object::getBoundingBox() {
+    return boundingBox;
 }

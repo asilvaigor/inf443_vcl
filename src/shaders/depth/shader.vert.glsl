@@ -1,6 +1,12 @@
 #version 330 core
 
 layout (location = 0) in vec4 position;
+layout (location = 3) in vec2 texture_uv;
+
+out struct fragment_data
+{
+    vec2 texture_uv;
+} fragment;
 
 uniform vec3 translation = vec3(0.0, 0.0, 0.0);                      // user defined translation
 uniform mat3 rotation = mat3(1.0, 0.0, 0.0,                          // user defined rotation
@@ -25,6 +31,8 @@ void main()
     mat4 R = mat4(rotation);
     // 4D translation
     vec4 T = vec4(translation, 0.0);
+
+    fragment.texture_uv = texture_uv;
 
     vec4 position_transformed = R * S * position + T;
     switch (current_light) {

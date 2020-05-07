@@ -7,7 +7,9 @@
 
 #include "vcl.hpp"
 #include "shaders/Shaders.h"
+#include "utils/BoundingBox.h"
 #include "utils/BoundingSphere.h"
+#include "utils/BillboardGenerator.h"
 
 /**
  * Abstract object class to be placed in a scene.
@@ -20,7 +22,13 @@ public:
      * Calls vcl::draw to draw the object in the scene.
      * @param camera
      */
-    virtual void draw(vcl::camera_scene &camera) = 0;
+    void draw(vcl::camera_scene &camera);
+
+    /**
+     * Draws the object's mesh in screen.
+     * @param camera
+     */
+    virtual void drawMesh(vcl::camera_scene &camera) = 0;
 
     /**
      * Sets the light object that the object will be rendered with.
@@ -46,10 +54,18 @@ public:
      */
     BoundingSphere &getBoundingSphere();
 
+    /**
+     * Minimum box that covers the whole object.
+     * @return
+     */
+    BoundingBox &getBoundingBox();
+
 protected:
     const bool movable;
     std::shared_ptr<vcl::light_source> light;
     BoundingSphere boundingSphere;
+    BoundingBox boundingBox;
+    BillboardGenerator billboard;
 };
 
 

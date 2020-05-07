@@ -46,6 +46,10 @@ struct mat<3,3> {
 
     const float& operator()(std::size_t index1, std::size_t index2) const;
     float& operator()(std::size_t index1, std::size_t index2);
+
+    void rotate_x(float ang);
+    void rotate_y(float ang);
+    void rotate_z(float ang);
 };
 
 float det(const mat3& m);
