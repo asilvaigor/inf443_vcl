@@ -5,14 +5,13 @@
 #ifndef PGM_TERRAIN_H
 #define PGM_TERRAIN_H
 
-#include "vcl.hpp"
-#include "objects/Object.h"
+#include "objects/terrain/BaseTerrain.h"
 #include "utils/Texture.h"
 
 /**
  * Ground object for the scene.
  */
-class Terrain : public Object {
+class Terrain : public BaseTerrain {
 public:
     /**
      * Generates the terrain.
@@ -21,7 +20,7 @@ public:
     Terrain(Shaders &shaders);
 
     /**
-     * Draws the terrain in opengl;
+     * Draws the surface in opengl;
      * @param camera
      */
     void draw(vcl::camera_scene &camera) override;
@@ -31,14 +30,10 @@ public:
      * @param light
      * @param idx
      */
-    void setLight(std::shared_ptr<vcl::light_source> &light, int idx);
+    void setLight(std::shared_ptr<vcl::light_source> &light, int idx) override;
 
 private:
-    vcl::mesh_drawable terrain;
     const Texture snowTexture;
-    // Terrain has extra lights
-    std::shared_ptr<vcl::light_source> light2;
-    std::shared_ptr<vcl::light_source> light3;
 };
 
 

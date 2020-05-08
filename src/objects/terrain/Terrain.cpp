@@ -4,7 +4,7 @@
 
 #include "Terrain.h"
 
-Terrain::Terrain(Shaders &shaders) : Object(false), snowTexture("snow_ground") {
+Terrain::Terrain(Shaders &shaders) : BaseTerrain(), snowTexture("snow_ground") {
     light2 = std::make_shared<vcl::light_source>();
     light3 = std::make_shared<vcl::light_source>();
 
@@ -38,10 +38,10 @@ void Terrain::setLight(std::shared_ptr<vcl::light_source> &light, int idx) {
             this->light = light;
             break;
         case 2:
-            light2 = light;
+            this->light2 = light;
             break;
         default:
-            light3 = light;
+            this->light3 = light;
             break;
     }
     terrain.uniform.current_light = idx;
