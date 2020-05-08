@@ -57,6 +57,9 @@ void BoundingSphere::calculate(std::vector<vcl::vec3 *> &points) {
     pt = {0, 0, 0};
     radius = 0.0f;
 
+    if (points.empty())
+        return;
+
     // Getting a random point
     vcl::vec3 *x = points[0];
 

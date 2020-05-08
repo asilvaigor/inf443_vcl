@@ -136,7 +136,7 @@ void BillboardGenerator::generateQuads(std::vector<vcl::vec3> &corners) {
     q2 = (corners[1] + corners[3]) / 2.0f;
     q3 = (corners[4] + corners[6]) / 2.0f;
     q4 = (corners[5] + corners[7]) / 2.0f;
-    mesh = vcl::mesh_primitive_quad(q3, q1, q2, q4);
+    mesh = vcl::mesh_primitive_quad(q1, q3, q4, q2);
     quad2 = vcl::mesh_drawable(mesh);
     quad2.shader = shaders->operator[]("mesh");
     quad2.uniform.shading = quad1.uniform.shading;
