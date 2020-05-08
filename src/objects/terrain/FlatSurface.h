@@ -9,7 +9,7 @@
 #include "utils/Texture.h"
 
 /**
- * Ground object for the scene.
+ * Flat ground object for the scene.
  */
 class FlatSurface : public BaseTerrain {
 public:

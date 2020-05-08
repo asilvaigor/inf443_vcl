@@ -5,3 +5,5 @@
 #include "BaseTerrain.h"
 
 BaseTerrain::BaseTerrain() : Object(false){}
+
+BaseTerrain::~BaseTerrain() {}

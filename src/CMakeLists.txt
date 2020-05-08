@@ -14,7 +14,7 @@ target_link_libraries(src glfw)
 
 add_executable(main main/main.cpp)
 if (UNIX)
-    target_link_libraries(main src vcl third_party glfw dl -static-libstdc++)
+    target_link_libraries(main src vcl third_party glfw dl)
 elseif (WIN32)
     target_link_libraries(main src vcl third_party ${GLFW_LIBRARIES})
 endif ()
