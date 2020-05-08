@@ -5,8 +5,7 @@
 #include "Leaf.h"
 #include "vcl.hpp"
 
-Leaf::Leaf(TreeSpecies &species, TurtleGraphics &turtle, BoundingBox &treeBoundingBox, float treeScale)
-        : treeBoundingBox(treeBoundingBox) {
+Leaf::Leaf(TreeSpecies &species, TurtleGraphics &turtle, float treeScale) {
     this->turtle = turtle;
     scale = treeScale;
 
@@ -32,7 +31,6 @@ vcl::mesh Leaf::toMesh() {
     for (auto &d : description) {
         turtle.turnRight(d.first);
         turtle.move(d.second);
-        treeBoundingBox.update(turtle.getPosition());
 
         auto delta = turtle.getPosition() - origin;
         delta *= scale;

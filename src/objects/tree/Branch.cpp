@@ -7,10 +7,10 @@
 
 vcl::rand_generator Branch::rand(false);
 
-Branch::Branch(TreeSpecies &s, TurtleGraphics turtle, BoundingBox &treeBoundingBox, float &snowCoverage, int depth,
+Branch::Branch(TreeSpecies &s, TurtleGraphics turtle, float &snowCoverage, int depth,
                int startIdx, Branch *parent, float treeScale, float nBranchesFactor, float splitAngleCorrection,
                float splitProb, float offsetInTrunk, float radiusLimit) :
-        species(s), treeBoundingBox(treeBoundingBox), snowCoverage(snowCoverage) {
+        species(s), snowCoverage(snowCoverage) {
     this->depth = depth;
     this->startIdx = startIdx;
     this->parent = parent;
@@ -30,9 +30,13 @@ Branch::Branch(TreeSpecies &s, TurtleGraphics turtle, BoundingBox &treeBoundingB
     if (depth == 0)
         this->treeScale = species.scale + rand.rand() * species.scaleVar;
 
-    maxLengthChild = species.length[depth + 1] + rand.rand() * species.lengthVar[depth + 1];
+    int dp = std::min(species.levels - 1, depth + 1);
+    maxLengthChild = species.length[dp] + rand.rand() * species.lengthVar[dp];
     length = calculateLength();
     radius = calculateRadius();
+
+    // Giving a random angle to begin with
+    this->turtle.rollCw(rand.rand(-M_PI, M_PI));
 
     generate();
 }
@@ -115,7 +119,7 @@ void Branch::generate() {
 
     // Starting with a random rotation
     float rotationAngle = 0.0f;
-    if (species.rotateAngle[depth + 1] > FLT_EPSILON)
+    if (species.rotateAngle[std::min(species.levels - 1, depth + 1)] > FLT_EPSILON)
         rotationAngle = rand.rand(0, (float) (2 * M_PI));
 
     // Iterating through the segments in the bezier spline
@@ -177,7 +181,6 @@ void Branch::generate() {
         }
 
         turtle.move(segLength);
-        treeBoundingBox.update(turtle.getPosition());
     }
 }
 
@@ -248,7 +251,7 @@ void Branch::makeBranch(int branchIdx, float offset, float offsetInParent, float
     newTurtle.pitchDown(calculateDownAngle(offsetInParent));
     newTurtle.move(r);
 
-    branches.emplace_back(Branch(species, newTurtle, treeBoundingBox, snowCoverage, depth + 1, 0, this, treeScale,
+    branches.emplace_back(Branch(species, newTurtle, snowCoverage, depth + 1, 0, this, treeScale,
                                  1, 0, 1, offsetInParent, r));
 }
 
@@ -282,8 +285,8 @@ void Branch::makeLeaf(float offset, float offsetInParent, float &prevRotationAng
 
     vcl::vec3 zAxis(0, 0, 1);
     if (newTurtle.getDirection().angle(zAxis) > (float) (snowCoverage * M_PI))
-        leaves.emplace_back(Leaf(species, newTurtle, treeBoundingBox, scale));
-    else snowyLeaves.emplace_back(Leaf(species, newTurtle, treeBoundingBox, scale));
+        leaves.emplace_back(Leaf(species, newTurtle, scale));
+    else snowyLeaves.emplace_back(Leaf(species, newTurtle, scale));
 }
 
 void Branch::makeSplits(int segIdx, float nSplits, float curveAngle) {
@@ -296,7 +299,7 @@ void Branch::makeSplits(int segIdx, float nSplits, float curveAngle) {
         auto newTurtle = turtle;
         newTurtle.turnLeft(effCurveAngle);
 
-        branches.emplace_back(Branch(species, newTurtle, treeBoundingBox, snowCoverage, depth, segIdx, parent,
+        branches.emplace_back(Branch(species, newTurtle, snowCoverage, depth, segIdx, parent,
                 treeScale, nBranchesFactor, splitAngleCorrection, splitProb, offsetInTrunk, radiusLimit));
     }
 }

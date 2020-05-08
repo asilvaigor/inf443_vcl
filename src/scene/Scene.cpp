@@ -39,6 +39,7 @@ void Scene::addObject(std::shared_ptr<Object> &object) {
 }
 
 void Scene::display() {
+    glViewport(0, 0, gui->getWindowWidth(), gui->getWindowHeight());
     while (gui->isRunning()) {
         gui->update();
         updateScene();
@@ -48,7 +49,7 @@ void Scene::display() {
 
 void Scene::updateScene() {
     cascadeShadow->update(movableObjects, stillObjects, gui, shaders);
-    shaders->overrideWithWireframe(gui->showVertices());
+    shaders->override("wireframe", gui->showVertices());
     if (gui->showGrid())
         grid->draw(gui->getCamera());
 

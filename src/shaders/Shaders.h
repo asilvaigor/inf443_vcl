@@ -22,16 +22,17 @@ public:
     static std::shared_ptr<Shaders> &getInstance();
 
     /**
-     * Will activate the wireframe shader for all objects on the scene, overriding the current shaders.
+     * Will activate the shader for all objects on the scene, overriding the current shaders.
+     * @param shader Name of the shader
      * @param override
      */
-    void overrideWithWireframe(bool override);
+    void override(std::string shader, bool override);
 
     /**
-     * Will activate the depth shader for all objects on the scene, overriding the current shaders.
-     * @param override
+     * Checks if the shaders are being overridden by another.
+     * @return
      */
-    void overrideWithDepth(bool override);
+    bool isOverridden();
 
     /**
      * Works as map.

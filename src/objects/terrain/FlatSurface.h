@@ -2,8 +2,8 @@
 // Created by igor on 23/04/2020.
 //
 
-#ifndef PGM_TERRAIN_H
-#define PGM_TERRAIN_H
+#ifndef PGM_FLATSURFACE_H
+#define PGM_FLATSURFACE_H
 
 #include "objects/terrain/BaseTerrain.h"
 #include "utils/Texture.h"
@@ -11,19 +11,19 @@
 /**
  * Ground object for the scene.
  */
-class Terrain : public BaseTerrain {
+class FlatSurface : public BaseTerrain {
 public:
     /**
      * Generates the terrain.
      * @param shaders
      */
-    Terrain(Shaders &shaders);
+    FlatSurface(Shaders &shaders);
 
     /**
      * Draws the surface in opengl;
      * @param camera
      */
-    void draw(vcl::camera_scene &camera) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
     /**
      * Sets a new light to the terrain.
@@ -37,4 +37,4 @@ private:
 };
 
 
-#endif //PGM_TERRAIN_H
+#endif //PGM_FLATSURFACE_H

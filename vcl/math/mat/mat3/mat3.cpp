@@ -223,6 +223,25 @@ float& mat3::operator()(std::size_t index1, std::size_t index2)
 	abort();
 }
 
+void mat3::rotate_x(const float ang) {
+    float sin = std::sin(ang);
+    float cos = std::cos(ang);
+    mat3 r(1, 0, 0, 0, cos, -sin, 0, sin, cos);
+    (*this) = r * (*this);
+}
+void mat3::rotate_y(const float ang) {
+    float sin = std::sin(ang);
+    float cos = std::cos(ang);
+    mat3 r(cos, 0, -sin, 0, 1, 0, sin, 0, cos);
+    (*this) = r * (*this);
+}
+void mat3::rotate_z(const float ang) {
+    float sin = std::sin(ang);
+    float cos = std::cos(ang);
+    mat3 r(cos, -sin, 0, sin, cos, 0, 0, 0, 1);
+    (*this) = r * (*this);
+}
+
 
 float det(const mat3& m)
 {

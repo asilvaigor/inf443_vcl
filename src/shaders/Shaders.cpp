@@ -35,16 +35,14 @@ Shaders::Shaders() {
     closedir(dp);
 }
 
-void Shaders::overrideWithWireframe(bool override) {
+void Shaders::override(std::string shader, bool override) {
     if (override)
-        vcl::mesh_drawable::overrideShader(shaders["wireframe"]);
+        vcl::mesh_drawable::overrideShader(shaders[shader]);
     else vcl::mesh_drawable::overrideShader(0);
 }
 
-void Shaders::overrideWithDepth(bool override) {
-    if (override)
-        vcl::mesh_drawable::overrideShader(shaders["depth"]);
-    else vcl::mesh_drawable::overrideShader(0);
+bool Shaders::isOverridden() {
+    return vcl::mesh_drawable::shaderOverride != 0;
 }
 
 GLuint &Shaders::operator[](const std::string& s) {

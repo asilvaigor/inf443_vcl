@@ -5,7 +5,7 @@
 #include "scene/Scene.h"
 #include "shaders/Shaders.h"
 #include "objects/box/Box.h"
-#include "objects/terrain/Terrain.h"
+#include "objects/terrain/FlatSurface.h"
 
 int main() {
     vcl::vec3 lightPos(2, 0, 2);

@@ -17,6 +17,9 @@ std::vector<uint3> connectivity_grid(size_t Nu, size_t Nv, bool periodic_u, bool
 mesh mesh_primitive_quad(const vec3& p00={-0.5f,-0.5f,0.0f}, const vec3& p10={0.5f,-0.5f,0.0f}, const vec3& p11={0.5f,0.5f,0.0f}, const vec3& p01={-0.5f,0.5f,0.0});
 
 mesh mesh_primitive_sphere(float radius=1.0f, const vec3& p0={0,0,0}, size_t Nu=20, size_t Nv=40);
+mesh mesh_primitive_ellipsoid(float a=1.0f, float b=1.0f, float c=1.0f, const vec3& p0={0,0,0}, size_t Nu=20, size_t Nv=20);
+mesh mesh_primitive_semi_ellipsoid(float a=1.0f, float b=1.0f, float c=1.0f, const vec3& p0={0,0,0}, size_t Nu=20, size_t Nv=20);
+
 mesh mesh_primitive_cylinder(float radius=0.2f, const vec3& p1={0,0,0}, const vec3& p2={0,0,1}, size_t Nu=10, size_t Nv=10, bool is_border_duplicated=false);
 mesh mesh_primitive_cone(float radius=0.2f, const vec3& p_base={0,0,0}, const vec3& p_extremity={0,0,1}, size_t Nu=20, size_t Nv=10);
 mesh mesh_primitive_torus(float external_radius=1.0f, float internal_radius=0.25f, const vec3& center={0,0,0}, const vec3& axis_direction={0,0,1}, size_t Nu=15, size_t Nv=30, bool is_border_duplicated = false);

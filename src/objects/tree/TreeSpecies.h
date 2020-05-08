@@ -21,6 +21,10 @@ public:
 
     static TreeSpecies blackTupelo();
 
+    static TreeSpecies bush1();
+
+    static TreeSpecies bush2();
+
     int levels{}; // >=1, Number of levels in the branches recursion.
     // 1 is only trunk, 2 is trunk with branches on it, 3 these branches will have branches etc.
     // Determines the size of all the std::vector variables below.
@@ -29,6 +33,7 @@ public:
     float flare{}; // >=0, How much the radius of the trunk decreases.
     float ratio{}; // >=0, Ratio radius / height of branches.
     float ratioPow{}; // >=0, How drastically the branch radius is reduced between levels.
+    float stemSpacing{}; // >=0, The maximum spacing of a stem from the center.
     int leafBlosNum{}; // >=0, Number of leaves on each of the deepest level of branches.
     float leavesRotateAngle{}; // >=0 Rad, Angle leaves will be rotated between each other.
     float leafHeight{}; // >=0, Height of the leaf triangle.

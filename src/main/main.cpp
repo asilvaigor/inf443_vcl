@@ -1,12 +1,12 @@
 #include "scene/Scene.h"
 #include "shaders/Shaders.h"
 #include "objects/tree/Tree.h"
-#include "objects/terrain/Terrain.h"
+#include "objects/terrain/FlatSurface.h"
 
 int main() {
     auto scene = Scene::getInstance("Winter Wonderland");
 
-    auto terrain = std::static_pointer_cast<Object>(std::make_shared<Terrain>(scene.getShaders()));
+    auto terrain = std::static_pointer_cast<Object>(std::make_shared<FlatSurface>(scene.getShaders()));
     scene.addObject(terrain);
 
     TreeSpecies species = TreeSpecies::pine();

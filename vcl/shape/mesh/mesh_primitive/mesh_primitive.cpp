@@ -101,6 +101,80 @@ mesh mesh_primitive_sphere(float radius, const vec3& p0, size_t Nu, size_t Nv)
     return shape;
 }
 
+mesh mesh_primitive_ellipsoid(float a, float b, float c, const vec3& p0, size_t Nu, size_t Nv)
+{
+    assert(Nu>=4);
+    assert(Nv>=4);
+
+    mesh shape;
+    for( size_t ku=0; ku<Nu; ++ku ) {
+        for( size_t kv=0; kv<Nv; ++kv ) {
+            // Parametric coordinates
+            const float u = static_cast<float>(ku)/static_cast<float>(Nu-1);
+            const float v = static_cast<float>(kv)/static_cast<float>(Nv-1);
+
+            // Angles
+            const float theta = static_cast<float>( 3.14159f*v );
+            const float phi   = static_cast<float>( 2*3.14159f*u );
+
+            // Spherical coordinates
+            const float x = a * std::sin(theta) * std::cos(phi);
+            const float y = b * std::sin(theta) * std::sin(phi);
+            const float z = c * std::cos(theta);
+
+
+            const vec3 p  = {x,y,z};      // Position (centered)
+            const vec3 n  = normalize(p); // Normal
+            const vec2 uv = {v,u};        // Texture-coordinates
+
+            shape.position.push_back( p+p0 ); // Add new position (with translation of the center)
+            shape.normal.push_back( n );
+            shape.texture_uv.push_back(uv);
+        }
+    }
+
+    shape.connectivity = connectivity_grid(Nu, Nv, false, false);
+
+    return shape;
+}
+
+mesh mesh_primitive_semi_ellipsoid(float a, float b, float c, const vec3& p0, size_t Nu, size_t Nv)
+{
+    assert(Nu>=4);
+    assert(Nv>=4);
+
+    mesh shape;
+    for( size_t ku=0; ku<Nu; ++ku ) {
+        for( size_t kv=0; kv<Nv; ++kv ) {
+            // Parametric coordinates
+            const float u = static_cast<float>(ku)/static_cast<float>(Nu-1);
+            const float v = static_cast<float>(kv)/static_cast<float>(Nv-1);
+
+            // Angles
+            const float theta = static_cast<float>( (float) (M_PI*v - M_PI_2) );
+            const float phi   = static_cast<float>( 2*3.14159f*u );
+
+            // Spherical coordinates
+            const float x = a * std::sin(theta) * std::cos(phi);
+            const float y = b * std::sin(theta) * std::sin(phi);
+            const float z = c * std::cos(theta);
+
+
+            const vec3 p  = {x,y,z};      // Position (centered)
+            const vec3 n  = normalize(p); // Normal
+            const vec2 uv = {v,u};        // Texture-coordinates
+
+            shape.position.push_back( p+p0 ); // Add new position (with translation of the center)
+            shape.normal.push_back( n );
+            shape.texture_uv.push_back(uv);
+        }
+    }
+
+    shape.connectivity = connectivity_grid(Nu, Nv, false, false);
+
+    return shape;
+}
+
 mesh mesh_primitive_cylinder(float radius,  const vec3& p1, const vec3& p2, size_t Nu, size_t Nv, bool is_border_duplicated)
 {
     const vec3 p12 = p2-p1;

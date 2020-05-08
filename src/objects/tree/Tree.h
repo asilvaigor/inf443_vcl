@@ -33,20 +33,26 @@ public:
      * Draws the tree on opengl.
      * @param camera
      */
-    void draw(vcl::camera_scene &camera) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
 private:
     TreeSpecies &species;
+    vcl::mesh branchesMesh;
+    vcl::mesh snowyBranchesMesh;
+    vcl::mesh leavesMesh;
+    vcl::mesh snowyLeavesMesh;
     vcl::mesh_drawable branchesDrawable;
     vcl::mesh_drawable snowyBranchesDrawable;
     vcl::mesh_drawable leavesDrawable;
     vcl::mesh_drawable snowyLeavesDrawable;
-    bool hasSnowyBranches;
-    bool hasLeaves;
-    bool hasSnowyLeaves;
+    bool verbose;
     const Texture branchTexture;
     const Texture leafTexture;
     const Texture snowTexture;
+
+    void createMeshes(vcl::vec3 &position, float &snowCoverage);
+
+    void createDrawables(Shaders &shaders);
 };
 
 

@@ -1,20 +1,31 @@
 //
-// Created by igor on 01/05/2020.
+// Created by igor on 04/05/2020.
 //
 
 #ifndef PGM_BOUNDINGBOX_H
 #define PGM_BOUNDINGBOX_H
 
-#include <memory>
-#include "vcl/vcl.hpp"
+#include "vcl.hpp"
 
 /**
- * Stores a box parallel to the axis.
+ * Minimum box that covers an object.
  */
 class BoundingBox {
 public:
+    /**
+     * The box will be infinite.
+     */
     BoundingBox();
 
+    /**
+     * Starts the box with the given boundaries.
+     * @param minX
+     * @param maxX
+     * @param minY
+     * @param maxY
+     * @param minZ
+     * @param maxZ
+     */
     BoundingBox(float minX, float maxX, float minY, float maxY, float minZ, float maxZ);
 
     /**
@@ -24,20 +35,21 @@ public:
     void update(const vcl::vec3 &point);
 
     /**
-     * Calculates if the box is in the camera frustum.
+     * Calculates the corner points of the box.
      * @param camera
-     * @return True if the object is in the camera frustum.
+     * @return Vector of size 8 with the corners.
      */
-    int isInCameraFrustum(vcl::camera_scene &camera);
+    std::vector<vcl::vec3> getCorners();
 
     /**
-     * Calculates if the box is in the light frustum.
+     * Calculates the relative size of the maximum dimension of the box in relationship to the screen's diagonal.
      * @param camera
-     * @param light Light in the shadow cascade.
-     * @return True if the object's shadow should be rendered.
+     * @return Float bigger than 0 indicating how big will the box be in the screen.
      */
-    int isInLightFrustum(vcl::camera_scene &camera, vcl::light_source &light);
+    float relativeSize(vcl::camera_scene &camera);
 
+private:
+    bool empty;
     float minX;
     float maxX;
     float minY;

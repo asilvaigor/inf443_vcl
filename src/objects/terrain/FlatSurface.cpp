@@ -2,9 +2,9 @@
 // Created by igor on 23/04/2020.
 //
 
-#include "Terrain.h"
+#include "FlatSurface.h"
 
-Terrain::Terrain(Shaders &shaders) : BaseTerrain(), snowTexture("snow_ground") {
+FlatSurface::FlatSurface(Shaders &shaders) : BaseTerrain(), snowTexture("snow_ground") {
     light2 = std::make_shared<vcl::light_source>();
     light3 = std::make_shared<vcl::light_source>();
 
@@ -16,7 +16,7 @@ Terrain::Terrain(Shaders &shaders) : BaseTerrain(), snowTexture("snow_ground") {
     vcl::mesh mesh = vcl::mesh_primitive_quad(p00, p10, p11, p01);
     mesh.texture_uv = {{0, 0}, {size, 0}, {size, size}, {0, size}};
 
-    boundingBox = BoundingBox(-size, size, -size, size, 0, 0);
+    boundingSphere = BoundingSphere(mesh);
 
     terrain = vcl::mesh_drawable(mesh);
     terrain.shader = shaders["terrain_mesh"];
@@ -24,7 +24,7 @@ Terrain::Terrain(Shaders &shaders) : BaseTerrain(), snowTexture("snow_ground") {
     terrain.uniform.shading = {0.5, 0.6, 0.1, 32};
 }
 
-void Terrain::draw(vcl::camera_scene &camera) {
+void FlatSurface::drawMesh(vcl::camera_scene &camera) {
     terrain.uniform.light = light;
     terrain.uniform.light2 = light2;
     terrain.uniform.light3 = light3;
@@ -32,7 +32,7 @@ void Terrain::draw(vcl::camera_scene &camera) {
     vcl::draw(terrain, camera);
 }
 
-void Terrain::setLight(std::shared_ptr<vcl::light_source> &light, int idx) {
+void FlatSurface::setLight(std::shared_ptr<vcl::light_source> &light, int idx) {
     switch (idx) {
         case 1:
             this->light = light;
