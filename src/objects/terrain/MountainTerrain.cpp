@@ -45,7 +45,7 @@ void MountainTerrain::setLight(std::shared_ptr<vcl::light_source> &light, int id
 
 float MountainTerrain::evaluate_base_terrain_outline(float u, float v) {
     const float d = norm(vcl::vec2(u,v)-vcl::vec2(0.2f, 0.2f))/0.15f;
-    float z = 20*std::exp(-d*d)-20;
+    float z = 4*std::exp(-d*d)-20;
     return z;
 }
 
@@ -54,6 +54,20 @@ float MountainTerrain::evaluate_terrain_z(const float u, const float v) {
 
     // Adding base terrain contribution
     z += evaluate_base_terrain_outline(u, v);
+
+    // Adding perlin noise
+    vcl::NoiseParameters parameters;
+    parameters.Ss = -0.5;
+    parameters.octaves = 7;
+    parameters.Ia = 0.2;
+    parameters.If = 3;
+    parameters.g = 0.6;
+    parameters.Sh = 0.2;
+    parameters.Ss = 2;
+
+    z += (float)(noiseGenerator.fbmNoise(u, v, parameters));
+    z = noiseGenerator.heightDependentNoise(z, parameters);
+//    std::cout << u << " " << v << " " << n << "\n";
 
     return z;
 }
@@ -68,8 +82,8 @@ vcl::vec3 MountainTerrain::evaluate_terrain(const float u, const float v){
 
 void MountainTerrain::evaluate_mesh() {
     // TODO change to variable size
-    size_t uDimensionSize = 100;
-    size_t vDimensionSize = 100;
+    size_t uDimensionSize = 400;
+    size_t vDimensionSize = 400;
 
     terrainMesh.position.resize(uDimensionSize*vDimensionSize);
 

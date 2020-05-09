@@ -13,7 +13,7 @@ int main() {
     vcl::camera_scene & camera = scene.getGui()->getCamera();
 
     // Camera settings
-    camera.translation = {0, 0, 0};
+    camera.translation = {-50, -50, 0};
 
     float phi = M_PI_2-M_PI_4/2;
     float theta = M_PI_2+M_PI_4;
@@ -28,6 +28,7 @@ int main() {
 
 
     camera.orientation = Rz*Rx;
+    camera.scale = 100;
     auto terrain = std::static_pointer_cast<Object>(std::make_shared<MountainTerrain>(scene.getShaders(), 100, 100));
     auto marker = std::static_pointer_cast<Object>(std::make_shared<CoordinateMarker>(scene.getShaders()));
 

@@ -6,6 +6,7 @@
 #define PGM_MOUNTAINTERRAIN_H
 
 #include <src/shaders/Shaders.h>
+#include <vcl/math/noise/PerlinNoise.h>
 #include "BaseTerrain.h"
 
 /**
@@ -59,7 +60,8 @@ private:
     float evaluate_terrain_z(float u, float v);
 
     float evaluate_base_terrain_outline(float u, float v);
-
+    
+    vcl::PerlinNoise noiseGenerator;
     vcl::mesh terrainMesh;
     float xSize;
     float ySize;
