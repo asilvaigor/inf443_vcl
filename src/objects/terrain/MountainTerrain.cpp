@@ -43,10 +43,25 @@ void MountainTerrain::setLight(std::shared_ptr<vcl::light_source> &light, int id
     terrain.uniform.current_light = idx;
 }
 
+float MountainTerrain::evaluate_base_terrain_outline(float u, float v) {
+    const float d = norm(vcl::vec2(u,v)-vcl::vec2(0.2f, 0.2f))/0.15f;
+    float z = 20*std::exp(-d*d)-20;
+    return z;
+}
+
+float MountainTerrain::evaluate_terrain_z(const float u, const float v) {
+    float z = 0.0f;
+
+    // Adding base terrain contribution
+    z += evaluate_base_terrain_outline(u, v);
+
+    return z;
+}
+
 vcl::vec3 MountainTerrain::evaluate_terrain(const float u, const float v){
     const float x = xSize*(u-0.5f);
     const float y = ySize*(v-0.5f);
-    const float z = 0;
+    const float z = evaluate_terrain_z(u, v);
 
     return {x, y, z};
 }
@@ -90,3 +105,4 @@ void MountainTerrain::evaluate_mesh() {
 
     terrain = vcl::mesh_drawable(terrainMesh);
 }
+

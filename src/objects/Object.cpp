@@ -36,3 +36,5 @@ BoundingSphere &Object::getBoundingSphere() {
 BoundingBox &Object::getBoundingBox() {
     return boundingBox;
 }
+
+Object::~Object() {}

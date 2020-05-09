@@ -50,6 +50,16 @@ private:
      */
     vcl::vec3 evaluate_terrain(float u, float v);
 
+    /**
+     * Terrain's elevation
+     * @param u
+     * @param v
+     * @return Terrain's elevation
+     */
+    float evaluate_terrain_z(float u, float v);
+
+    float evaluate_base_terrain_outline(float u, float v);
+
     vcl::mesh terrainMesh;
     float xSize;
     float ySize;

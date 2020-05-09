@@ -32,6 +32,10 @@ Shaders &Scene::getShaders() {
     return *shaders;
 }
 
+std::shared_ptr<SceneGui> Scene::getGui() {
+    return gui;
+}
+
 void Scene::addObject(std::shared_ptr<Object> &object) {
     if (object->isMovable())
         movableObjects.push_back(object);
