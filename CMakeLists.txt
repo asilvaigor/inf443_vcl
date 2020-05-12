@@ -16,11 +16,15 @@ elseif (WIN32)
     set(GLFW_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/lib_windows/glfw3_win/lib/glfw3.lib")
 endif ()
 
+add_subdirectory(third_party/assimp/contrib/irrXML)
+set(ASSIMP_LIBRARIES "${CMAKE_CURRENT_SOURCE_DIR}/third_party/assimp/lib/assimp.lib")
+
 # Creating bin folder
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 include_directories(".")
-include_directories("third_party/eigen/")
+include_directories(third_party/eigen/)
+include_directories(third_party/assimp/assimp-5.0.1/include)
 include_directories(vcl)
 include_directories(src)
 
@@ -28,9 +32,10 @@ file(GLOB_RECURSE vcl_files vcl/*.[ch]pp)
 add_library(vcl ${vcl_files})
 target_link_libraries(vcl glfw)
 
-file(GLOB_RECURSE third_party_files third_party/*.[ch]pp third_party/*.[ch])
+file(GLOB_RECURSE third_party_files
+        third_party/*.[ch]pp third_party/*.[ch])
 add_library(third_party ${third_party_files})
-target_link_libraries(third_party glfw)
+target_link_libraries(third_party glfw IrrXML assimp)
 
 add_subdirectory(src)
 add_subdirectory(tests)
