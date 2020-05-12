@@ -132,4 +132,22 @@ namespace vcl {
     double PerlinNoise::heightDependentNoise(double h, NoiseParameters &parameters) {
         return h*pow(fabs(h), parameters.Se)*parameters.Sh;
     }
+
+    double PerlinNoise::erosionFbmNoise(double x, double y, NoiseParameters &parameters) {
+        double val = 0;
+        std::vector<double> gains(parameters.octaves);
+        for (int i = 0; i < parameters.octaves; ++i){
+            if (i == 0) gains[i] = parameters.Ia;
+            else {
+                gains[i] = gains[i-1]*lerp(parameters.Ea, parameters.g, parameters.sigma*parameters.g);
+            }
+        }
+
+        for (int k = 0; k < parameters.octaves; ++k){
+            double freq = parameters.If*pow(parameters.l, k);
+            val += gains[k]*sharpnessAdjustedNoise(x*freq, y*freq, parameters.Ss);
+        }
+
+        return val;
+    }
 }

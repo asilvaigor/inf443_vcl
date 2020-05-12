@@ -60,7 +60,9 @@ private:
     float evaluate_terrain_z(float u, float v);
 
     float evaluate_base_terrain_outline(float u, float v);
-    
+
+    float evaluate_terrain_z_no_erosion(float u, float v, vcl::NoiseParameters &parameters);
+
     vcl::PerlinNoise noiseGenerator;
     vcl::mesh terrainMesh;
     float xSize;

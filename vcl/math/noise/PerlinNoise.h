@@ -25,6 +25,10 @@ namespace vcl {
         double Se = 1;
         // Noise total gain
         double Sh = 1;
+        // Interpolation factor for altitude erosion
+        double sigma = 1;
+        // Altitude factor
+        double Ea = 1;
     };
 
     class PerlinNoise {
@@ -114,7 +118,7 @@ namespace vcl {
          * @param parameters
          * @return
          */
-        double erosionFbmNoise(double x, double y, NoiseParameters* parameters);
+        double erosionFbmNoise(double x, double y, NoiseParameters &parameters);
 
     private:
         double fade(double t);
