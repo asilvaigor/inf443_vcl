@@ -24,7 +24,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 include_directories(".")
 include_directories(third_party/eigen/)
-include_directories(third_party/assimp/assimp-5.0.1/include)
+include_directories(third_party/assimp/include)
 include_directories(vcl)
 include_directories(src)
 

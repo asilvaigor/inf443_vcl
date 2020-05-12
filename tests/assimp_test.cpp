@@ -1,7 +1,7 @@
 #include <iostream>
-#include "assimp/Importer.hpp"
-#include "assimp/scene.h"
-#include "assimp/postprocess.h"
+#include "third_party/assimp/include/Importer.hpp"
+#include "third_party/assimp/include/scene.h"
+#include "third_party/assimp/include/postprocess.h"
 
 int main() {
     Assimp::Importer Importer;
