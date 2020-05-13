@@ -37,4 +37,4 @@ file(GLOB_RECURSE assimp_files
         code/*.[ch]pp code/*.[ch]
         include/*.[ch]pp include/*.[ch])
 add_library(assimp ${assimp_files})
-target_link_libraries(assimp IrrXML ZLIB::ZLIB)
+target_link_libraries(assimp IrrXML z)

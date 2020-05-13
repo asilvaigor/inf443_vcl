@@ -254,7 +254,8 @@ void buffer<T>::fill(T const& value)
 template <typename T>
 typename std::vector<T>::iterator buffer<T>::insert(typename std::vector<T>::iterator pos,
         typename std::vector<T>::iterator begin, typename std::vector<T>::iterator end) {
-    return data.insert(pos, begin, end);
+    data.insert(pos, begin, end);
+    return data.begin();
 }
 
 
