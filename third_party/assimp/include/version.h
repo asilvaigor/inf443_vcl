@@ -50,6 +50,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 extern "C" {
 #endif
 
+#include "defs.h"
+
 // ---------------------------------------------------------------------------
 /** @brief Returns a string with legal copyright and licensing information 
  *  about Assimp. The string may include multiple lines.
