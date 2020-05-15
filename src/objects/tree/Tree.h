@@ -32,8 +32,9 @@ public:
     /**
      * Draws the tree on opengl.
      * @param camera
+     * @param time
      */
-    void drawMesh(vcl::camera_scene &camera) override;
+    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
 
 private:
     TreeSpecies &species;

@@ -21,6 +21,10 @@ public:
 
     BoundingSphere(vcl::mesh &mesh);
 
+    BoundingSphere(std::vector<vcl::mesh> &meshes);
+
+    BoundingSphere(std::vector<vcl::mesh_skinned> &meshes);
+
     BoundingSphere(std::vector<vcl::vec3 *> &points);
 
     /**

@@ -116,6 +116,10 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
     uniform(shader, "light_color", drawable.uniform.light->get_color()); opengl_debug();
     uniform(shader, "shadow_map_id", drawable.uniform.light->get_shadow_map_id()); opengl_debug();
 
+    if (!drawable.uniform.bones.empty()) {
+        uniform(shader, "bones", drawable.uniform.bones.data(), drawable.uniform.bones.size());
+    }
+
     vcl::draw(drawable.data); opengl_debug();
 
 

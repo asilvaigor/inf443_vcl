@@ -15,7 +15,7 @@ Box::Box(Shaders &shaders, vcl::vec3 base) : Object(false) {
     billboard = BillboardGenerator(shaders, this);
 }
 
-void Box::drawMesh(vcl::camera_scene &camera) {
+void Box::drawMesh(vcl::camera_scene &camera, float) {
     box.uniform.light = light;
     vcl::draw(box, camera);
 }

@@ -28,7 +28,7 @@ include_directories(src)
 
 file(GLOB_RECURSE vcl_files vcl/*.[ch]pp)
 add_library(vcl ${vcl_files})
-target_link_libraries(vcl glfw)
+target_link_libraries(vcl glfw assimp)
 
 file(GLOB_RECURSE third_party_files
         third_party/eigen/*.[ch]pp third_party/eigen/*.[ch]

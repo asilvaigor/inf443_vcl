@@ -13,7 +13,7 @@ Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species, float sn
     billboard = BillboardGenerator(shaders, this);
 }
 
-void Tree::drawMesh(vcl::camera_scene &camera) {
+void Tree::drawMesh(vcl::camera_scene &camera, float) {
     if (!branchesMesh.empty()) {
         branchesDrawable.uniform.light = light;
         branchTexture.bind();

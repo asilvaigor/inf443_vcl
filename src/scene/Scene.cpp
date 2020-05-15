@@ -53,13 +53,14 @@ void Scene::updateScene() {
     if (gui->showGrid())
         grid->draw(gui->getCamera());
 
+    float time = glfwGetTime();
     whiteTexture->bind();
     for (auto &obj : stillObjects) {
         obj->draw(gui->getCamera());
         whiteTexture->bind();
     }
     for (auto &obj : movableObjects) {
-        obj->draw(gui->getCamera());
+        obj->draw(gui->getCamera(), time);
         whiteTexture->bind();
     }
 }

@@ -8,7 +8,7 @@
 #include "objects/terrain/FlatSurface.h"
 
 int main() {
-    auto scene = Scene::getInstance("Tree Test");
+    auto scene = Scene::getInstance("Rock Test");
 
     auto terrain = std::static_pointer_cast<Object>(std::make_shared<FlatSurface>(scene.getShaders()));
     scene.addObject(terrain);

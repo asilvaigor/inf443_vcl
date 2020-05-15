@@ -103,6 +103,14 @@ mat4 mat4::from_translation(const vcl::vec3& t)
         0,0,0,1
     };
 }
+mat4 mat4::from_assimp(const aiMatrix4x4& m) {
+    return {
+        m.a1, m.a2, m.a3, m.a4,
+        m.b1, m.b2, m.b3, m.b4,
+        m.c1, m.c2, m.c3, m.c4,
+        m.d1, m.d2, m.d3, m.d4
+    };
+}
 
 
 

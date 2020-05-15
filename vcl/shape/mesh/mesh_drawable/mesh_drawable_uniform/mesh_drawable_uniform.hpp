@@ -2,6 +2,7 @@
 
 #include <memory>
 #include "vcl/math/math.hpp"
+#include "vcl/shape/mesh/mesh_structure/mesh_skinned.hpp"
 
 namespace vcl
 {
@@ -27,6 +28,7 @@ struct mesh_drawable_uniform {
     std::shared_ptr<light_source> light;
     std::shared_ptr<light_source> light2;
     std::shared_ptr<light_source> light3;
+    std::vector<mat4> bones;
     int current_light;
 
 };

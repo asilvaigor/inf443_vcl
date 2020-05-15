@@ -2,6 +2,7 @@
 
 #include "../mat/mat.hpp"
 #include "../../vec/vec4/vec4.hpp"
+#include "third_party/assimp/include/matrix4x4.h"
 
 
 
@@ -68,6 +69,8 @@ template <> struct mat<4,4> {
      * (  0   0   0  |  1 )
      *  */
     static mat4 from_translation(const vcl::vec3& t);
+
+    static mat4 from_assimp(const aiMatrix4x4& m);
 
     vec4 row(std::size_t offset) const;
     vec4 col(std::size_t offset) const;
