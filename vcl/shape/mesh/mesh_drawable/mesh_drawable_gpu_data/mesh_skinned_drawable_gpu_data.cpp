@@ -2,6 +2,7 @@
 // Created by igor on 14/05/2020.
 //
 
+#include "opengl/debug/opengl_debug.hpp"
 #include "mesh_skinned_drawable_gpu_data.hpp"
 
 namespace vcl {
@@ -16,13 +17,13 @@ mesh_skinned_drawable_gpu_data::mesh_skinned_drawable_gpu_data(const mesh_skinne
 
     // Fill VBO for skeleton
     glGenBuffers(1, &vbo_skeleton);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_skeleton);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_skeleton);
     if (!mesh_cpu.bones.empty())
         glBufferData(GL_ARRAY_BUFFER, sizeof(vertex_bone_data) * mesh_cpu.bones.size(),
                      &mesh_cpu.bones[0], GL_STATIC_DRAW);
     else
         glBufferData(GL_ARRAY_BUFFER, 0, nullptr, GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glBindVertexArray(vao);
 

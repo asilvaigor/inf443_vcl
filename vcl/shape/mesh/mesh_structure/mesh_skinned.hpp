@@ -8,14 +8,15 @@
 #include "vcl/math/math.hpp"
 #include "vcl/wrapper/glad/glad.hpp"
 #include "mesh.hpp"
+#include "third_party/assimp/include/anim.h"
 
 #define NUM_BONES_PER_VERTEX 4
 
 namespace vcl {
 
 struct bone_info {
-    mat4 offset;
-    mat4 transform;
+    aiMatrix4x4 offset;
+    aiMatrix4x4 transform;
 };
 
 struct vertex_bone_data {

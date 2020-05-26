@@ -57,7 +57,7 @@ void Rock::calculateMesh(vcl::vec3 &base, vcl::vec3 &ellipsoidAxisSize) {
         float noise;
 
         noise = vcl::perlin(scaling * p.x, scaling * p.y, octave, persistency);
-        if (p.z - base.z > FLT_EPSILON)
+        if (p.z - base.z > EPSILON)
             p.z += height * noise;
         noise = vcl::perlin(scaling * p.x, scaling * p.y, octave, persistency);
         p.x += (p.x - base.x) > 0 ? height * noise : -height * noise;

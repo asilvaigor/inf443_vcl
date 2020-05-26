@@ -1,5 +1,7 @@
 #pragma once
 
+#define EPSILON 1e-6
+
 #include "vec/vec.hpp"
 #include "mat/mat.hpp"
 #include "transformation/transformation.hpp"

@@ -19,7 +19,7 @@ void BezierSpline::addPoint(vcl::vec3 pos, float r, vcl::vec3 lH, vcl::vec3 rH) 
 vcl::mesh BezierSpline::toMesh() {
     vcl::mesh mesh;
 
-    if (nPoints < 2 || radius[0] < FLT_EPSILON)
+    if (nPoints < 2 || radius[0] < EPSILON)
         return mesh;
 
     const float circleResolution = 64;
@@ -36,7 +36,7 @@ vcl::mesh BezierSpline::toMesh() {
     }
 
     // If it finishes in a point, will optimize the number of points
-    bool finishesInPoint = radius.back() < FLT_EPSILON;
+    bool finishesInPoint = radius.back() < EPSILON;
     if (finishesInPoint)
         vMax--;
 
@@ -67,7 +67,7 @@ vcl::mesh BezierSpline::toMesh() {
             vcl::vec3 dir = tangent(i, a);
 
             // If it is not a point
-            if (r > FLT_EPSILON) {
+            if (r > EPSILON) {
                 // Placing points in mesh as a circle orthogonal to dir
                 vcl::vec3 ort1 = vcl::cross(dir, {1, 0, 0}).normalized();
                 vcl::vec3 ort2 = vcl::cross(dir, ort1).normalized();
