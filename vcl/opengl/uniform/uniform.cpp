@@ -1,4 +1,5 @@
 #include "uniform.hpp"
+#include "opengl/debug/opengl_debug.hpp"
 
 namespace vcl
 {

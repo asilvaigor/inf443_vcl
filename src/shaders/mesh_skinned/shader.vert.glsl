@@ -42,8 +42,8 @@ void main()
     bone_transform     += bones[bone_ids[2]] * bone_weights[2];
     bone_transform     += bones[bone_ids[3]] * bone_weights[3];
 
-    vec4 true_normal = normal; //bone_transform * normal;
-    vec4 true_pos = position; //bone_transform * position;
+    vec4 true_normal = bone_transform * normal;
+    vec4 true_pos = bone_transform * position;
 
     // scaling matrix
     mat4 S = mat4(scaling*scaling_axis.x,0.0,0.0,0.0, 0.0,scaling*scaling_axis.y,0.0,0.0, 0.0,0.0,scaling*scaling_axis.z,0.0, 0.0,0.0,0.0,1.0);

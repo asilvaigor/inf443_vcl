@@ -11,8 +11,8 @@ CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
     maps = std::make_shared<vcl::depth_maps>(2 * nCascades, mapResolution);
     for (int i = 0; i < 2 * nCascades; i++) {
         lastCamera.emplace_back(vcl::camera_scene());
-        lastSunAngle.emplace_back(0);
-        lastTime.emplace_back(0.0);
+        lastSunAngle.emplace_back(0.0f);
+        lastTime.emplace_back(0.0f);
     }
     float zN;
     float zF = light.get_z_near();
@@ -26,7 +26,8 @@ CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
 
 void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects,
                            std::vector<std::shared_ptr<Object> > &stillObjects,
-                           std::shared_ptr<SceneGui> &gui, std::shared_ptr<Shaders> &shaders) {
+                           std::shared_ptr<SceneGui> &gui, std::shared_ptr<Shaders> &shaders,
+                           float time) {
     shaders->override("depth", true);
 
     int startIdx = lastUpdated;
@@ -40,8 +41,8 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
         mustUpdate |= std::fabs(prevCamera.perspective.image_aspect - camera.perspective.image_aspect) > 1e-6;
         mustUpdate |= prevCamera.camera_position().dist(camera.camera_position()) > 1.0f;
         mustUpdate |= prevCamera.camera_direction().angle(camera.camera_direction()) > 1e-2f;
-        mustUpdate |= std::fabs(gui->getSunAngle() - lastSunAngle[lastUpdated]) > 1e-3;
-        // TODO: Add condition for moving objects.
+        mustUpdate |= std::fabs(gui->getSunAngle() - lastSunAngle[lastUpdated]) > 1e-3f;
+        mustUpdate |= (lastUpdated % 2 == 1) && (time - lastTime[lastUpdated] > 1e-1f);
 
         // If camera has changed or objects have moved, update the objects
         if (mustUpdate) {
@@ -50,13 +51,13 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
                                500.0f * std::sin((float) (0.5 * M_PI) - sunAngle));
             vcl::vec3 lightDir = -lightPos.normalized();
             lights[lastUpdated]->update(camera, lightPos, lightDir);
+            lastCamera[lastUpdated] = camera;
+            lastSunAngle[lastUpdated] = sunAngle;
+            lastTime[lastUpdated] = time;
 
             if (lastUpdated % 2 == 0)
                 render(stillObjects, camera);
             else render(movableObjects, camera);
-
-            lastCamera[lastUpdated] = camera;
-            lastSunAngle[lastUpdated] = sunAngle;
             break;
         }
 
@@ -73,15 +74,17 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
 
     for (auto &obj : objects) {
         // If it is the terrain, it will be in all cascades
-        auto *t = dynamic_cast<FlatSurface *> (obj.get());
+        auto *t = dynamic_cast<BaseTerrain *> (obj.get());
         if (t != nullptr) {
             t->setLight(lights[lastUpdated], lastUpdated / 2 + 1);
             t->draw(camera);
             // A normal object must be in the correct frustum to be rendered
         } else if (obj->getLight()->get_shadow_map_id() == lastUpdated / 2 + 1 ||
-                obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated])) {
+                   obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated])) {
             obj->setLight(lights[lastUpdated]);
-            obj->draw(camera);
+            if (obj->isMovable())
+                obj->draw(camera, lastTime[lastUpdated]);
+            else obj->draw(camera);
         }
     }
 }

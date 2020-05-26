@@ -33,7 +33,8 @@ void fbx_model::draw(vcl::camera_scene &camera, float time) {
         for (auto &drawable : drawables) {
             for (int i = 0; i < (int) bones.size(); i++)
                 drawable.uniform.bones[i] = mat4::from_assimp(bones[i].transform);
-            vcl::draw(drawable, camera);
+            drawable.uniform.light = light;
+            drawable.draw(camera);
         }
 
         auto ticks_per_sec = (float) (animation_map[cur_animation]->mTicksPerSecond != 0 ?
@@ -80,9 +81,12 @@ void fbx_model::load_mesh(aiMesh *assimpMesh) {
 
     // Filling up position, normals and texture_uv
     for (uint i = 0; i < assimpMesh->mNumVertices; i++) {
-        const aiVector3D *pos = &(assimpMesh->mVertices[i]);
-        const aiVector3D *normal = &(assimpMesh->mNormals[i]);
+        aiVector3D *pos = &(assimpMesh->mVertices[i]);
+        aiVector3D *normal = &(assimpMesh->mNormals[i]);
         const aiVector3D *tex = assimpMesh->HasTextureCoords(0) ? &(assimpMesh->mTextureCoords[0][i]) : &origin;
+
+        *normal = global_inverse_transform * (*normal);
+        *pos = global_inverse_transform * (*pos);
 
         mesh.position.push_back(vec3(pos->x, pos->y, pos->z));
         mesh.normal.push_back(vec3(normal->x, normal->y, normal->z));
@@ -92,7 +96,8 @@ void fbx_model::load_mesh(aiMesh *assimpMesh) {
     // Filling up connectivity
     for (uint i = 0; i < assimpMesh->mNumFaces; i++) {
         const aiFace &face = assimpMesh->mFaces[i];
-        mesh.connectivity.push_back({face.mIndices[0], face.mIndices[1], face.mIndices[2]});
+        mesh.connectivity.push_back({face.mIndices[0], face.mIndices[1],
+                                     face.mIndices[2]});
     }
 
     // Filling up bones
@@ -119,7 +124,7 @@ void fbx_model::load_mesh(aiMesh *assimpMesh) {
     }
 
     meshes.push_back(mesh);
-    drawables.emplace_back(mesh_skinned_drawable(mesh));
+    drawables.emplace_back(mesh_skinned_drawable(mesh, shader));
     drawables.back().uniform.bones.resize(bones.size());
 
     // Storing animations

@@ -27,22 +27,23 @@ public:
     /**
      * Updates the lights and renders shadows, if the camera has changed significantly. This method always ensured that
      * at most one depth map will be rendered per frame, placing pended updates in a stack.
-     * TODO: Implement update if an object has moved.
      * @param movableObjects
      * @param stillObjects
      * @param gui Contains info on camera, light and windows.
      * @param shaders
+     * @param time
      */
     void update(std::vector<std::shared_ptr<Object>> &movableObjects,
                 std::vector<std::shared_ptr<Object>> &stillObjects,
-                std::shared_ptr<SceneGui> &gui, std::shared_ptr<Shaders> &shaders);
+                std::shared_ptr<SceneGui> &gui, std::shared_ptr<Shaders> &shaders,
+                float time);
 
 private:
     const int nCascades;
     std::shared_ptr<vcl::depth_maps> maps;
     std::vector<vcl::camera_scene> lastCamera;
     std::vector<float> lastSunAngle;
-    std::vector<double> lastTime;
+    std::vector<float> lastTime;
     std::vector<std::shared_ptr<vcl::light_source>> lights;
     int lastUpdated;
 

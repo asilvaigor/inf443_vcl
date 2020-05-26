@@ -48,12 +48,13 @@ void Scene::display() {
 }
 
 void Scene::updateScene() {
-    cascadeShadow->update(movableObjects, stillObjects, gui, shaders);
+    float time = glfwGetTime();
+
+    cascadeShadow->update(movableObjects, stillObjects, gui, shaders, time);
     shaders->override("wireframe", gui->showVertices());
     if (gui->showGrid())
         grid->draw(gui->getCamera());
 
-    float time = glfwGetTime();
     whiteTexture->bind();
     for (auto &obj : stillObjects) {
         obj->draw(gui->getCamera());

@@ -54,5 +54,7 @@ public:
 void draw(const mesh_drawable& drawable, const camera_scene& camera);
 void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader);
 void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id);
+void load_data(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id);
+
 
 }

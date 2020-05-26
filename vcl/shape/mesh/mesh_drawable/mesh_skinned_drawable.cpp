@@ -3,6 +3,7 @@
 //
 
 #include "mesh_skinned_drawable.hpp"
+#include "vcl/opengl/opengl.hpp"
 
 namespace vcl {
 
@@ -16,5 +17,12 @@ mesh_skinned_drawable::mesh_skinned_drawable(const vcl::mesh_skinned &mesh_cpu, 
     shader = shader_arg;
     texture_id = texture_id_arg;
 }
+
+void mesh_skinned_drawable::draw(const camera_scene& camera) {
+    load_data(*this, camera, shader, texture_id);
+    vcl::draw(data); opengl_debug();
+}
+
+
 
 }

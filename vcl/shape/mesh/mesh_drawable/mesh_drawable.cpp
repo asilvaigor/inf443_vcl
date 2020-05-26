@@ -49,6 +49,11 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
 
 void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id)
 {
+    load_data(drawable, camera, shader, texture_id);
+    vcl::draw(drawable.data); opengl_debug();
+}
+
+void load_data(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id) {
     if (mesh_drawable::shaderOverride != (GLuint) 0)
         shader = mesh_drawable::shaderOverride;
 
@@ -116,9 +121,8 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
     uniform(shader, "light_color", drawable.uniform.light->get_color()); opengl_debug();
     uniform(shader, "shadow_map_id", drawable.uniform.light->get_shadow_map_id()); opengl_debug();
 
-    if (!drawable.uniform.bones.empty()) {
-        uniform(shader, "bones", drawable.uniform.bones.data(), drawable.uniform.bones.size());
-    }
+    if (!drawable.uniform.bones.empty())
+        uniform(shader, "bones", drawable.uniform.bones.data(), drawable.uniform.bones.size()); opengl_debug();
 
     vcl::draw(drawable.data); opengl_debug();
 
