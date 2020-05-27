@@ -2,6 +2,8 @@
 
 layout (location = 0) in vec4 position;
 layout (location = 3) in vec2 texture_uv;
+layout (location = 4) in ivec4 bone_ids;
+layout (location = 5) in vec4 bone_weights;
 
 out struct fragment_data
 {
@@ -15,13 +17,25 @@ uniform mat3 rotation = mat3(1.0, 0.0, 0.0,                          // user def
 uniform float scaling = 1.0;                                           // user defined scaling
 uniform vec3 scaling_axis = vec3(1.0, 1.0, 1.0);                       // user defined scaling
 
-uniform int current_light;
-uniform mat4 light_matrix;
-uniform mat4 light_matrix_2;
-uniform mat4 light_matrix_3;
+uniform mat4 light_matrices[1];
+
+uniform bool is_skinned;
+uniform mat4 bones[50];
 
 void main()
 {
+    vec4 true_pos;
+    if (is_skinned) {
+        mat4 bone_transform = bones[bone_ids[0]] * bone_weights[0];
+        bone_transform     += bones[bone_ids[1]] * bone_weights[1];
+        bone_transform     += bones[bone_ids[2]] * bone_weights[2];
+        bone_transform     += bones[bone_ids[3]] * bone_weights[3];
+
+        true_pos = bone_transform * position;
+    } else {
+        true_pos = position;
+    }
+
     // scaling matrix
     mat4 S = mat4(scaling * scaling_axis.x, 0.0, 0.0, 0.0,
                   0.0, scaling * scaling_axis.y, 0.0, 0.0,
@@ -34,16 +48,6 @@ void main()
 
     fragment.texture_uv = texture_uv;
 
-    vec4 position_transformed = R * S * position + T;
-    switch (current_light) {
-        case 1:
-            gl_Position = light_matrix * position_transformed;
-            break;
-        case 2:
-            gl_Position = light_matrix_2 * position_transformed;
-            break;
-        default:
-            gl_Position = light_matrix_3 * position_transformed;
-            break;
-    }
+    vec4 position_transformed = R * S * true_pos + T;
+    gl_Position = light_matrices[0] * position_transformed;
 }

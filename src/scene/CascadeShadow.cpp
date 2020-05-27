@@ -19,8 +19,8 @@ CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
     for (int i = 0; i < nCascades; i++) {
         zN = zF;
         zF = light.get_z_far() / std::max(1.0f, (4.0f * (float) (nCascades - i - 1)));
-        lights.emplace_back(std::make_shared<vcl::light_source>(light.get_pos(), light.get_dir(), zN, zF, i + 1));
-        lights.emplace_back(std::make_shared<vcl::light_source>(light.get_pos(), light.get_dir(), zN, zF, i + 1));
+        lights.emplace_back(std::make_shared<vcl::light_source>(light.get_pos(), light.get_dir(), zN, zF, i));
+        lights.emplace_back(std::make_shared<vcl::light_source>(light.get_pos(), light.get_dir(), zN, zF, i));
     }
 }
 
@@ -76,10 +76,10 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
         // If it is the terrain, it will be in all cascades
         auto *t = dynamic_cast<BaseTerrain *> (obj.get());
         if (t != nullptr) {
-            t->setLight(lights[lastUpdated], lastUpdated / 2 + 1);
+            t->setLight(lights, lastUpdated / 2);
             t->draw(camera);
             // A normal object must be in the correct frustum to be rendered
-        } else if (obj->getLight()->get_shadow_map_id() == lastUpdated / 2 + 1 ||
+        } else if (obj->getLight()->get_shadow_map_id() == lastUpdated / 2 ||
                    obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated])) {
             obj->setLight(lights[lastUpdated]);
             if (obj->isMovable())

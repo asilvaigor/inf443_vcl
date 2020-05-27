@@ -15,22 +15,22 @@ Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species, float sn
 
 void Tree::drawMesh(vcl::camera_scene &camera, float) {
     if (!branchesMesh.empty()) {
-        branchesDrawable.uniform.light = light;
+        branchesDrawable.uniform.lights = lights;
         branchTexture.bind();
         vcl::draw(branchesDrawable, camera);
     }
     if (!snowyBranchesMesh.empty()) {
-        snowyBranchesDrawable.uniform.light = light;
+        snowyBranchesDrawable.uniform.lights = lights;
         snowTexture.bind();
         vcl::draw(snowyBranchesDrawable, camera);
     }
     if (!leavesMesh.empty()) {
-        leavesDrawable.uniform.light = light;
+        leavesDrawable.uniform.lights = lights;
         leafTexture.bind();
         vcl::draw(leavesDrawable, camera);
     }
     if (!snowyLeavesMesh.empty()) {
-        snowyLeavesDrawable.uniform.light = light;
+        snowyLeavesDrawable.uniform.lights = lights;
         snowTexture.bind();
         vcl::draw(snowyLeavesDrawable, camera);
     }

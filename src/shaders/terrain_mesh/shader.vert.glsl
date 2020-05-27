@@ -11,9 +11,7 @@ out struct fragment_data
     vec4 normal;
     vec4 color;
     vec2 texture_uv;
-    vec4 light_ref_pos;
-    vec4 light_ref_pos_2;
-    vec4 light_ref_pos_3;
+    vec4 light_ref_pos[6];
 } fragment;
 
 
@@ -28,9 +26,7 @@ uniform mat4 view;
 // perspective matrix
 uniform mat4 perspective;
 
-uniform mat4 light_matrix;
-uniform mat4 light_matrix_2;
-uniform mat4 light_matrix_3;
+uniform mat4 light_matrices[6];
 
 void main()
 {
@@ -48,9 +44,8 @@ void main()
     fragment.normal = R*normal;
     vec4 position_transformed = R*S*position + T;
 
-    fragment.light_ref_pos = light_matrix * position_transformed;
-    fragment.light_ref_pos_2 = light_matrix_2 * position_transformed;
-    fragment.light_ref_pos_3 = light_matrix_3 * position_transformed;
+    for (int i = 0; i < 6; i++)
+        fragment.light_ref_pos[i] = light_matrices[i] * position_transformed;
 
     fragment.position = position_transformed;
     gl_Position = perspective * view * position_transformed;

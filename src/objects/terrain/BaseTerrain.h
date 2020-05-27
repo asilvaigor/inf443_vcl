@@ -20,16 +20,15 @@ public:
     BaseTerrain();
 
     /**
-     * Sets a new light to the terrain.
-     * @param light
-     * @param idx
+     * Sets new lights to the terrain.
+     * @param lights
+     * @param currentLight
      */
-    virtual void setLight(std::shared_ptr<vcl::light_source> &light, int idx) = 0;
+    void setLight(std::vector<std::shared_ptr<vcl::light_source>> &lights, int currentLight);
+
 protected:
     vcl::mesh_drawable terrain;
-    // Terrain has extra lights
-    std::shared_ptr<vcl::light_source> light2;
-    std::shared_ptr<vcl::light_source> light3;
+    int currentLight;
 };
 
 

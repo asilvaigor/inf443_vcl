@@ -38,10 +38,10 @@ Rock::Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellis
 }
 
 void Rock::drawMesh(vcl::camera_scene &camera, float) {
-    rock.uniform.light = light;
+    rock.uniform.lights = lights;
     rockTexture.bind();
     vcl::draw(rock, camera);
-    snow.uniform.light = light;
+    snow.uniform.lights = lights;
     snowTexture.bind();
     vcl::draw(snow, camera);
 }

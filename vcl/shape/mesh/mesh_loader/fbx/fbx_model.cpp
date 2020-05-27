@@ -33,7 +33,7 @@ void fbx_model::draw(vcl::camera_scene &camera, float time) {
         for (auto &drawable : drawables) {
             for (int i = 0; i < (int) bones.size(); i++)
                 drawable.uniform.bones[i] = mat4::from_assimp(bones[i].transform);
-            drawable.uniform.light = light;
+            drawable.uniform.lights = {light};
             drawable.draw(camera);
         }
 

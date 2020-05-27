@@ -63,7 +63,7 @@ public:
 
 protected:
     const bool movable;
-    std::shared_ptr<vcl::light_source> light;
+    std::vector<std::shared_ptr<vcl::light_source>> lights;
     BoundingSphere boundingSphere;
     BoundingBox boundingBox;
     BillboardGenerator billboard;

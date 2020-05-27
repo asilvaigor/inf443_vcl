@@ -26,13 +26,6 @@ public:
      */
     void drawMesh(vcl::camera_scene &camera , float time = 0.0f) override;
 
-    /**
-     * Sets a new light to the terrain.
-     * @param light
-     * @param idx
-     */
-    void setLight(std::shared_ptr<vcl::light_source> &light, int idx) override;
-
 private:
     const Texture snowTexture;
 };

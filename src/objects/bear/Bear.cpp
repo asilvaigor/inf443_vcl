@@ -5,12 +5,12 @@
 #include "Bear.h"
 
 Bear::Bear(Shaders &shaders, vcl::vec3 base) :
-        Object(true), bear("../src/assets/models/bear.fbx", shaders["mesh_skinned"], base) {
-    boundingSphere = BoundingSphere(bear.meshes);
+        Object(true), bear("../src/assets/models/bear.fbx", shaders["mesh"], base) {
+    boundingSphere = BoundingSphere(bear.meshes); // TODO: check bounding sphere
     bear.set_animation("bear|run");
 }
 
 void Bear::drawMesh(vcl::camera_scene &camera, float time) {
-    bear.set_light(light);
+    bear.set_light(lights[0]);
     bear.draw(camera, time);
 }

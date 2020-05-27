@@ -16,6 +16,6 @@ Box::Box(Shaders &shaders, vcl::vec3 base) : Object(false) {
 }
 
 void Box::drawMesh(vcl::camera_scene &camera, float) {
-    box.uniform.light = light;
+    box.uniform.lights = lights;
     vcl::draw(box, camera);
 }
