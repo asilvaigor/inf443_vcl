@@ -61,69 +61,8 @@ void MountainTerrain::setLight(std::shared_ptr<vcl::light_source> &light, int id
     terrain.uniform.current_light = idx;
 }
 
-float MountainTerrain::evaluate_base_terrain_outline(float u, float v) {
-//    const float d = norm(vcl::vec2(u,v)-vcl::vec2(0.2f, 0.2f))/0.25f;
-//    float z = 2*std::exp(-d*d);
-    return 0;
-}
-
 float MountainTerrain::evaluate_terrain_z(const float u, const float v) {
-    vcl::NoiseParameters parameters;
-    parameters.g = 0.6;
-
-    // Adding slope erosion
-    float eps = 0.00001;
-    if (u > eps && u < 1-eps && v > eps && v < 1-eps){
-        // Slope erosion
-        float du = (evaluate_terrain_z_no_erosion(u + eps, v, parameters) - evaluate_terrain_z_no_erosion(u - eps, v,
-                                                                                           parameters)) / (2 * eps);
-        float dv = (evaluate_terrain_z_no_erosion(u, v + eps, parameters) - evaluate_terrain_z_no_erosion(u, v - eps,
-                                                                                           parameters)) / (2 * eps);
-        vcl::vec2 grad = {du, dv};
-        float slopeErosion = 1/(1+vcl::dot(grad, grad));
-
-
-        //Concavity erosion
-        float d2u = (evaluate_terrain_z_no_erosion(u + eps, v, parameters) + evaluate_terrain_z_no_erosion(u - eps, v,
-                                                                                             parameters) - 2 *
-                                                                                                                evaluate_terrain_z_no_erosion(
-                                                                                                                     u,
-                                                                                                                     v,
-                                                                                                                     parameters)) / (eps * eps);
-        float d2v = (evaluate_terrain_z_no_erosion(u, v + eps, parameters) + evaluate_terrain_z_no_erosion(u, v - eps,
-                                                                                             parameters) - 2 *
-                                                                                                                evaluate_terrain_z_no_erosion(
-                                                                                                                     u,
-                                                                                                                     v,
-                                                                                                                     parameters)) / (eps * eps);
-        float C = (d2u+d2v)*0.5f;
-
-//        std::cout << C << std::endl;
-
-//        parameters.g = parameters.g+0.005*(parameters.g/(1+fabs(std::min(C, (float) 0.0)))-parameters.g);
-
-//        return evaluate_terrain_z_no_erosion(u, v, parameters)+slopeErosion;
-        return evaluate_terrain_z_no_erosion(u, v, parameters);
-    } else return evaluate_terrain_z_no_erosion(u, v, parameters);
-}
-
-float MountainTerrain::evaluate_terrain_z_no_erosion(float u, float v, vcl::NoiseParameters &parameters) {
     float z = 0.0f;
-
-    // Adding base terrain contribution
-    z += evaluate_base_terrain_outline(u, v);
-
-    // Adding perlin noise
-//    vcl::NoiseParameters parameters;
-    parameters.Ss = -0.5;
-    parameters.octaves = 20;
-    parameters.Ia = 0.2;
-    parameters.If = 3;
-//    parameters.g = 0.6;
-    parameters.Sh = 10;
-    parameters.Ss = 2;
-    parameters.Ea = 2;
-    parameters.sigma = 0.9;
 
     z += altitudeErosionFbmNoise(u, v);
     z = noiseGenerator.heightDependentNoise(z, parameters);

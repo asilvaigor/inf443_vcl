@@ -77,11 +77,6 @@ private:
      */
     float evaluate_terrain_z(float u, float v);
 
-    //TODO add descriptions
-    float evaluate_base_terrain_outline(float u, float v);
-
-    float evaluate_terrain_z_no_erosion(float u, float v, vcl::NoiseParameters &parameters);
-
     float altitudeErosionFbmNoise(double x, double y);
 
     // TODO change noise parameters names and pass them to class
