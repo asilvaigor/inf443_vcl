@@ -133,6 +133,8 @@ namespace vcl {
         return h*pow(fabs(h), parameters.Se)*parameters.Sh;
     }
 
+    //TODO remove lerp
+
     double PerlinNoise::erosionFbmNoise(double x, double y, NoiseParameters &parameters) {
         double val = 0;
         std::vector<double> gains(parameters.octaves);

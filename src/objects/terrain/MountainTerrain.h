@@ -7,7 +7,9 @@
 
 #include <src/shaders/Shaders.h>
 #include <vcl/math/noise/PerlinNoise.h>
+#include <vcl/math/helper_functions/helper_functions.hpp>
 #include "BaseTerrain.h"
+#include "TerrainFeature.h"
 
 /**
  * Generates procedurally a terrain with some
@@ -35,6 +37,22 @@ public:
      */
     void setLight(std::shared_ptr<vcl::light_source> &light, int idx) override;
 
+    /**
+     * Adds a mountain in the terrain
+     * @param pos
+     * @param sig
+     * @param height
+     */
+    void addMountain(vcl::vec2 pos, float sig, float height);
+
+    /**
+     * Adds a gaussian curve to the terrain altitude map
+     * @param pos
+     * @param sig
+     * @param height
+     */
+    void addHighLevelFeature(vcl::vec2 pos, float sig, float height);
+
 private:
 
     /**
@@ -59,12 +77,18 @@ private:
      */
     float evaluate_terrain_z(float u, float v);
 
+    //TODO add descriptions
     float evaluate_base_terrain_outline(float u, float v);
 
     float evaluate_terrain_z_no_erosion(float u, float v, vcl::NoiseParameters &parameters);
 
+    float altitudeErosionFbmNoise(double x, double y);
+
+    // TODO change noise parameters names and pass them to class
+    vcl::NoiseParameters parameters;
     vcl::PerlinNoise noiseGenerator;
     vcl::mesh terrainMesh;
+    std::vector<TerrainFeature> features;
     float xSize;
     float ySize;
 };

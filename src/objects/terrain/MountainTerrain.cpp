@@ -3,6 +3,7 @@
 //
 
 #include "MountainTerrain.h"
+#include <cmath>
 
 MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) {
     // Initializing internal variables
@@ -10,6 +11,23 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) {
     light3 = std::make_shared<vcl::light_source>();
     this->xSize = xSize;
     this->ySize = ySize;
+
+    // TODO remove all this parameter initialization
+    parameters.Ss = -0.5;
+    parameters.octaves = 20;
+    parameters.Ia = 0.2;
+    parameters.If = 3;
+    parameters.g = 0.6;
+    parameters.Sh = 10;
+    parameters.Ss = 2;
+    parameters.Ea = 2;
+    parameters.sigma = 0.9;
+
+    // TODO remove this mountain
+    addMountain({0.2f, 0.2f}, 0.3f, 2.0f);
+
+    // TODO remove this lake
+    addHighLevelFeature({0.5f, 0.7f}, 0.25f, -30.0f);
 
     // Creating mesh
     evaluate_mesh();
@@ -44,9 +62,9 @@ void MountainTerrain::setLight(std::shared_ptr<vcl::light_source> &light, int id
 }
 
 float MountainTerrain::evaluate_base_terrain_outline(float u, float v) {
-    const float d = norm(vcl::vec2(u,v)-vcl::vec2(0.2f, 0.2f))/0.15f;
-    float z = -1*std::exp(-d*d);
-    return z;
+//    const float d = norm(vcl::vec2(u,v)-vcl::vec2(0.2f, 0.2f))/0.25f;
+//    float z = 2*std::exp(-d*d);
+    return 0;
 }
 
 float MountainTerrain::evaluate_terrain_z(const float u, const float v) {
@@ -107,9 +125,14 @@ float MountainTerrain::evaluate_terrain_z_no_erosion(float u, float v, vcl::Nois
     parameters.Ea = 2;
     parameters.sigma = 0.9;
 
-    z += (float)(noiseGenerator.erosionFbmNoise(u, v, parameters));
-//    z += (float)(noiseGenerator.fbmNoise(u, v, parameters));
+    z += altitudeErosionFbmNoise(u, v);
     z = noiseGenerator.heightDependentNoise(z, parameters);
+
+    // Adding high level features
+    for (auto & feature: features){
+        if (!feature.isLowLevel())
+            z+= feature.evaluate(u, v);
+    }
 
     return z;
 }
@@ -160,6 +183,40 @@ void MountainTerrain::evaluate_mesh() {
     }
 
     terrain = vcl::mesh_drawable(terrainMesh);
+}
+
+float MountainTerrain::altitudeErosionFbmNoise(double x, double y) {
+    float val = 0;
+    std::vector<float> gains(parameters.octaves);
+    for (int i = 0; i < parameters.octaves; ++i){
+        if (i == 0) gains[i] = parameters.Ia;
+        else {
+            gains[i] = gains[i-1]*vcl::lerp(parameters.g, parameters.sigma*parameters.g, parameters.Ea);
+        }
+    }
+
+    for (int k = 0; k < parameters.octaves; ++k){
+        float freq = parameters.If*pow(parameters.l, k);
+        val += gains[k]*noiseGenerator.sharpnessAdjustedNoise(x*freq, y*freq, parameters.Ss);
+
+        // Adding low frequency features
+        if (k == 0){
+            for (auto &feature : features){
+                if (feature.isLowLevel())
+                    val += feature.evaluate(x, y);
+            }
+        }
+    }
+
+    return val;
+}
+
+void MountainTerrain::addMountain(vcl::vec2 pos, float sig, float height) {
+    features.emplace_back(pos, sig, height, true);
+}
+
+void MountainTerrain::addHighLevelFeature(vcl::vec2 pos, float sig, float height) {
+    features.emplace_back(pos, sig, height, false);
 }
 
 
