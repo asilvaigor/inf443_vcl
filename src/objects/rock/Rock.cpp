@@ -4,8 +4,16 @@
 
 #include "Rock.h"
 
+std::shared_ptr<Texture> Rock::rockTexture = nullptr;
+std::shared_ptr<Texture> Rock::snowTexture = nullptr;
+
 Rock::Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellisoidAxisSize, bool verbose) :
-        Object(false), rockTexture("rock"), snowTexture("snow") {
+        Object(false) {
+    if (Rock::rockTexture == nullptr)
+        Rock::rockTexture = std::make_shared<Texture>("rock");
+    if (Rock::snowTexture == nullptr)
+        Rock::rockTexture = std::make_shared<Texture>("snow");
+
     calculateMesh(base, ellisoidAxisSize);
     putSnow(snowCoverage);
 
@@ -39,10 +47,10 @@ Rock::Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellis
 
 void Rock::drawMesh(vcl::camera_scene &camera) {
     rock.uniform.light = light;
-    rockTexture.bind();
+    rockTexture->bind();
     vcl::draw(rock, camera);
     snow.uniform.light = light;
-    snowTexture.bind();
+    snowTexture->bind();
     vcl::draw(snow, camera);
 }
 
