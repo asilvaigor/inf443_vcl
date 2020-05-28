@@ -73,7 +73,7 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
 
     for (auto &obj : objects) {
         // If it is the terrain, it will be in all cascades
-        auto *t = dynamic_cast<FlatSurface *> (obj.get());
+        auto *t = dynamic_cast<BaseTerrain *> (obj.get());
         if (t != nullptr) {
             t->setLight(lights[lastUpdated], lastUpdated / 2 + 1);
             t->draw(camera);
