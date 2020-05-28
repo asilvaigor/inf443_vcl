@@ -53,6 +53,40 @@ public:
      */
     void addHighLevelFeature(vcl::vec2 pos, float sig, float height);
 
+    /**
+     * Returns the height of the terrain at a given point.
+     * @param x Must be within terrain boundaries.
+     * @param y Must be within terrain boundaries.
+     * @return z value of the terrain.
+     */
+    float getTerrainHeight(float x, float y);
+
+    /**
+     * Height of the peak of the mountain.
+     * @return
+     */
+    float getMaxTerrainHeight();
+
+    /**
+     * Checks if a point is inside the lake area.
+     * @param x Must be within terrain boundaries.
+     * @param y Must be within terrain boundaries.
+     * @return True if the point will fall inside the lake.
+     */
+    bool isInsideLake(float x, float y);
+
+    /**
+     * Length of a side of the terrain.
+     * @return
+     */
+    float &getXSize();
+
+    /**
+     * Length of a side of the terrain.
+     * @return
+     */
+    float &getYSize();
+
 private:
 
     /**
@@ -86,6 +120,9 @@ private:
     std::vector<TerrainFeature> features;
     float xSize;
     float ySize;
+    float mountainHeight;
+    vcl::vec2 lakePos;
+    float lakeSig;
 };
 
 

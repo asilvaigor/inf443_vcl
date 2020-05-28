@@ -105,7 +105,7 @@ void main()
     float specular_value = specular * pow(clamp(dot(r, t), 0.0, 1.0), specular_exponent);
 
     float light_dist = length(fragment.light_ref_pos);
-    float a = 0.01;
+    float a = 0.02;
     float epsilon = max((a / light_dist) * (1.0 - un), a / (10.0 * light_dist));
     float shadow = shadowCalc(fragment.light_ref_pos, epsilon);
 

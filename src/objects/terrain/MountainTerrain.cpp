@@ -24,10 +24,13 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) {
     parameters.sigma = 0.9;
 
     // TODO remove this mountain
-    addMountain({0.2f, 0.2f}, 0.3f, 2.0f);
+    mountainHeight = 2.0f;
+    addMountain({0.2f, 0.2f}, 0.3f, mountainHeight);
 
     // TODO remove this lake
-    addHighLevelFeature({0.5f, 0.7f}, 0.25f, -30.0f);
+    lakePos = {0.5f, 0.7f};
+    lakeSig = 0.25f;
+    addHighLevelFeature(lakePos, lakeSig, -30.0f);
 
     // Creating mesh
     evaluate_mesh();
@@ -156,6 +159,29 @@ void MountainTerrain::addMountain(vcl::vec2 pos, float sig, float height) {
 
 void MountainTerrain::addHighLevelFeature(vcl::vec2 pos, float sig, float height) {
     features.emplace_back(pos, sig, height, false);
+}
+
+float MountainTerrain::getTerrainHeight(float x, float y) {
+    return evaluate_terrain_z(x / xSize + 0.5f, y / ySize + 0.5f);
+}
+
+float MountainTerrain::getMaxTerrainHeight() {
+    return mountainHeight;
+}
+
+bool MountainTerrain::isInsideLake(float x, float y) {
+    // FIXME: This isn't working
+    x = x / xSize - lakePos[0];
+    y = y / ySize - lakePos[1];
+    return x * x + y * y < 3 * lakeSig;
+}
+
+float &MountainTerrain::getXSize() {
+    return xSize;
+}
+
+float &MountainTerrain::getYSize() {
+    return ySize;
 }
 
 
