@@ -14,6 +14,7 @@ CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
         lastCamera.emplace_back(vcl::camera_scene());
         lastSunAngle.emplace_back(0.0f);
         lastTime.emplace_back(0.0f);
+        nMovableObjects.emplace_back(0);
     }
     float zN;
     float zF = light.get_z_near();
@@ -43,7 +44,8 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
         mustUpdate |= prevCamera.camera_position().dist(camera.camera_position()) > 1.0f;
         mustUpdate |= prevCamera.camera_direction().angle(camera.camera_direction()) > 1e-2f;
         mustUpdate |= std::fabs(gui->getSunAngle() - lastSunAngle[lastUpdated]) > 1e-3f;
-        mustUpdate |= (lastUpdated % 2 == 1) && (time - lastTime[lastUpdated] > 1e-3f);
+        float timeThreshold = nMovableObjects[lastUpdated] > 0 ? 1e-3f : 1.0f;
+        mustUpdate |= (lastUpdated % 2 == 1) && (time - lastTime[lastUpdated] > timeThreshold);
 
         // If camera has changed or objects have moved, update the objects
         if (mustUpdate) {
@@ -59,6 +61,7 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
             if (lastUpdated % 2 == 0)
                 render(stillObjects, camera);
             else render(movableObjects, camera);
+            lastUpdated = (lastUpdated + 1) % (2 * nCascades);
             break;
         }
 
@@ -72,6 +75,7 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
 void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::camera_scene &camera) {
     maps->bind(lastUpdated);
     camera.calculate_frustum_planes();
+    nMovableObjects[lastUpdated] = 0;
 
     for (auto &obj : objects) {
         // If it is the terrain, it will be in all cascades
@@ -93,8 +97,9 @@ void CascadeShadow::renderObject(std::shared_ptr<Object> &obj, vcl::camera_scene
            obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated])) {
         // A normal object must be in the correct frustum to be rendered
         obj->setLight(lights[lastUpdated]);
-        if (obj->isMovable())
+        if (obj->isMovable()) {
             obj->draw(camera, lastTime[lastUpdated]);
-        else obj->draw(camera);
+            nMovableObjects[lastUpdated]++;
+        } else obj->draw(camera);
     }
 }

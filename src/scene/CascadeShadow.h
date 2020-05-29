@@ -45,6 +45,7 @@ private:
     std::vector<float> lastSunAngle;
     std::vector<float> lastTime;
     std::vector<std::shared_ptr<vcl::light_source>> lights;
+    std::vector<int> nMovableObjects;
     int lastUpdated;
 
     /**
