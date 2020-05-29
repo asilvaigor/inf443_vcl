@@ -49,13 +49,13 @@ void Tree::drawMesh(vcl::camera_scene &camera) {
 
 void Tree::createMeshes(vcl::vec3 &position, float &snowCoverage) {
     std::vector<vcl::vec3 *> vertices;
-    int nBranches = species.nBranches[0] + (int) (vcl::rand_interval(-1, 1) * species.nBranchesVar[0]);
+    int nBranches = species.nBranches[0] + (int) (Branch::rand.rand() * species.nBranchesVar[0]);
     for (int i = 0; i < nBranches; i++) {
         vcl::vec3 p = position;
         if (species.nBranches[0] > 1) {
             // Placing stems uniformly in a circle
-            float r = vcl::rand_interval(0.0f, species.stemSpacing);
-            float ang = vcl::rand_interval(0.0f, 2 * M_PI);
+            float r = Branch::rand.rand(0.0f, species.stemSpacing);
+            float ang = Branch::rand.rand(0.0f, 2 * M_PI);
             p += vcl::vec3(r * std::cos(ang), r * std::sin(ang), 0);
         }
         TurtleGraphics turtle(p);

@@ -7,6 +7,7 @@
 #include "utils/SingletonException.h"
 
 bool Scene::exists = false;
+bool Scene::deterministic = true;
 
 Scene &Scene::getInstance(std::string windowTitle) {
     if (exists)

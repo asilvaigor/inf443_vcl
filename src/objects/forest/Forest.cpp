@@ -4,9 +4,10 @@
 
 #include "Forest.h"
 #include "objects/tree/TreeSpecies.h"
+#include "scene/Scene.h"
 
 Forest::Forest(Shaders &shaders, std::shared_ptr<MountainTerrain> &terrain, int nTrees, int nBushes, int nRocks) :
-        Object(false), generator(false) {
+        Object(false), generator(Scene::deterministic) {
     auto pine = TreeSpecies::pine();
     auto tupelo = TreeSpecies::blackTupelo();
     auto bush1 = TreeSpecies::bush1();
