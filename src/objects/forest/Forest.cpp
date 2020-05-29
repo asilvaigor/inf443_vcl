@@ -44,8 +44,8 @@ Forest::Forest(Shaders &shaders, std::shared_ptr<MountainTerrain> &terrain, int 
 }
 
 void Forest::drawMesh(vcl::camera_scene &camera) {
-    for (auto &o : objects)
-        o->draw(camera);
+    throw std::invalid_argument("Forst drawMesh should not be called because of bounding spheres. "
+                                "Draw each of the objects separately.");
 }
 
 std::vector<std::shared_ptr<Object>> &Forest::getObjects() {

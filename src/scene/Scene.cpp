@@ -3,6 +3,7 @@
 //
 
 #include "Scene.h"
+#include "objects/forest/Forest.h"
 #include "utils/SingletonException.h"
 
 bool Scene::exists = false;
@@ -59,7 +60,12 @@ void Scene::updateScene() {
 
     whiteTexture->bind();
     for (auto &obj : stillObjects) {
-        obj->draw(gui->getCamera());
+        // Forest should be decomposed in its objects
+        auto *f = dynamic_cast<Forest *>(obj.get());
+        if (f != nullptr)
+            for (auto &o : f->getObjects())
+                o->draw(gui->getCamera());
+        else obj->draw(gui->getCamera());
         whiteTexture->bind();
     }
     for (auto &obj : movableObjects) {
