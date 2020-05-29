@@ -43,7 +43,7 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
         mustUpdate |= prevCamera.camera_position().dist(camera.camera_position()) > 1.0f;
         mustUpdate |= prevCamera.camera_direction().angle(camera.camera_direction()) > 1e-2f;
         mustUpdate |= std::fabs(gui->getSunAngle() - lastSunAngle[lastUpdated]) > 1e-3f;
-        mustUpdate |= (lastUpdated % 2 == 1) && (time - lastTime[lastUpdated] > 1e-1f);
+        mustUpdate |= (lastUpdated % 2 == 1) && (time - lastTime[lastUpdated] > 1e-3f);
 
         // If camera has changed or objects have moved, update the objects
         if (mustUpdate) {
@@ -78,7 +78,7 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
         auto *t = dynamic_cast<BaseTerrain *> (obj.get());
         auto *f = dynamic_cast<Forest *>(obj.get());
         if (t != nullptr) {
-            t->setLight(lights, lastUpdated / 2);
+            t->setLight(lights, lastUpdated);
             t->draw(camera);
         } else if (f != nullptr) {
             // A forest will be decomposed in its objects
@@ -89,7 +89,7 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
 }
 
 void CascadeShadow::renderObject(std::shared_ptr<Object> &obj, vcl::camera_scene &camera) {
-    if (obj->getLight()->get_shadow_map_id() == lastUpdated / 2 ||
+    if (obj->getLight()->get_shadow_map_id() == lastUpdated ||
            obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated])) {
         // A normal object must be in the correct frustum to be rendered
         obj->setLight(lights[lastUpdated]);

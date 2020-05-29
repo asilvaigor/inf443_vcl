@@ -22,13 +22,13 @@ fbx_model::fbx_model(const std::string &filename, GLuint shader, vec3 &pos) : sh
     for (int i = 0; i < (int) scene->mNumMeshes; i++)
         load_mesh(scene->mMeshes[i]);
 
-    last_time = std::numeric_limits<float>::max();
+    last_time = 0;
     animation_time = 0;
     light = nullptr;
 }
 
 void fbx_model::draw(vcl::camera_scene &camera, float time) {
-    if (!cur_animation.empty() && last_time < time) {
+    if (!cur_animation.empty() && last_time > EPSILON) {
         updateBones(scene->mRootNode, global_inverse_transform);
         for (auto &drawable : drawables) {
             for (int i = 0; i < (int) bones.size(); i++)
