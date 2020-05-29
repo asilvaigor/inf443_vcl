@@ -6,11 +6,11 @@
 
 BoundingBox::BoundingBox() {
     minX = std::numeric_limits<float>::max();
-    maxX = std::numeric_limits<float>::min();
+    maxX = std::numeric_limits<float>::lowest();
     minY = std::numeric_limits<float>::max();
-    maxY = std::numeric_limits<float>::min();
+    maxY = std::numeric_limits<float>::lowest();
     minZ = std::numeric_limits<float>::max();
-    maxZ = std::numeric_limits<float>::min();
+    maxZ = std::numeric_limits<float>::lowest();
     empty = true;
 };
 
@@ -57,7 +57,7 @@ float BoundingBox::relativeSize(vcl::camera_scene &camera) {
     if (empty) return std::numeric_limits<float>::max();
 
     float xMin = std::numeric_limits<float>::max(), yMin = std::numeric_limits<float>::max(),
-            xMax = std::numeric_limits<float>::min(), yMax = std::numeric_limits<float>::min();
+            xMax = std::numeric_limits<float>::lowest(), yMax = std::numeric_limits<float>::lowest();
     auto cameraMatrix = camera.perspective.matrix() * camera.view_matrix();
     auto corners = getCorners();
 
@@ -69,5 +69,5 @@ float BoundingBox::relativeSize(vcl::camera_scene &camera) {
         yMax = std::max(yMax, p.y / p.w);
     }
 
-    return std::max(0.5 * (xMax - xMin), 0.5 * (yMax - yMin));
+    return std::max(xMax - xMin, yMax - yMin);
 }
