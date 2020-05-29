@@ -10,6 +10,7 @@
 #include <vcl/math/helper_functions/helper_functions.hpp>
 #include "BaseTerrain.h"
 #include "TerrainFeature.h"
+#include "utils/Texture.h"
 
 /**
  * Generates procedurally a terrain with some
@@ -117,6 +118,7 @@ private:
     vcl::NoiseParameters parameters;
     vcl::PerlinNoise noiseGenerator;
     vcl::mesh terrainMesh;
+    std::shared_ptr<Texture> terrainTexture;
     std::vector<TerrainFeature> features;
     float xSize;
     float ySize;
