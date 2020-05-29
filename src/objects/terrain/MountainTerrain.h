@@ -27,15 +27,9 @@ public:
     /**
      * Draws the surface in opengl;
      * @param camera
+     * @param time
      */
-    void drawMesh(vcl::camera_scene &camera) override;
-
-    /**
-     * Sets a new light to the terrain.
-     * @param light
-     * @param idx
-     */
-    void setLight(std::shared_ptr<vcl::light_source> &light, int idx) override;
+    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
 
     /**
      * Adds a mountain in the terrain

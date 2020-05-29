@@ -43,7 +43,7 @@ Forest::Forest(Shaders &shaders, std::shared_ptr<MountainTerrain> &terrain, int 
     boundingSphere = BoundingSphere({0, 0, 0}, hypotf(terrain->getXSize(), terrain->getYSize()));
 }
 
-void Forest::drawMesh(vcl::camera_scene &camera) {
+void Forest::drawMesh(vcl::camera_scene &camera, float) {
     for (auto &o : objects)
         o->draw(camera);
 }

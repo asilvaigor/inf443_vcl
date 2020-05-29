@@ -55,8 +55,8 @@ float shadowCalc(float un) {
     texel_size[5] = 1.0 / textureSize(shadow_map_5, 0);
 
     float shadow = 0.0;
-    for(int x = -1; x <= 1; ++x) {
-        for(int y = -1; y <= 1; ++y) {
+    for (int x = -1; x <= 1; ++x) {
+        for (int y = -1; y <= 1; ++y) {
             float pcf_depth_0 = texture(shadow_map_0, pos[0].xy + vec2(x, y) * texel_size[0]).r;
             float pcf_depth_1 = texture(shadow_map_1, pos[1].xy + vec2(x, y) * texel_size[1]).r;
             float pcf_depth_2 = texture(shadow_map_2, pos[2].xy + vec2(x, y) * texel_size[2]).r;
@@ -64,15 +64,12 @@ float shadowCalc(float un) {
             float pcf_depth_4 = texture(shadow_map_4, pos[4].xy + vec2(x, y) * texel_size[4]).r;
             float pcf_depth_5 = texture(shadow_map_5, pos[5].xy + vec2(x, y) * texel_size[5]).r;
 
-            shadow += ((current_depth[0] <= 1.0 && current_depth[1] <= 1.0 &&
-                        (current_depth[0] - epsilon[0] > pcf_depth_0 ||
-                         current_depth[1] - epsilon[1] > pcf_depth_1)) ||
-                       (current_depth[2] <= 1.0 && current_depth[3] <= 1.0 &&
-                        (current_depth[2] - epsilon[2] > pcf_depth_2 ||
-                         current_depth[3] - epsilon[3] > pcf_depth_3)) ||
-                       (current_depth[4] <= 1.0 && current_depth[5] <= 1.0 &&
-                        (current_depth[4] - epsilon[4] > pcf_depth_4 ||
-                         current_depth[5] - epsilon[5] > pcf_depth_5))) ? 1.0 : 0.0;
+            shadow += (((current_depth[0] <= 1.0 && current_depth[0] - epsilon[0] > pcf_depth_0) ||
+                        (current_depth[1] <= 1.0 && current_depth[1] - epsilon[1] > pcf_depth_1)) ||
+                       ((current_depth[2] <= 1.0 && current_depth[2] - epsilon[2] > pcf_depth_2) ||
+                        (current_depth[3] <= 1.0 && current_depth[3] - epsilon[3] > pcf_depth_3)) ||
+                       ((current_depth[4] <= 1.0 && current_depth[4] - epsilon[4] > pcf_depth_4) ||
+                        (current_depth[5] <= 1.0 && current_depth[5] - epsilon[5] > pcf_depth_5))) ? 1.0 : 0.0;
         }
     }
     shadow /= 9.0;
@@ -98,7 +95,7 @@ void main()
     vec4 color_texture = texture(texture_sampler, fragment.texture_uv);
     vec3 color = color.rgb * fragment.color.rgb * color_texture.rgb;
     vec3 c = (ambiant + (1 - shadow) * light_color * (diffuse_value + specular_value)) * color;
-//    vec3 c = (ambiant + diffuse_value) * color.rgb * fragment.color.rgb * color_texture.rgb + specular_value * white;
+    //    vec3 c = (ambiant + diffuse_value) * color.rgb * fragment.color.rgb * color_texture.rgb + specular_value * white;
 
     FragColor = vec4(c, color_texture.a * fragment.color.a * color_alpha);
 }

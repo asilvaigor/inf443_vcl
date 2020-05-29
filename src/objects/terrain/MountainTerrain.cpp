@@ -7,8 +7,6 @@
 
 MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) {
     // Initializing internal variables
-    light2 = std::make_shared<vcl::light_source>();
-    light3 = std::make_shared<vcl::light_source>();
     this->xSize = xSize;
     this->ySize = ySize;
 
@@ -42,26 +40,10 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) {
     terrain.shader = shaders["terrain_mesh"];
 }
 
-void MountainTerrain::drawMesh(vcl::camera_scene &camera) {
-    terrain.uniform.light = light;
-    terrain.uniform.light2 = light2;
-    terrain.uniform.light3 = light3;
+void MountainTerrain::drawMesh(vcl::camera_scene &camera, float) {
+    terrain.uniform.lights = lights;
+    terrain.uniform.current_light = currentLight;
     vcl::draw(terrain, camera);
-}
-
-void MountainTerrain::setLight(std::shared_ptr<vcl::light_source> &light, int idx) {
-    switch (idx) {
-        case 1:
-            this->light = light;
-            break;
-        case 2:
-            this->light2 = light;
-            break;
-        default:
-            this->light3 = light;
-            break;
-    }
-    terrain.uniform.current_light = idx;
 }
 
 float MountainTerrain::evaluate_terrain_z(const float u, const float v) {

@@ -15,7 +15,7 @@ public:
     Forest(Shaders &shaders, std::shared_ptr<MountainTerrain> &terrain, int nTrees = 100, int nBushes = 200,
             int nRocks = 20);
 
-    void drawMesh(vcl::camera_scene &camera) override;
+    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
 
     std::vector<std::shared_ptr<Object>> &getObjects();
 
