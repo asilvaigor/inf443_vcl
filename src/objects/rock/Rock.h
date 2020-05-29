@@ -35,8 +35,8 @@ private:
     vcl::mesh snowMesh;
     vcl::mesh_drawable rock;
     vcl::mesh_drawable snow;
-    Texture rockTexture;
-    Texture snowTexture;
+    static std::shared_ptr<Texture> rockTexture;
+    static std::shared_ptr<Texture> snowTexture;
 
     /**
      * Calculates the rock's mesh using an ellipsoid with pelerin noise.

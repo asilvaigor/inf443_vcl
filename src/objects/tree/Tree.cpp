@@ -5,8 +5,19 @@
 #include "Tree.h"
 #include "TreeSpecies.h"
 
+std::shared_ptr<Texture> Tree::branchTexture = nullptr;
+std::shared_ptr<Texture> Tree::leafTexture = nullptr;
+std::shared_ptr<Texture> Tree::snowTexture = nullptr;
+
 Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species, float snowCoverage, bool verbose) :
-        Object(false), species(species), branchTexture("wood"), leafTexture("leaf"), snowTexture("snow") {
+        Object(false), species(species) {
+    if (Tree::branchTexture == nullptr)
+        branchTexture = std::make_shared<Texture>("wood");
+    if (Tree::leafTexture == nullptr)
+        leafTexture = std::make_shared<Texture>("leaf");
+    if (Tree::snowTexture == nullptr)
+        snowTexture = std::make_shared<Texture>("snow");
+
     this->verbose = verbose;
     createMeshes(position, snowCoverage);
     createDrawables(shaders);
@@ -16,22 +27,22 @@ Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species, float sn
 void Tree::drawMesh(vcl::camera_scene &camera, float) {
     if (!branchesMesh.empty()) {
         branchesDrawable.uniform.lights = lights;
-        branchTexture.bind();
+        branchTexture->bind();
         vcl::draw(branchesDrawable, camera);
     }
     if (!snowyBranchesMesh.empty()) {
         snowyBranchesDrawable.uniform.lights = lights;
-        snowTexture.bind();
+        snowTexture->bind();
         vcl::draw(snowyBranchesDrawable, camera);
     }
     if (!leavesMesh.empty()) {
         leavesDrawable.uniform.lights = lights;
-        leafTexture.bind();
+        leafTexture->bind();
         vcl::draw(leavesDrawable, camera);
     }
     if (!snowyLeavesMesh.empty()) {
         snowyLeavesDrawable.uniform.lights = lights;
-        snowTexture.bind();
+        snowTexture->bind();
         vcl::draw(snowyLeavesDrawable, camera);
     }
 }

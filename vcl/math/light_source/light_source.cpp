@@ -24,11 +24,12 @@ void light_source::update(camera_scene &camera, vec3 &p, vec3 &d) {
     auto corners = camera.calculate_frustum_corners(camera_z_near, camera_z_far);
     vec3 centroid;
     float z_min = std::numeric_limits<float>::max();
-    float z_max = std::numeric_limits<float>::min();
+    float z_max = std::numeric_limits<float>::lowest();
     for (auto &c : corners) {
         centroid += c;
-        z_min = std::min(z_min, c.z);
-        z_max = std::max(z_max, c.z);
+        float z = dot(c, dir);
+        z_min = std::min(z_min, z);
+        z_max = std::max(z_max, z);
     }
     centroid /= 8.0f;
 
@@ -82,11 +83,11 @@ mat4 light_source::calculate_view_matrix(vec3 const &virtual_pos) const {
 
 mat4 light_source::calculate_ortho_matrix(std::vector<vec3> &corners, mat4 view) {
     float min_x = std::numeric_limits<float>::max();
-    float max_x = std::numeric_limits<float>::min();
+    float max_x = std::numeric_limits<float>::lowest();
     float min_y = std::numeric_limits<float>::max();
-    float max_y = std::numeric_limits<float>::min();
+    float max_y = std::numeric_limits<float>::lowest();
     float min_z = std::numeric_limits<float>::max();
-    float max_z = std::numeric_limits<float>::min();
+    float max_z = std::numeric_limits<float>::lowest();
 
     for (int i = 0; i < 8; i++) {
         vec4 tmp = view * vec4(corners[i], 1);

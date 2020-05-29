@@ -47,9 +47,9 @@ private:
     vcl::mesh_drawable leavesDrawable;
     vcl::mesh_drawable snowyLeavesDrawable;
     bool verbose;
-    const Texture branchTexture;
-    const Texture leafTexture;
-    const Texture snowTexture;
+    static std::shared_ptr<Texture> branchTexture;
+    static std::shared_ptr<Texture> leafTexture;
+    static std::shared_ptr<Texture> snowTexture;
 
     void createMeshes(vcl::vec3 &position, float &snowCoverage);
 

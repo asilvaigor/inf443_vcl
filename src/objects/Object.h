@@ -61,6 +61,11 @@ public:
      */
     BoundingBox &getBoundingBox();
 
+    /**
+     * Destructor
+     */
+    virtual ~Object();
+
 protected:
     const bool movable;
     std::vector<std::shared_ptr<vcl::light_source>> lights;

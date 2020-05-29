@@ -32,6 +32,12 @@ public:
     Shaders &getShaders();
 
     /**
+     * Gets the GUI
+     * @return GUI
+     */
+    std::shared_ptr<SceneGui> getGui();
+
+    /**
      * Adds an Object to the scene. This object will then be drawn every loop.
      * @param object
      */

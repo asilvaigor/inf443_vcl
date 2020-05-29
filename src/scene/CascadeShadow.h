@@ -53,6 +53,13 @@ private:
      * @param camera
      */
     void render(std::vector<std::shared_ptr<Object>> &objects, vcl::camera_scene &camera);
+
+    /**
+     * Renders a single object, if it is in the light range.
+     * @param object
+     * @param camera
+     */
+    void renderObject(std::shared_ptr<Object> &object, vcl::camera_scene &camera);
 };
 
 

@@ -33,7 +33,7 @@ uniform vec3 light_color;
 
 float shadowCalc(float un) {
     // Calculating shadow
-    float a = 0.01;
+    float a = 0.02;
     float light_dist[6];
     float epsilon[6];
     vec3 pos[6];

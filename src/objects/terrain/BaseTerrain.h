@@ -19,6 +19,8 @@ public:
      */
     BaseTerrain();
 
+    virtual ~BaseTerrain();
+
     /**
      * Sets new lights to the terrain.
      * @param lights

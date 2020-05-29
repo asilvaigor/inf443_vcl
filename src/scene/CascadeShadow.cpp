@@ -2,7 +2,8 @@
 // Created by igor on 30/04/2020.
 //
 
-#include "objects/terrain/FlatSurface.h"
+#include "objects/terrain/BaseTerrain.h"
+#include "objects/forest/Forest.h"
 #include "CascadeShadow.h"
 
 CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
@@ -75,16 +76,25 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
     for (auto &obj : objects) {
         // If it is the terrain, it will be in all cascades
         auto *t = dynamic_cast<BaseTerrain *> (obj.get());
+        auto *f = dynamic_cast<Forest *>(obj.get());
         if (t != nullptr) {
             t->setLight(lights, lastUpdated / 2);
             t->draw(camera);
-            // A normal object must be in the correct frustum to be rendered
-        } else if (obj->getLight()->get_shadow_map_id() == lastUpdated / 2 ||
-                   obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated])) {
-            obj->setLight(lights[lastUpdated]);
-            if (obj->isMovable())
-                obj->draw(camera, lastTime[lastUpdated]);
-            else obj->draw(camera);
-        }
+        } else if (f != nullptr) {
+            // A forest will be decomposed in its objects
+            for (auto &o : f->getObjects())
+                renderObject(o, camera);
+        } else renderObject(obj, camera);
+    }
+}
+
+void CascadeShadow::renderObject(std::shared_ptr<Object> &obj, vcl::camera_scene &camera) {
+    if (obj->getLight()->get_shadow_map_id() == lastUpdated / 2 ||
+           obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated])) {
+        // A normal object must be in the correct frustum to be rendered
+        obj->setLight(lights[lastUpdated]);
+        if (obj->isMovable())
+            obj->draw(camera, lastTime[lastUpdated]);
+        else obj->draw(camera);
     }
 }
