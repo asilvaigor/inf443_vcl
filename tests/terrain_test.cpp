@@ -29,7 +29,9 @@ int main() {
 
     camera.orientation = Rz*Rx;
     camera.scale = 200;
-    auto terrain = std::static_pointer_cast<Object>(std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280));
+    WaterLimits waterLimits(-100, 100, -35, 135, -30, -10);
+    auto terrain = std::static_pointer_cast<Object>(std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280,
+            waterLimits));
     auto marker = std::static_pointer_cast<Object>(std::make_shared<CoordinateMarker>(scene.getShaders()));
 
     scene.addObject(marker);

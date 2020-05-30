@@ -30,3 +30,20 @@ bool WaterLimits::isInside(vcl::vec2 pos) {
 bool WaterLimits::isInside(vcl::vec3 pos) {
     return isInside({pos.x, pos.y}) && (pos.z >= z1 && pos.z <= z2);
 }
+
+float WaterLimits::getX1() {
+    return x1;
+}
+
+float WaterLimits::getX2() {
+    return x2;
+}
+
+float WaterLimits::getY1() {
+    return y1;
+}
+
+float WaterLimits::getY2() {
+    return y2;
+}
+

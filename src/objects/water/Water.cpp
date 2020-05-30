@@ -4,10 +4,12 @@
 
 #include "Water.h"
 
-Water::Water(Shaders &shaders, float xSize, float ySize, std::vector<WaterOscillator>& oscillators)
-        : Object(false), xSize(xSize), ySize(ySize), oscillators(oscillators){
+Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscillator> &oscillators)
+        : Object(false), waterLimits(waterLimits), oscillators(oscillators){
     uDimensionSize = 100;
     vDimensionSize = 100;
+    xSize = fabs(waterLimits.getX2()-waterLimits.getX1());
+    ySize = fabs(waterLimits.getY1()-waterLimits.getY2());
 
     // Initializing water mesh
     initialize_mesh();
@@ -20,13 +22,17 @@ Water::Water(Shaders &shaders, float xSize, float ySize, std::vector<WaterOscill
 
     // Adding shader
     waterMeshDrawable.shader = shaders["mesh"];
+    waterMeshDrawable.uniform.shading.specular = 0.8f;
+    waterMeshDrawable.uniform.shading.diffuse = 0.3f;
+    waterMeshDrawable.uniform.shading.ambiant = 0.1f;
+
 
     // Setting current time
     timer = std::chrono::system_clock::now();
     timeBegin = std::chrono::system_clock::now();
 
-    waterMeshDrawable.uniform.color = {0, 0.5, 1};
-    waterMeshDrawable.uniform.color_alpha = 0.7;
+    waterMeshDrawable.uniform.color = {15.0f/255.0f, 94.0f/255.0f, 156.0f/255.0f};
+    waterMeshDrawable.uniform.color_alpha = 0.9;
 }
 
 void Water::drawMesh(vcl::camera_scene &camera) {
@@ -43,6 +49,7 @@ void Water::drawMesh(vcl::camera_scene &camera) {
     glDepthMask(false);
 
     waterMeshDrawable.uniform.light = light;
+
     // Updating animation
     std::chrono::duration<double> duration = std::chrono::system_clock::now() - timer;
     // Chance animation rate
@@ -56,11 +63,12 @@ void Water::drawMesh(vcl::camera_scene &camera) {
         update_mesh();
         timer = std::chrono::system_clock::now();
     }
-
-    // TODO remove drawing this marker
     vcl::draw(waterMeshDrawable, camera);
+
+//    // TODO dont forget to erase this
     glDepthMask(true);
 
+    // Drawing oscillators
     for (auto& oscillator: oscillators){
         if (oscillator.getDebugState()){
             oscillator.setLight(light);
@@ -73,14 +81,12 @@ void Water::initialize_mesh() {
     waterMesh.position.resize(uDimensionSize*vDimensionSize);
     waterPositions.resize(uDimensionSize);
     waterVerticalSpeeds.resize(uDimensionSize);
-    waterUpdatedVerticalPositions.resize(uDimensionSize);
 
     // Fill terrain geometry
     for(size_t ku=0; ku<uDimensionSize; ++ku)
     {
         waterPositions[ku].resize(vDimensionSize);
         waterVerticalSpeeds[ku].resize(vDimensionSize);
-        waterUpdatedVerticalPositions[ku].resize(vDimensionSize);
         for(size_t kv=0; kv<vDimensionSize; ++kv)
         {
             // Compute local parametric coordinates (u,v) \in [0,1]
@@ -88,14 +94,13 @@ void Water::initialize_mesh() {
             const float v = kv/((float)vDimensionSize-1.0f);
 
             // Compute coordinates
-            const float x = xSize*(u-0.5f);
-            const float y = ySize*(v-0.5f);
-            waterMesh.position[kv+uDimensionSize*ku] = {x, y, 0};
+            const float x = xSize*(u) + waterLimits.getX1();
+            const float y = ySize*(v) + waterLimits.getY1();
+            waterMesh.position[kv+uDimensionSize*ku] = {x, y, waterLimits.getWaterLevel()};
 
             // Initializing height matrix
-            waterPositions[ku][kv] = {x, y, 0};
+            waterPositions[ku][kv] = {x, y, waterLimits.getWaterLevel()};
             waterVerticalSpeeds[ku][kv] = 0.0f;
-            waterUpdatedVerticalPositions[ku][kv] = 0.0f;
         }
     }
 
@@ -124,29 +129,12 @@ void Water::update_mesh() {
     vcl::buffer<vcl::vec3> position(uDimensionSize*vDimensionSize);
     update_heights();
 
-    // Fill terrain geometry
+    // Update water positions
     for(size_t ku=0; ku<uDimensionSize; ++ku)
-    {
         for(size_t kv=0; kv<vDimensionSize; ++kv)
-        {
-            // Compute local parametric coordinates (u,v) \in [0,1]
-            const float u = ku/((float)uDimensionSize-1.0f);
-            const float v = kv/((float)vDimensionSize-1.0f);
-
-            // Compute coordinates
-            const float x = xSize*(u-0.5f);
-            const float y = ySize*(v-0.5f);
-            std::chrono::duration<double> elapsed = std::chrono::system_clock::now()-timeBegin;
-            float time = sin(elapsed.count()+30*u);
             position[kv+uDimensionSize*ku] = waterPositions[ku][kv];
-        }
-    }
-    waterMeshDrawable.update_position(position);
-}
 
-void Water::update_oscillators() {
-//    std::chrono::duration<double> elapsed = std::chrono::system_clock::now()-timeBegin;
-//    oscillator.z = sin(2*elapsed.count());
+    waterMeshDrawable.update_position(position);
 }
 
 void Water::update_heights() {

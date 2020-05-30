@@ -18,6 +18,14 @@ public:
     bool isInside(vcl::vec3 pos);
 
     bool isInside(vcl::vec2 pos);
+    
+    float getX1();
+    
+    float getX2();
+    
+    float getY1();
+    
+    float getY2();
 
 private:
     float x1;
