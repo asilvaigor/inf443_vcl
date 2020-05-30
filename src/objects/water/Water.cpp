@@ -4,18 +4,19 @@
 
 #include "Water.h"
 
-Water::Water(Shaders &shaders, float xSize, float ySize) : Object(false), xSize(xSize), ySize(ySize) {
+Water::Water(Shaders &shaders, float xSize, float ySize, std::vector<WaterOscillator>& oscillators)
+        : Object(false), xSize(xSize), ySize(ySize), oscillators(oscillators){
     uDimensionSize = 100;
     vDimensionSize = 100;
 
     // Initializing water mesh
     initialize_mesh();
 
-    // Initializing oscillator
-    oscillator = {0, 0, 0};
-    oscilator_mesh = vcl::mesh_primitive_sphere(1);
-    oscilator_mesh.shader = shaders["mesh"];
-    oscilator_mesh.uniform.color = {1, 0, 0};
+    // Initializing oscillators
+    for (auto& oscillator: oscillators){
+        if (oscillator.getDebugState())
+            oscillator.setShaders(shaders);
+    }
 
     // Adding shader
     waterMeshDrawable.shader = shaders["mesh"];
@@ -49,8 +50,9 @@ void Water::drawMesh(vcl::camera_scene &camera) {
     //TODO add parameter for this
     if (duration.count() > 1/60){
 //        std::cout << "here\n";
-
-        update_oscillators();
+        for (auto& oscillator: oscillators){
+            oscillator.step();
+        }
         update_mesh();
         timer = std::chrono::system_clock::now();
     }
@@ -59,9 +61,12 @@ void Water::drawMesh(vcl::camera_scene &camera) {
     vcl::draw(waterMeshDrawable, camera);
     glDepthMask(true);
 
-    oscilator_mesh.uniform.light = light;
-    oscilator_mesh.uniform.transform.translation = oscillator;
-    vcl::draw(oscilator_mesh, camera);
+    for (auto& oscillator: oscillators){
+        if (oscillator.getDebugState()){
+            oscillator.setLight(light);
+            vcl::draw(oscillator.getMesh(), camera);
+        }
+    }
 }
 
 void Water::initialize_mesh() {
@@ -140,8 +145,8 @@ void Water::update_mesh() {
 }
 
 void Water::update_oscillators() {
-    std::chrono::duration<double> elapsed = std::chrono::system_clock::now()-timeBegin;
-    oscillator.z = sin(2*elapsed.count());
+//    std::chrono::duration<double> elapsed = std::chrono::system_clock::now()-timeBegin;
+//    oscillator.z = sin(2*elapsed.count());
 }
 
 void Water::update_heights() {
@@ -150,12 +155,19 @@ void Water::update_heights() {
             vcl::vec3 pos = waterPositions[u][v];
 
             // Calculating electrostatic force
+            // TODO put those constants somewhere
             float m = 1;
             float q = 1;
-            float d = vcl::norm(pos-oscillator);
-            vcl::vec3 force = q/(pow(d,3))*(oscillator-pos);
+            float forceZ = 0;
 
-            waterVerticalSpeeds[u][v] += force.z/m;
+            for (auto& oscillator: oscillators){
+                float d = vcl::norm(pos-oscillator.getPosition());
+                vcl::vec3 force = q*oscillator.getCharge()/(pow(d,3))*(oscillator.getPosition()-pos);
+
+                forceZ += force.z;
+            }
+
+            waterVerticalSpeeds[u][v] += forceZ/m;
 
             if (u > 0 && v > 0 && u < uDimensionSize-1 && v < vDimensionSize-1){
                 float north = waterPositions[u][v+1].z;
@@ -166,7 +178,7 @@ void Water::update_heights() {
                 waterVerticalSpeeds[u][v] += 0.002*((north+south+east+west)/4-waterPositions[u][v].z);
             }
 
-            waterVerticalSpeeds[u][v] *= 0.99;
+            waterVerticalSpeeds[u][v] *= 0.999;
 
             waterPositions[u][v].z += waterVerticalSpeeds[u][v];
         }

@@ -6,7 +6,9 @@
 #include "scene/Scene.h"
 #include "shaders/Shaders.h"
 #include "objects/water/Water.h"
+#include "objects/water/WaterOscillator.h"
 #include <string>
+#include <vector>
 
 int main() {
     std::string windowTitle = "Water Test";
@@ -30,7 +32,12 @@ int main() {
 
 //    camera.orientation = Rz*Rx;
 //    camera.scale = 200;
-    auto water = std::static_pointer_cast<Object>(std::make_shared<Water>(scene.getShaders(), 280, 280));
+    std::vector<WaterOscillator> oscillators;
+    oscillators.emplace_back(vcl::vec2(0.0f, 0.0f), 0.1f, 0.01, 1, 1, true);
+    oscillators.emplace_back(vcl::vec2(20.0f, 20.0f), 0.01f, 0.01, 10, 1, true);
+    oscillators.emplace_back(vcl::vec2(-30.0f, -30.0f), 0.01f, 0.01, 10, 1, true);
+
+    auto water = std::static_pointer_cast<Object>(std::make_shared<Water>(scene.getShaders(), 280, 280, oscillators));
     auto marker = std::static_pointer_cast<Object>(std::make_shared<CoordinateMarker>(scene.getShaders()));
 
     scene.addObject(marker);
