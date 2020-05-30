@@ -8,6 +8,7 @@
 #include <src/shaders/Shaders.h>
 #include <vcl/math/noise/PerlinNoise.h>
 #include <vcl/math/helper_functions/helper_functions.hpp>
+#include <src/objects/water/Water.h>
 #include "BaseTerrain.h"
 #include "TerrainFeature.h"
 #include "objects/water/WaterLimits.h"
@@ -24,7 +25,7 @@ public:
      * Generates the relief mesh
      * @param shaders
      */
-    explicit MountainTerrain(Shaders &shaders, float xSize, float ySize);
+    explicit MountainTerrain(Shaders &shaders, float xSize, float ySize, WaterLimits &waterLimits);
 
     /**
      * Draws the surface in opengl;

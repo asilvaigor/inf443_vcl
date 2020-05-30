@@ -4,10 +4,12 @@
 
 #include "Water.h"
 
-Water::Water(Shaders &shaders, float xSize, float ySize, std::vector<WaterOscillator>& oscillators)
-        : Object(false), xSize(xSize), ySize(ySize), oscillators(oscillators){
+Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscillator> &oscillators)
+        : Object(false), waterLimits(waterLimits), oscillators(oscillators){
     uDimensionSize = 100;
     vDimensionSize = 100;
+    xSize = fabs(waterLimits.getX2()-waterLimits.getX1());
+    ySize = fabs(waterLimits.getY1()-waterLimits.getY2());
 
     // Initializing water mesh
     initialize_mesh();
@@ -56,11 +58,12 @@ void Water::drawMesh(vcl::camera_scene &camera) {
         update_mesh();
         timer = std::chrono::system_clock::now();
     }
-
-    // TODO remove drawing this marker
     vcl::draw(waterMeshDrawable, camera);
+
+    // TODO dont forget to erase this
     glDepthMask(true);
 
+    // Drawing oscillators
     for (auto& oscillator: oscillators){
         if (oscillator.getDebugState()){
             oscillator.setLight(light);
@@ -88,8 +91,8 @@ void Water::initialize_mesh() {
             const float v = kv/((float)vDimensionSize-1.0f);
 
             // Compute coordinates
-            const float x = xSize*(u-0.5f);
-            const float y = ySize*(v-0.5f);
+            const float x = xSize*(u) + waterLimits.getX1();
+            const float y = ySize*(v) + waterLimits.getY1();
             waterMesh.position[kv+uDimensionSize*ku] = {x, y, 0};
 
             // Initializing height matrix
@@ -142,11 +145,6 @@ void Water::update_mesh() {
         }
     }
     waterMeshDrawable.update_position(position);
-}
-
-void Water::update_oscillators() {
-//    std::chrono::duration<double> elapsed = std::chrono::system_clock::now()-timeBegin;
-//    oscillator.z = sin(2*elapsed.count());
 }
 
 void Water::update_heights() {

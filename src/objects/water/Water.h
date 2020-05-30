@@ -9,6 +9,7 @@
 #include "vcl.hpp"
 #include "objects/Object.h"
 #include "WaterOscillator.h"
+#include "WaterLimits.h"
 #include <chrono>
 
 class Water : public Object {
@@ -17,7 +18,7 @@ public:
      * Generates the water mesh
      * @param shaders
      */
-    Water(Shaders &shaders, float xSize, float ySize, std::vector<WaterOscillator>& oscillators);
+    Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscillator> &oscillators);
 
     /**
      * Draws mesh in opengl
@@ -29,6 +30,7 @@ private:
     // Mesh related variables
     vcl::mesh_drawable waterMeshDrawable;
     vcl::mesh waterMesh;
+    WaterLimits &waterLimits;
     float xSize, ySize;
     size_t uDimensionSize, vDimensionSize;
 
@@ -42,7 +44,6 @@ private:
     void update_mesh();
     void initialize_mesh();
 
-    void update_oscillators();
     void update_heights();
 };
 

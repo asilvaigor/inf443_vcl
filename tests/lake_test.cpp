@@ -40,13 +40,13 @@ int main() {
     auto terrain = std::static_pointer_cast<Object>(std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280));
     scene.addObject(terrain);
 
-    WaterLimits waterLimits(-100, 100, -35, 135, -30, -10);
-
-    // Visualizing the water limits
-    auto debugObject = std::static_pointer_cast<Object>(std::make_shared<DebugObject>(scene.getShaders()));
-    auto debugObjectPtr = std::static_pointer_cast<DebugObject>(debugObject);
-    debugObjectPtr->addMesh(waterLimits.getMesh());
-    scene.addObject(debugObject);
+//    WaterLimits waterLimits(-100, 100, -35, 135, -30, -10);
+//
+//    // Visualizing the water limits
+//    auto debugObject = std::static_pointer_cast<Object>(std::make_shared<DebugObject>(scene.getShaders()));
+//    auto debugObjectPtr = std::static_pointer_cast<DebugObject>(debugObject);
+//    debugObjectPtr->addMesh(waterLimits.getMesh());
+//    scene.addObject(debugObject);
 
     auto marker = std::static_pointer_cast<Object>(std::make_shared<CoordinateMarker>(scene.getShaders()));
     scene.addObject(marker);

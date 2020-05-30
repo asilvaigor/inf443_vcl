@@ -5,8 +5,8 @@
 #include "MountainTerrain.h"
 #include <cmath>
 
-MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) :
-    waterLimits(-100, 100, -35, 135, -30, -10) {
+MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize, WaterLimits &waterLimits) :
+    waterLimits(waterLimits) {
     //TODO REfactor this as a final terrain class
 
     // Initializing internal variables
@@ -17,8 +17,6 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) :
 
     // Initializing texture
     terrainTexture = std::make_shared<Texture>("terrain");
-
-    // TODO Initializing lake
 
     // TODO remove all this parameter initialization stuff
     parameters.Ss = -0.5;

@@ -29,7 +29,8 @@ int main() {
 
     camera.orientation = Rz*Rx;
     camera.scale = 200;
-    auto terrain = std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280);
+    WaterLimits waterLimits(-100, 100, -35, 135, -30, -10);
+    auto terrain = std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280, waterLimits);
     auto terrainPt = std::static_pointer_cast<Object>(terrain);
     auto forest = std::static_pointer_cast<Object>(std::make_shared<Forest>(scene.getShaders(), terrain));
 

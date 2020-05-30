@@ -37,7 +37,9 @@ int main() {
     oscillators.emplace_back(vcl::vec2(20.0f, 20.0f), 0.01f, 0.01, 10, 1, true);
     oscillators.emplace_back(vcl::vec2(-30.0f, -30.0f), 0.01f, 0.01, 10, 1, true);
 
-    auto water = std::static_pointer_cast<Object>(std::make_shared<Water>(scene.getShaders(), 280, 280, oscillators));
+    WaterLimits waterLimits(10, 280, 10, 280, 0, 1);
+
+    auto water = std::static_pointer_cast<Object>(std::make_shared<Water>(scene.getShaders(), waterLimits, oscillators));
     auto marker = std::static_pointer_cast<Object>(std::make_shared<CoordinateMarker>(scene.getShaders()));
 
     scene.addObject(marker);
