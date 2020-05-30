@@ -33,7 +33,7 @@ void light_source::update(camera_scene &camera, vec3 &p, vec3 &d) {
     }
     centroid /= 8.0f;
 
-    vec3 virtual_pos = centroid - dir * (z_max - z_min);
+    vec3 virtual_pos = centroid - dir * (dot(centroid, dir) - z_min);
 
     mat4 view = calculate_view_matrix(virtual_pos);
     mat4 ortho = calculate_ortho_matrix(corners, view);
@@ -73,15 +73,15 @@ mat4 light_source::calculate_view_matrix(vec3 const &virtual_pos) const {
     vec3 xaxis = cross({0, 0, 1}, dir).normalized();
     vec3 yaxis = cross(-dir, xaxis).normalized();
 
-    mat4 m(xaxis.x, xaxis.y, xaxis.z, -virtual_pos.x,
-           yaxis.x, yaxis.y, yaxis.z, -virtual_pos.y,
-           -dir.x, -dir.y, -dir.z, -virtual_pos.z,
+    mat4 m(xaxis.x, yaxis.x, dir.x, virtual_pos.x,
+           xaxis.y, yaxis.y, dir.y, virtual_pos.y,
+           xaxis.z, yaxis.z, dir.z, virtual_pos.z,
            0, 0, 0, 1);
 
-    return m;
+    return inverse(m);
 }
 
-mat4 light_source::calculate_ortho_matrix(std::vector<vec3> &corners, mat4 view) {
+mat4 light_source::calculate_ortho_matrix(std::vector<vec3> &corners, mat4& view) {
     float min_x = std::numeric_limits<float>::max();
     float max_x = std::numeric_limits<float>::lowest();
     float min_y = std::numeric_limits<float>::max();
@@ -107,7 +107,7 @@ mat4 light_source::ortho(float const &left, float const &right, float const &bot
     mat4 result = mat4::identity();
     result(0, 0) = 2.0f / (right - left);
     result(1, 1) = 2.0f / (top - bottom);
-    result(2, 2) = -2.0f / (zFar - zNear);
+    result(2, 2) = 2.0f / (zFar - zNear);
     result(0, 3) = -(right + left) / (right - left);
     result(1, 3) = -(top + bottom) / (top - bottom);
     result(2, 3) = -(zFar + zNear) / (zFar - zNear);

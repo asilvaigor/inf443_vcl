@@ -10,6 +10,9 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) {
     this->xSize = xSize;
     this->ySize = ySize;
 
+    // Initializing texture
+    terrainTexture = std::make_shared<Texture>("terrain");
+
     // TODO remove all this parameter initialization
     parameters.Ss = -0.5;
     parameters.octaves = 20;
@@ -43,6 +46,7 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) {
 void MountainTerrain::drawMesh(vcl::camera_scene &camera, float) {
     terrain.uniform.lights = lights;
     terrain.uniform.current_light = currentLight;
+    terrainTexture->bind();
     vcl::draw(terrain, camera);
 }
 
@@ -75,6 +79,7 @@ void MountainTerrain::evaluate_mesh() {
     size_t vDimensionSize = 200;
 
     terrainMesh.position.resize(uDimensionSize*vDimensionSize);
+    terrainMesh.texture_uv.resize(uDimensionSize*vDimensionSize);
 
     // Fill terrain geometry
     for(size_t ku=0; ku<uDimensionSize; ++ku)
@@ -87,6 +92,9 @@ void MountainTerrain::evaluate_mesh() {
 
             // Compute coordinates
             terrainMesh.position[kv+uDimensionSize*ku] = evaluate_terrain(u, v);
+
+            // Compute texture coordinates
+            terrainMesh.texture_uv[kv+uDimensionSize*ku] = {u, v};
         }
     }
 

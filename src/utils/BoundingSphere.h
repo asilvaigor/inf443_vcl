@@ -35,7 +35,7 @@ public:
     int isInCameraFrustum(vcl::camera_scene &camera);
 
     /**
-     * Calculates if the sphere is in the light z range.
+     * Calculates if the sphere is in the z range covered by a light source.
      * @param camera
      * @param light Light in the shadow cascade.
      * @return True if the object's shadow should be rendered.

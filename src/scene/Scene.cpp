@@ -3,9 +3,11 @@
 //
 
 #include "Scene.h"
+#include "objects/forest/Forest.h"
 #include "utils/SingletonException.h"
 
 bool Scene::exists = false;
+bool Scene::deterministic = true;
 
 Scene &Scene::getInstance(std::string windowTitle) {
     if (exists)
@@ -25,7 +27,7 @@ Scene::Scene(std::string &windowTitle) {
 
     vcl::light_source light({100, 0, 100}, {-1, 0, -1},
             gui->getCamera().perspective.z_near, gui->getCamera().perspective.z_far);
-    cascadeShadow = std::make_shared<CascadeShadow>(light, 3072);
+    cascadeShadow = std::make_shared<CascadeShadow>(light, 2048);
 }
 
 Shaders &Scene::getShaders() {
@@ -61,7 +63,12 @@ void Scene::updateScene() {
 
     whiteTexture->bind();
     for (auto &obj : stillObjects) {
-        obj->draw(gui->getCamera());
+        // Forest should be decomposed in its objects
+        auto *f = dynamic_cast<Forest *>(obj.get());
+        if (f != nullptr)
+            for (auto &o : f->getObjects())
+                o->draw(gui->getCamera());
+        else obj->draw(gui->getCamera());
         whiteTexture->bind();
     }
     for (auto &obj : movableObjects) {

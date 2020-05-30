@@ -4,14 +4,15 @@
 
 #include "Leaf.h"
 #include "vcl.hpp"
+#include "objects/tree/Branch.h"
 
 Leaf::Leaf(TreeSpecies &species, TurtleGraphics &turtle, float treeScale) {
     this->turtle = turtle;
     scale = treeScale;
 
     // Describing leaf triangle in terms of turtle movements
-    float height = species.leafHeight + vcl::rand_interval(-1, 1) * species.leafHeightVar;
-    float base = species.leafBase + vcl::rand_interval(-1, 1) * species.leafBaseVar;
+    float height = species.leafHeight + Branch::rand.rand() * species.leafHeightVar;
+    float base = species.leafBase + Branch::rand.rand() * species.leafBaseVar;
     const float side = hypot(height, base / 2);
     const float alpha = atan2(height, base / 2);
     description = {{-M_PI / 2, base / 2},
