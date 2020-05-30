@@ -23,7 +23,7 @@ public:
      * Generates the relief mesh
      * @param shaders
      */
-    MountainTerrain(Shaders &shaders, float xSize, float ySize);
+    explicit MountainTerrain(Shaders &shaders, float xSize, float ySize);
 
     /**
      * Draws the surface in opengl;
