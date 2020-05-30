@@ -49,6 +49,8 @@ public:
      */
     void display();
 
+    static bool deterministic;
+
 private:
     std::shared_ptr<SceneGui> gui;
     std::vector<std::shared_ptr<Object>> stillObjects;

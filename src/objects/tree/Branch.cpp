@@ -4,8 +4,9 @@
 
 #include "vcl.hpp"
 #include "Branch.h"
+#include "scene/Scene.h"
 
-vcl::rand_generator Branch::rand(false);
+vcl::rand_generator Branch::rand(Scene::deterministic);
 
 Branch::Branch(TreeSpecies &s, TurtleGraphics turtle, float &snowCoverage, int depth,
                int startIdx, Branch *parent, float treeScale, float nBranchesFactor, float splitAngleCorrection,

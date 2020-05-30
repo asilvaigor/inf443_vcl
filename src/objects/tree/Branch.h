@@ -63,6 +63,8 @@ public:
      */
     vcl::mesh toSnowyLeavesMesh();
 
+    static vcl::rand_generator rand;
+
 private:
     TreeSpecies &species;
     TurtleGraphics turtle;
@@ -83,8 +85,6 @@ private:
     float offsetInTrunk;
     float maxLengthChild;
     float radiusLimit;
-
-    static vcl::rand_generator rand;
 
     /**
      * Generates the tree by using a TurtleGraphics and recursively creating child branches/leaves as necessary.

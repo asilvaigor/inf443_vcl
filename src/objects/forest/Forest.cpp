@@ -4,9 +4,10 @@
 
 #include "Forest.h"
 #include "objects/tree/TreeSpecies.h"
+#include "scene/Scene.h"
 
 Forest::Forest(Shaders &shaders, std::shared_ptr<MountainTerrain> &terrain, int nTrees, int nBushes, int nRocks) :
-        Object(false), generator(false) {
+        Object(false), generator(Scene::deterministic) {
     auto pine = TreeSpecies::pine();
     auto tupelo = TreeSpecies::blackTupelo();
     auto bush1 = TreeSpecies::bush1();
@@ -44,8 +45,8 @@ Forest::Forest(Shaders &shaders, std::shared_ptr<MountainTerrain> &terrain, int 
 }
 
 void Forest::drawMesh(vcl::camera_scene &camera) {
-    for (auto &o : objects)
-        o->draw(camera);
+    throw std::invalid_argument("Forst drawMesh should not be called because of bounding spheres. "
+                                "Draw each of the objects separately.");
 }
 
 std::vector<std::shared_ptr<Object>> &Forest::getObjects() {

@@ -27,7 +27,6 @@ public:
     /**
      * Updates the lights and renders shadows, if the camera has changed significantly. This method always ensured that
      * at most one depth map will be rendered per frame, placing pended updates in a stack.
-     * TODO: Implement update if an object has moved.
      * @param movableObjects
      * @param stillObjects
      * @param gui Contains info on camera, light and windows.
