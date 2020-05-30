@@ -11,7 +11,7 @@
 class WaterOscillator {
 public:
     WaterOscillator(vcl::vec2 position, float timestep, float charge = 1.0f, float amplitude = 1.0f,
-                    float initial_phase = 0.0f, bool debug = false);
+                    float initial_phase = 0.0f, float zOffset = 0.0f, bool debug = false);
 
     vcl::vec3 step();
 
@@ -34,6 +34,7 @@ private:
     float charge;
     float amplitude;
     float phase;
+    float zOffset;
     bool debug;
 };
 

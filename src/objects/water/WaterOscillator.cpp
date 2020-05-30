@@ -6,26 +6,26 @@
 
 #include "WaterOscillator.h"
 
-WaterOscillator::WaterOscillator(vcl::vec2 position, float timestep, float charge, float amplitude,
-                                 float initial_phase, bool debug) : postion(position), timestep(timestep),
-        charge(charge), amplitude(amplitude), phase(initial_phase), debug(debug) {
+WaterOscillator::WaterOscillator(vcl::vec2 position, float timestep, float charge, float amplitude, float initial_phase,
+                                 float zOffset, bool debug) : postion(position), timestep(timestep),
+        charge(charge), amplitude(amplitude), phase(initial_phase), zOffset(zOffset), debug(debug) {
     if (debug){
         meshDrawable = vcl::mesh_primitive_sphere(1);
         meshDrawable.uniform.color = {1, 0, 0};
-        meshDrawable.uniform.transform.translation = {position.x, position.y, amplitude*sin(phase)};
+        meshDrawable.uniform.transform.translation = {position.x, position.y, zOffset+amplitude*sin(phase)};
     }
 }
 
-vcl::vec3 WaterOscillator::step() {amplitude*sin(phase);
+vcl::vec3 WaterOscillator::step() {
     phase += timestep;
 
     if (debug)
-        meshDrawable.uniform.transform.translation = {postion.x, postion.y, amplitude*sin(phase)};
-    return {postion.x, postion.y, amplitude*sin(phase)};
+        meshDrawable.uniform.transform.translation = {postion.x, postion.y, zOffset+amplitude*sin(phase)};
+    return {postion.x, postion.y, zOffset+amplitude*sin(phase)};
 }
 
 vcl::vec3 WaterOscillator::getPosition() {
-    return {postion.x, postion.y, amplitude*sin(phase)};
+    return {postion.x, postion.y, zOffset+amplitude*sin(phase)};
 }
 
 bool WaterOscillator::getDebugState() {

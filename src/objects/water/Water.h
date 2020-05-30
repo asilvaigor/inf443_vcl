@@ -37,7 +37,6 @@ private:
     // Animation related variables
     std::chrono::time_point<std::chrono::system_clock> timer, timeBegin;
     std::vector<std::vector<vcl::vec3>> waterPositions;
-    std::vector<std::vector<float>> waterUpdatedVerticalPositions;
     std::vector<std::vector<float>> waterVerticalSpeeds;
     std::vector<WaterOscillator>& oscillators;
 

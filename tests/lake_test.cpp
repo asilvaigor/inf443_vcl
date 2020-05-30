@@ -37,11 +37,23 @@ int main() {
     camera.scale = 200;
     scene.getGui()->setShowVertices(true);
 
-    auto terrain = std::static_pointer_cast<Object>(std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280));
+    WaterLimits waterLimits(-100, 100, -35, 135, -30, -10);
+    auto terrain = std::static_pointer_cast<Object>(std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280,
+                                                                                      waterLimits));
     scene.addObject(terrain);
 
-//    WaterLimits waterLimits(-100, 100, -35, 135, -30, -10);
-//
+    // Adding water to the scene
+    std::vector<WaterOscillator> oscillators;
+    oscillators.emplace_back(vcl::vec2(0.0f, 50.0f), 0.1f, 0.01, 1, 1, waterLimits.getWaterLevel(), true);
+    oscillators.emplace_back(vcl::vec2(20.0f, 50.0f-40*sqrt(3)/6), 0.01f, 0.01, 10, 1, waterLimits.getWaterLevel(), true);
+    oscillators.emplace_back(vcl::vec2(-20.0f, 50.0f-40*sqrt(3)/6), 0.01f, 0.01, 10, 1, waterLimits.getWaterLevel(), true);
+    oscillators.emplace_back(vcl::vec2(0.0f, 50.0f+40*sqrt(3)/3), 0.01f, 0.01, 10, 1, waterLimits.getWaterLevel(), true);
+
+    auto water = std::static_pointer_cast<Object>(std::make_shared<Water>(scene.getShaders(),
+            waterLimits,oscillators));
+
+    scene.addObject(water);
+
 //    // Visualizing the water limits
 //    auto debugObject = std::static_pointer_cast<Object>(std::make_shared<DebugObject>(scene.getShaders()));
 //    auto debugObjectPtr = std::static_pointer_cast<DebugObject>(debugObject);
