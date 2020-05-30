@@ -5,7 +5,10 @@
 #include "MountainTerrain.h"
 #include <cmath>
 
-MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) {
+MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) :
+    waterLimits(-100, 100, -35, 135, -30, -10) {
+    //TODO REfactor this as a final terrain class
+
     // Initializing internal variables
     light2 = std::make_shared<vcl::light_source>();
     light3 = std::make_shared<vcl::light_source>();
@@ -15,7 +18,9 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize) {
     // Initializing texture
     terrainTexture = std::make_shared<Texture>("terrain");
 
-    // TODO remove all this parameter initialization
+    // TODO Initializing lake
+
+    // TODO remove all this parameter initialization stuff
     parameters.Ss = -0.5;
     parameters.octaves = 20;
     parameters.Ia = 0.2;
@@ -178,10 +183,7 @@ float MountainTerrain::getMaxTerrainHeight() {
 }
 
 bool MountainTerrain::isInsideLake(float x, float y) {
-    // FIXME: This isn't working
-    x = x / xSize - lakePos[0];
-    y = y / ySize - lakePos[1];
-    return x * x + y * y < 3 * lakeSig;
+    return waterLimits.isInside({x, y}) && getTerrainHeight(x, y) <= waterLimits.getWaterLevel();
 }
 
 float &MountainTerrain::getXSize() {

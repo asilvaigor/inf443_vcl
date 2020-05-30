@@ -13,6 +13,12 @@ public:
 
     vcl::mesh_drawable& getMesh();
 
+    float getWaterLevel();
+
+    bool isInside(vcl::vec3 pos);
+
+    bool isInside(vcl::vec2 pos);
+
 private:
     float x1;
     float x2;

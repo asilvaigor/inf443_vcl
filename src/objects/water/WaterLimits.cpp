@@ -17,3 +17,16 @@ WaterLimits::WaterLimits(float x1, float x2, float y1, float y2, float z, float 
 vcl::mesh_drawable &WaterLimits::getMesh() {
     return mesh;
 }
+
+float WaterLimits::getWaterLevel() {
+    return z2;
+}
+
+bool WaterLimits::isInside(vcl::vec2 pos) {
+    return (pos.x >= x1 && pos.x <= x2) &&
+           (pos.y >= y1 && pos.y <= y2);
+}
+
+bool WaterLimits::isInside(vcl::vec3 pos) {
+    return isInside({pos.x, pos.y}) && (pos.z >= z1 && pos.z <= z2);
+}
