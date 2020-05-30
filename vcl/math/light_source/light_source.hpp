@@ -47,7 +47,7 @@ private:
 
     mat4 calculate_view_matrix(vec3 const &pos) const;
 
-    static mat4 calculate_ortho_matrix(std::vector<vec3> &corners, mat4 view);
+    static mat4 calculate_ortho_matrix(std::vector<vec3> &corners, mat4& view);
 
     static mat4 ortho(float const &left, float const &right, float const &bottom, float const &top,
                       float const &zNear, float const &zFar);
