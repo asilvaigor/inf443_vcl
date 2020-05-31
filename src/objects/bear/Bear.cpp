@@ -5,8 +5,7 @@
 #include "Bear.h"
 
 Bear::Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, vcl::vec3 pos) :
-        Object(true), bear("../src/assets/models/bear.fbx", shaders["mesh"], pos),
-        terrain(terrain) {
+        Object(true), bear("../src/assets/models/bear.fbx", shaders["mesh"]), terrain(terrain) {
     bear.set_animation("bear|run");
     boundingSphereRadius = 1.2f;
     boundingSphere = BoundingSphere(pos, boundingSphereRadius);

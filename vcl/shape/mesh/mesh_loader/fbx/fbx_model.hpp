@@ -15,7 +15,7 @@ namespace vcl {
 
 class fbx_model {
 public:
-    fbx_model(const std::string &filename, GLuint shader, vec3 &pos);
+    fbx_model(const std::string &filename, GLuint shader);
 
     float draw(vcl::camera_scene &camera, float time);
 
@@ -24,8 +24,6 @@ public:
     void set_animation(const std::string &animation);
 
     void transform(vcl::mat4 &m);
-
-    vcl::vec3 get_position() const;
 
     std::vector<mesh_skinned> meshes;
     std::vector<mesh_skinned_drawable> drawables;

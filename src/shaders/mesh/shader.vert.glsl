@@ -45,7 +45,7 @@ void main()
         bone_transform     += bones[bone_ids[2]] * bone_weights[2];
         bone_transform     += bones[bone_ids[3]] * bone_weights[3];
 
-        true_normal = bone_transform * normal;
+        true_normal = bone_transform * vec4(normal.xyz, 0);
         true_pos = bone_transform * position;
     } else {
         true_normal = normal;

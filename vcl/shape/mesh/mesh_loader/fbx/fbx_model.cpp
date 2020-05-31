@@ -7,7 +7,7 @@
 
 namespace vcl {
 
-fbx_model::fbx_model(const std::string &filename, GLuint shader, vec3 &pos) : shader(shader) {
+fbx_model::fbx_model(const std::string &filename, GLuint shader) : shader(shader) {
     auto flags = (unsigned int) aiProcess_Triangulate | aiProcess_GenSmoothNormals |
                  aiProcess_FlipUVs | aiProcess_FindDegenerates;
     scene = importer.ReadFile(filename.c_str(), flags);
@@ -16,9 +16,6 @@ fbx_model::fbx_model(const std::string &filename, GLuint shader, vec3 &pos) : sh
 
     global_inverse_transform = scene->mRootNode->mTransformation;
     global_inverse_transform.Inverse();
-    aiMatrix4x4 translate;
-    aiMatrix4x4::Translation({pos.x, pos.y, pos.z}, translate);
-    global_inverse_transform = translate * global_inverse_transform;
     start_transform = global_inverse_transform;
     for (int i = 0; i < (int) scene->mNumMeshes; i++)
         load_mesh(scene->mMeshes[i]);
@@ -75,10 +72,6 @@ void fbx_model::set_animation(const std::string &animationName) {
 
 void fbx_model::transform(vcl::mat4 &m) {
     global_inverse_transform = m * start_transform;
-}
-
-vcl::vec3 fbx_model::get_position() const {
-    return {global_inverse_transform.a4, global_inverse_transform.b4, global_inverse_transform.c4};
 }
 
 void fbx_model::load_mesh(aiMesh *assimpMesh) {
