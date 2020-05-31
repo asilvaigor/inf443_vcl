@@ -6,17 +6,16 @@
 
 Bear::Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, vcl::vec3 pos) :
         Object(true), bear("../src/assets/models/bear.fbx", shaders["mesh"]), terrain(terrain) {
-    bear.set_animation("bear|run");
+    bear.set_animation("bear|walk");
     boundingSphereRadius = 1.2f;
     boundingSphere = BoundingSphere(pos, boundingSphereRadius);
     position = pos;
     direction = {0, -1, 0};
-    deltaZ = 0.95f;
-    deltaZVar = 0.1f;
-    deltaZPhi = 0.0f;
-    speed = 2.0f;
-    speedVar = 0.5f;
-    speedPhi = 0.0f;
+    deltaZ = 1.1f;
+    speed = 1.5f;
+    speedVar = 0.75f;
+    stepPhi = -0.14f;
+    stepPeriod = 0.5f;
     animationTime = 0.0f;
     lastTime = 0.0f;
 }
@@ -43,13 +42,12 @@ vcl::mat4 Bear::updateTransform(float &time) {
                         cosx * siny, sinx, cosx * cosy);
 
     // Adjusting position with animation change of height
-    float deltaZCur = deltaZ + deltaZVar * std::sin((animationTime + deltaZPhi) * 2.0f * (float) M_PI);
-    vcl::vec3 positionAdjusted = position + floorNormal * deltaZCur;
+    vcl::vec3 positionAdjusted = position + floorNormal * deltaZ;
     boundingSphere = BoundingSphere(positionAdjusted, boundingSphereRadius);
 
     // Updating position with velocity
     auto speedDir = floor_rot * direction;
-    float speedCur = speed + speedVar * std::sin((animationTime + speedPhi) * 2.0f * (float) M_PI);
+    float speedCur = speed + speedVar * std::sin(((animationTime + stepPhi) / stepPeriod) * 2.0f * (float) M_PI);
     position += speedDir * speedCur * (time - lastTime);
     position.z = terrain->getTerrainHeight(positionAdjusted.x, positionAdjusted.y);
 

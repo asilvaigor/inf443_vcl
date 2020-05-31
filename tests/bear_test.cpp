@@ -18,7 +18,7 @@ int main() {
     vcl::vec3 pos;
     std::shared_ptr<Object> bear;
 
-    pos = {0, 15, 0};
+    pos = {0, 0, 0};
     bear = std::static_pointer_cast<Object>(
             std::make_shared<Bear>(scene.getShaders(), terrain, pos));
     scene.addObject(bear);

@@ -35,8 +35,9 @@ private:
     vcl::vec3 position;
     vcl::vec3 direction;
     float boundingSphereRadius;
-    float deltaZ, deltaZVar, deltaZPhi;
-    float speed, speedVar, speedPhi;
+    float deltaZ;
+    float speed, speedVar;
+    float stepPhi, stepPeriod;
     float animationTime;
     float lastTime;
 
