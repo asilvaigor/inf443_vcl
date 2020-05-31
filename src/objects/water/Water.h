@@ -35,7 +35,7 @@ private:
     size_t uDimensionSize, vDimensionSize;
 
     // Animation related variables
-    std::chrono::time_point<std::chrono::system_clock> timer, timeBegin;
+    std::chrono::time_point<std::chrono::system_clock> timer;
     std::vector<std::vector<vcl::vec3>> waterPositions;
     std::vector<std::vector<float>> waterVerticalSpeeds;
     std::vector<WaterOscillator>& oscillators;

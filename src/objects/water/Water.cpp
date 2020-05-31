@@ -29,7 +29,7 @@ Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscill
 
     // Setting current time
     timer = std::chrono::system_clock::now();
-    timeBegin = std::chrono::system_clock::now();
+    std::chrono::system_clock::now();
 
     waterMeshDrawable.uniform.color = {15.0f/255.0f, 94.0f/255.0f, 156.0f/255.0f};
     waterMeshDrawable.uniform.color_alpha = 0.9;

@@ -14,6 +14,8 @@ void Bird::drawMesh(vcl::camera_scene &camera) {
     // Adjusting mesh rotation and angle
     mesh.uniform.light = light;
     mesh.uniform.transform.rotation = vcl::rotation_between_vector_mat3({0, 0, 1}, dp);
+    mesh.uniform.transform.translation = p;
+    ndp = dp;
 
     vcl::draw(mesh, camera);
 }
@@ -22,8 +24,16 @@ vcl::vec3 Bird::getSpeed() {
     return dp;
 }
 
-void Bird::setSpeed(vcl::vec3 speed) {
-    dp = speed;
+void Bird::setFutureSpeed(vcl::vec3 speed) {
+    ndp = speed;
+}
+
+void Bird::addFutureSpeed(vcl::vec3 speed) {
+    ndp += speed;
+}
+
+vcl::vec3 Bird::getFutureSpeed() {
+    return ndp;
 }
 
 vcl::vec3 Bird::getPosition() {
@@ -32,4 +42,12 @@ vcl::vec3 Bird::getPosition() {
 
 void Bird::setPosition(vcl::vec3 pos) {
     p = pos;
+}
+
+void Bird::stepSpeed() {
+    dp = ndp;
+}
+
+void Bird::stepPosition() {
+    p += dp;
 }

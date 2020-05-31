@@ -8,7 +8,7 @@
 #include "objects/boid/Bird.h"
 
 int main() {
-    std::string windowTitle = "Boid Test";
+    std::string windowTitle = "Bird Test";
     auto scene = Scene::getInstance(windowTitle);
     vcl::camera_scene &camera = scene.getGui()->getCamera();
 

@@ -2,6 +2,7 @@
 // Created by igor on 30/04/2020.
 //
 
+#include <src/objects/boid/Boid.h>
 #include "objects/terrain/BaseTerrain.h"
 #include "objects/forest/Forest.h"
 #include "CascadeShadow.h"
@@ -76,12 +77,17 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
         // If it is the terrain, it will be in all cascades
         auto *t = dynamic_cast<BaseTerrain *> (obj.get());
         auto *f = dynamic_cast<Forest *>(obj.get());
+        auto *b = dynamic_cast<Boid *>(obj.get());
         if (t != nullptr) {
             t->setLight(lights[lastUpdated], lastUpdated / 2 + 1);
             t->draw(camera);
         } else if (f != nullptr) {
             // A forest will be decomposed in its objects
             for (auto &o : f->getObjects())
+                renderObject(o, camera);
+        } else if(b != nullptr){
+            // A boid will be decomposed in its birds
+            for (auto &o : b->getObjects())
                 renderObject(o, camera);
         } else renderObject(obj, camera);
     }
