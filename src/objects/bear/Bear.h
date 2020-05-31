@@ -7,6 +7,7 @@
 
 #include "vcl.hpp"
 #include "objects/Object.h"
+#include "objects/terrain/BaseTerrain.h"
 
 /**
  * Bear object.
@@ -16,12 +17,13 @@ public:
     /**
      * Generates the bear.
      * @param shaders
-     * @param base
+     * @param terrain
+     * @param pos
      */
-    explicit Bear(Shaders &shaders, vcl::vec3 base = {0, 0, 0});
+    explicit Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, vcl::vec3 pos = {0, 0, 0});
 
     /**
-     * Draws the bear in opengl;
+     * Draws the bear in opengl, without colliding with the terrain
      * @param camera
      * @param time
      */
@@ -29,6 +31,16 @@ public:
 
 private:
     vcl::fbx_model bear;
+    std::shared_ptr<BaseTerrain> &terrain;
+    vcl::vec3 position;
+    vcl::vec3 direction;
+    float boundingSphereRadius;
+    float deltaZ, deltaZVar, deltaZPhi;
+    float speed, speedVar, speedPhi;
+    float animationTime;
+    float lastTime;
+
+    vcl::mat4 updateTransform(float &time);
 };
 
 

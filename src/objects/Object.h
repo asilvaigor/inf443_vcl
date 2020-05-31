@@ -16,7 +16,7 @@
  */
 class Object {
 public:
-    Object(bool movable);
+    explicit Object(bool movable);
 
     /**
      * Calls vcl::draw to draw the object in the scene.

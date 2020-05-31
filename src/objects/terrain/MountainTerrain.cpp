@@ -174,4 +174,41 @@ float &MountainTerrain::getYSize() {
     return ySize;
 }
 
+vcl::vec3 MountainTerrain::normal(float x, float y) {
+    x = x / xSize + 0.5f;
+    y = y / ySize + 0.5f;
+    const int ptControl = 1;
+    const int nPts = (2 * ptControl + 1) * (2 * ptControl + 1);
+    const float step = 0.1f;
+    const float bigStep = 1.0f;
+    const float bigStepNorm = bigStep / xSize;
+    const float stepNorm = step / xSize;
 
+    // First point
+    float z1 = 0.0f;
+    for (int i = -ptControl; i <= ptControl; i++)
+        for (int j = -ptControl; j <= ptControl; j++)
+            z1 += evaluate_terrain_z(x + stepNorm * (float) i, y + stepNorm * (float) j);
+    z1 /= nPts;
+
+    // Second point
+    x += bigStepNorm;
+    float z2 = 0.0f;
+    for (int i = -ptControl; i <= ptControl; i++)
+        for (int j = -ptControl; j <= ptControl; j++)
+            z2 += evaluate_terrain_z(x + stepNorm * (float) i, y + stepNorm * (float) j);
+    z2 /= nPts;
+
+    // Third point
+    x -= bigStepNorm;
+    y += bigStepNorm;
+    float z3 = 0.0f;
+    for (int i = -ptControl; i <= ptControl; i++)
+        for (int j = -ptControl; j <= ptControl; j++)
+            z3 += evaluate_terrain_z(x + stepNorm * (float) i, y + stepNorm * (float) j);
+    z3 /= nPts;
+
+    vcl::vec3 px(bigStep, 0.0f, z2 - z1);
+    vcl::vec3 py(0.0f, bigStep, z3 - z1);
+    return vcl::cross(px, py).normalized();
+}

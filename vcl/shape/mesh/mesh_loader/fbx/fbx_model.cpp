@@ -19,6 +19,7 @@ fbx_model::fbx_model(const std::string &filename, GLuint shader, vec3 &pos) : sh
     aiMatrix4x4 translate;
     aiMatrix4x4::Translation({pos.x, pos.y, pos.z}, translate);
     global_inverse_transform = translate * global_inverse_transform;
+    start_transform = global_inverse_transform;
     for (int i = 0; i < (int) scene->mNumMeshes; i++)
         load_mesh(scene->mMeshes[i]);
 
@@ -27,23 +28,17 @@ fbx_model::fbx_model(const std::string &filename, GLuint shader, vec3 &pos) : sh
     light = nullptr;
 }
 
-void fbx_model::draw(vcl::camera_scene &camera, float time) {
+float fbx_model::draw(vcl::camera_scene &camera, float time) {
     if (!cur_animation.empty() && last_time > EPSILON) {
         updateBones(scene->mRootNode, global_inverse_transform);
-        for (auto &drawable : drawables) {
-            for (int i = 0; i < (int) bones.size(); i++)
-                drawable.uniform.bones[i] = mat4::from_assimp(bones[i].transform);
-            drawable.uniform.lights = {light};
-            drawable.draw(camera);
-        }
-
-        auto ticks_per_sec = (float) (animation_map[cur_animation]->mTicksPerSecond != 0 ?
-                                      animation_map[cur_animation]->mTicksPerSecond : 25.0f);
-        animation_time += (time - last_time) * ticks_per_sec;
-        animation_time = fmod(animation_time, (float) animation_map[cur_animation]->mDuration);
+        updateDrawables(camera);
+        updateAnimationTime(time);
     }
 
     last_time = time;
+    if (!cur_animation.empty())
+        return (float) (animation_time / animation_map[cur_animation]->mDuration);
+    else return 0.0f;
 }
 
 void fbx_model::set_light(std::shared_ptr<vcl::light_source> &l) {
@@ -63,6 +58,9 @@ void fbx_model::set_animation(const std::string &animationName) {
             animation_node_map[pNodeAnim->mNodeName.C_Str()] = pNodeAnim;
         }
 
+        // Updating transformations
+        updateBones(scene->mRootNode, global_inverse_transform);
+
         return;
     }
 
@@ -73,6 +71,14 @@ void fbx_model::set_animation(const std::string &animationName) {
     }
     error.push_back(']');
     throw std::invalid_argument(error);
+}
+
+void fbx_model::transform(vcl::mat4 &m) {
+    global_inverse_transform = m * start_transform;
+}
+
+vcl::vec3 fbx_model::get_position() const {
+    return {global_inverse_transform.a4, global_inverse_transform.b4, global_inverse_transform.c4};
 }
 
 void fbx_model::load_mesh(aiMesh *assimpMesh) {
@@ -153,6 +159,22 @@ void fbx_model::updateBones(const aiNode *node, const aiMatrix4x4 &parent_transf
 
     for (GLuint i = 0; i < node->mNumChildren; i++)
         updateBones(node->mChildren[i], global_transformation);
+}
+
+void fbx_model::updateDrawables(vcl::camera_scene &camera) {
+    for (auto &drawable : drawables) {
+        for (int i = 0; i < (int) bones.size(); i++)
+            drawable.uniform.bones[i] = mat4::from_assimp(bones[i].transform);
+        drawable.uniform.lights = {light};
+        drawable.draw(camera);
+    }
+}
+
+void fbx_model::updateAnimationTime(float &time) {
+    auto ticks_per_sec = (float) (animation_map[cur_animation]->mTicksPerSecond != 0 ?
+                                  animation_map[cur_animation]->mTicksPerSecond : 25.0f);
+    animation_time += (time - last_time) * ticks_per_sec;
+    animation_time = fmod(animation_time, (float) animation_map[cur_animation]->mDuration);
 }
 
 aiVector3D fbx_model::calc_interpolated_scaling(const aiNodeAnim *node_anim) const {

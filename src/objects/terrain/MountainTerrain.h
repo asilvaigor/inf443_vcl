@@ -54,7 +54,7 @@ public:
      * @param y Must be within terrain boundaries.
      * @return z value of the terrain.
      */
-    float getTerrainHeight(float x, float y);
+    float getTerrainHeight(float x, float y) override;
 
     /**
      * Height of the peak of the mountain.
@@ -81,6 +81,14 @@ public:
      * @return
      */
     float &getYSize();
+
+    /**
+     * Calculates the vector normal to the terrain's ground in a given spot.
+     * @param x
+     * @param y
+     * @return Normal vector.
+     */
+    vcl::vec3 normal(float x, float y) override;
 
 private:
 

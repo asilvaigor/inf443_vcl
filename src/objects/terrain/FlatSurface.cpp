@@ -27,3 +27,11 @@ void FlatSurface::drawMesh(vcl::camera_scene &camera, float) {
     snowTexture.bind();
     vcl::draw(terrain, camera);
 }
+
+float FlatSurface::getTerrainHeight(float x, float y) {
+    return 0.0f;
+}
+
+vcl::vec3 FlatSurface::normal(float, float) {
+    return {0, 0, 1};
+}

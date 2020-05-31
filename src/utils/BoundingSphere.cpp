@@ -36,20 +36,6 @@ BoundingSphere::BoundingSphere(std::vector<vcl::mesh> &meshes) {
     calculate(points);
 }
 
-BoundingSphere::BoundingSphere(std::vector<vcl::mesh_skinned> &meshes) {
-    int nVertex = 0;
-    for (auto &m : meshes)
-        nVertex += m.position.size();
-
-    std::vector<vcl::vec3 *> points;
-    points.reserve(nVertex);
-    for (auto &m : meshes)
-        for (auto &p : m.position)
-            points.push_back(&p);
-
-    calculate(points);
-}
-
 BoundingSphere::BoundingSphere(std::vector<vcl::vec3 *> &points) {
     calculate(points);
 }

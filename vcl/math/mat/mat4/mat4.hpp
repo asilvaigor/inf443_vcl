@@ -2,7 +2,9 @@
 
 #include "../mat/mat.hpp"
 #include "../../vec/vec4/vec4.hpp"
-#include "third_party/assimp/include/matrix4x4.h"
+#include "third_party/assimp/include/mesh.h"
+#include "third_party/assimp/include/scene.h"
+#include "third_party/assimp/include/Importer.hpp"
 
 
 
@@ -84,6 +86,7 @@ template <> struct mat<4,4> {
     const float& operator()(std::size_t index1, std::size_t index2) const;
     float& operator()(std::size_t index1, std::size_t index2);
 
+    aiMatrix4x4 operator*(aiMatrix4x4 &m) const;
 
     vcl::mat3 mat3() const;
     mat4& set_mat3(const vcl::mat3& m);

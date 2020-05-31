@@ -26,6 +26,22 @@ public:
      */
     void drawMesh(vcl::camera_scene &camera , float time = 0.0f) override;
 
+    /**
+     * Returns the height of the terrain at a given point.
+     * @param x Must be within terrain boundaries.
+     * @param y Must be within terrain boundaries.
+     * @return z value of the terrain.
+     */
+    float getTerrainHeight(float x, float y) override;
+
+    /**
+     * Calculates the vector normal to the terrain's ground in a given spot.
+     * @param x
+     * @param y
+     * @return Normal vector.
+     */
+    vcl::vec3 normal(float x, float y);
+
 private:
     const Texture snowTexture;
 };

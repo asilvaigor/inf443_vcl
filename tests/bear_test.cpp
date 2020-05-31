@@ -5,20 +5,21 @@
 #include "scene/Scene.h"
 #include "shaders/Shaders.h"
 #include "objects/bear/Bear.h"
-#include "objects/terrain/FlatSurface.h"
+#include "objects/terrain/MountainTerrain.h"
 
 int main() {
     auto scene = Scene::getInstance("Bear Test");
 
-    auto terrain = std::static_pointer_cast<Object>(std::make_shared<FlatSurface>(scene.getShaders()));
-    scene.addObject(terrain);
+    std::shared_ptr<BaseTerrain> terrain = std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280);
+    std::shared_ptr<Object> terrainObj = std::dynamic_pointer_cast<Object>(terrain);
+    scene.addObject(terrainObj);
 
     vcl::vec3 pos;
     std::shared_ptr<Object> bear;
 
     pos = {0, 0, 0};
     bear = std::static_pointer_cast<Object>(
-            std::make_shared<Bear>(scene.getShaders(), pos));
+            std::make_shared<Bear>(scene.getShaders(), terrain, pos));
     scene.addObject(bear);
 
     scene.display();
