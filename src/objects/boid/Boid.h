@@ -7,11 +7,13 @@
 
 
 #include <src/objects/Object.h>
+#include <src/objects/terrain/MountainTerrain.h>
 #include "Bird.h"
 
 class Boid : public Object {
 public:
-    Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, float maxY, float minZ, float maxZ);
+    Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, float maxY, float minZ, float maxZ,
+         std::shared_ptr<MountainTerrain> terrain = nullptr);
 
     void drawMesh(vcl::camera_scene &camera) override;
 
@@ -34,22 +36,25 @@ private:
     float maxX, maxY, maxZ;
     float minX, minY, minZ;
     vcl::rand_generator generator;
+    std::shared_ptr<MountainTerrain> terrain;
 
     std::chrono::time_point<std::chrono::system_clock> timer;
 
     // TODO do not hardcode these variables
-    const float centeringFactor = 0.000001f;
-    const float visualRange = 20.0f;
+    const float centeringFactor = 0.0001f;
+    const float visualRange = 10.0f;
 
-    const float minDistance = 5.0f;
-    const float avoidFactor = 0.001f;
+    const float minDistance = 2.0f;
+    const float avoidFactor = 0.01f;
 
-    const float matchingFactor = 0.001f;
+    const float matchingFactor = 0.1f;
 
     const float turnFactor = 0.01f;
 
     const float speedMaxLimit = 1.0f;
     const float speedMinLimit = 0.5f;
+
+    const float terrainMargin = 20.0f;
 };
 
 

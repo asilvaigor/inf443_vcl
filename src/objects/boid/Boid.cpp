@@ -1,3 +1,5 @@
+#include <utility>
+
 //
 // Created by Aloysio Galvão Lopes on 2020-05-30.
 //
@@ -5,9 +7,10 @@
 #include <src/scene/Scene.h>
 #include "Boid.h"
 
-Boid::Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, float maxY, float minZ, float maxZ)
+Boid::Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, float maxY, float minZ, float maxZ,
+           std::shared_ptr<MountainTerrain> terrain)
         : Object(false),  minX(minX), maxX(maxX), maxY(maxY), minY(minY), minZ(minZ), maxZ(maxZ),
-        generator(Scene::deterministic){
+        generator(Scene::deterministic), terrain(std::move(terrain)){
 
 
     // TODO stop hardcoding the scale
@@ -15,8 +18,9 @@ Boid::Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, 
     for (int i = 0; i < birdCount; ++i){
         vcl::vec3 pos = {generator.rand(minX, maxX), generator.rand(minY, maxY), generator.rand(minZ, maxZ)};
         float scale = generator.rand(1.0f, 2.0f);
+        vcl::vec3 speed = {generator.rand(), generator.rand(), generator.rand(-0.2, 0.2)};
 
-        birds.push_back(std::make_shared<Bird>(shaders, pos, scale));
+        birds.push_back(std::make_shared<Bird>(shaders, pos, scale, speed));
     }
 
     // Setting current time
@@ -68,6 +72,7 @@ void Boid::birdFlyCenter(Bird* bird) {
 
     center /= numBirds;
     bird->addFutureSpeed((center - bird->getPosition()) * centeringFactor);
+    bird->addFutureSpeed({0.0f, 0.0f, -bird->getFutureSpeed().z*0.01f});
 }
 
 void Boid::birdLimitSpeed(Bird *bird) {
@@ -135,6 +140,14 @@ void Boid::birdBound(Bird *bird) {
         bird->addFutureSpeed({0.0f, -turnFactor, 0.0f});
     if (bird->getPosition().z <= minZ)
         bird->addFutureSpeed({0.0f, 0.0f, turnFactor});
-    if (bird->getPosition().z >= maxZ)
-        bird->addFutureSpeed({0.0f, 0.0f, -turnFactor});
+
+    float vertDist = maxZ - bird->getPosition().z;
+    vertDist = vertDist*vertDist;
+
+    bird->addFutureSpeed({0.0f, 0.0f, -turnFactor/vertDist});
+    if (terrain != nullptr &&
+    bird->getPosition().z <= terrainMargin+terrain->getTerrainHeight(bird->getPosition().x, bird->getPosition().y))
+//    vertDist = bird->getPosition().z-terrain->getTerrainHeight(bird->getPosition().x, bird->getPosition().y);
+//    vertDist = vertDist*vertDist;
+    bird->addFutureSpeed({0.0f, 0.0f, turnFactor});
 }
