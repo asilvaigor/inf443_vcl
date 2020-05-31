@@ -5,7 +5,7 @@
 #include "Water.h"
 
 Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscillator> &oscillators)
-        : Object(false), waterLimits(waterLimits), oscillators(oscillators){
+        : Object(true), waterLimits(waterLimits), oscillators(oscillators){
     uDimensionSize = 100;
     vDimensionSize = 100;
     xSize = fabs(waterLimits.getX2()-waterLimits.getX1());
