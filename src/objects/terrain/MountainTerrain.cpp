@@ -6,12 +6,8 @@
 #include <cmath>
 
 MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize, WaterLimits &waterLimits) :
-    waterLimits(waterLimits) {
+    BaseTerrain(xSize, ySize), waterLimits(waterLimits) {
     //TODO REfactor this as a final terrain class
-
-    // Initializing internal variables
-    this->xSize = xSize;
-    this->ySize = ySize;
 
     // Initializing texture
     terrainTexture = std::make_shared<Texture>("terrain");
@@ -28,8 +24,8 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize, Wat
     parameters.sigma = 0.9;
 
     // TODO remove this mountain
-    mountainHeight = 2.0f;
-    addMountain({0.2f, 0.2f}, 0.3f, mountainHeight);
+    addMountain({0.2f, 0.2f}, 0.3f, 2.0f);
+    mountainHeight = evaluate_terrain_z(0.2f, 0.2f);
 
     // TODO remove this lake
     lakePos = {0.5f, 0.7f};
@@ -162,16 +158,8 @@ float MountainTerrain::getMaxTerrainHeight() {
     return mountainHeight;
 }
 
-bool MountainTerrain::isInsideLake(float x, float y) {
+bool MountainTerrain::isObstructed(float x, float y) {
     return waterLimits.isInside({x, y}) && getTerrainHeight(x, y) <= waterLimits.getWaterLevel();
-}
-
-float &MountainTerrain::getXSize() {
-    return xSize;
-}
-
-float &MountainTerrain::getYSize() {
-    return ySize;
 }
 
 vcl::vec3 MountainTerrain::normal(float x, float y) {

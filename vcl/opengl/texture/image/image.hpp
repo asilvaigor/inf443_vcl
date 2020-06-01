@@ -9,7 +9,7 @@ namespace vcl
 {
 
 
-enum class image_color_type {rgb, rgba};
+enum class image_color_type {rgb, rgba, grey};
 
 struct image_raw
 {

@@ -19,6 +19,7 @@ Tree::Tree(Shaders &shaders, vcl::vec3 &pos, TreeSpecies &species, float snowCov
         snowTexture = std::make_shared<Texture>("snow");
 
     this->verbose = verbose;
+    snowCoverage = normalizeSnowCoverage(snowCoverage);
     createMeshes(snowCoverage);
     createDrawables(shaders);
     billboard = BillboardGenerator(shaders, this);
@@ -159,4 +160,10 @@ void Tree::createDrawables(Shaders &shaders) {
                                              species.snowyLeafColor.z};
         snowyLeavesDrawable.uniform.color_alpha = species.snowyLeafColor.w;
     }
+}
+
+float Tree::normalizeSnowCoverage(float &snowCoverage) {
+    if (snowCoverage > 0.99f)
+        return 1.0f;
+    return snowCoverage * 0.6f;
 }

@@ -60,7 +60,8 @@ int main() {
     scene.addObject(water);
 
     // Adding forest
-    auto forest = std::static_pointer_cast<Object>(std::make_shared<Forest>(scene.getShaders(), terrain));
+    auto terrainBase = std::static_pointer_cast<BaseTerrain>(terrain);
+    auto forest = std::static_pointer_cast<Object>(std::make_shared<Forest>(scene.getShaders(), terrainBase));
     scene.addObject(forest);
 
     scene.display();

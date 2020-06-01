@@ -15,6 +15,8 @@ image_raw image_load_png(const std::string& filename, image_color_type color_typ
         lodepng_color_type = LCT_RGB;
     else if(color_type==image_color_type::rgba)
         lodepng_color_type = LCT_RGBA;
+    else if (color_type==image_color_type::grey)
+        lodepng_color_type = LCT_GREY;
     else
     {
         std::cerr<<"Unkown color type for file"<<filename<<std::endl;

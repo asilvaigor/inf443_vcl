@@ -4,7 +4,7 @@
 
 #include "FlatSurface.h"
 
-FlatSurface::FlatSurface(Shaders &shaders) : BaseTerrain(), snowTexture("snow_ground") {
+FlatSurface::FlatSurface(Shaders &shaders) : BaseTerrain(280, 280), snowTexture("snow_ground") {
     float size = 140.0;
     vcl::vec3 p00 = {-size, -size, 0};
     vcl::vec3 p10 = {size, -size, 0};

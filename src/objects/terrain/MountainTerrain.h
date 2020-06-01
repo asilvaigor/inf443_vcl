@@ -62,7 +62,7 @@ public:
      * Height of the peak of the mountain.
      * @return
      */
-    float getMaxTerrainHeight();
+    float getMaxTerrainHeight() override;
 
     /**
      * Checks if a point is inside the lake area.
@@ -70,19 +70,7 @@ public:
      * @param y Must be within terrain boundaries.
      * @return True if the point will fall inside the lake.
      */
-    bool isInsideLake(float x, float y);
-
-    /**
-     * Length of a side of the terrain.
-     * @return
-     */
-    float &getXSize();
-
-    /**
-     * Length of a side of the terrain.
-     * @return
-     */
-    float &getYSize();
+    bool isObstructed(float x, float y) override;
 
     /**
      * Calculates the vector normal to the terrain's ground in a given spot.
@@ -125,8 +113,6 @@ private:
     std::shared_ptr<Texture> terrainTexture;
     std::vector<TerrainFeature> features;
 
-    float xSize;
-    float ySize;
     float mountainHeight;
 
     // Lake parameters

@@ -16,8 +16,10 @@ public:
     /**
      * Generates the terrain.
      * @param shaders
+     * @param xSize
+     * @param ySize
      */
-    BaseTerrain();
+    BaseTerrain(float xSize, float ySize);
 
     virtual ~BaseTerrain();
 
@@ -37,6 +39,12 @@ public:
     virtual float getTerrainHeight(float x, float y) = 0;
 
     /**
+     * Height of the peak of the terrain.
+     * @return
+     */
+    virtual float getMaxTerrainHeight();
+
+    /**
      * Calculates the vector normal to the terrain's ground in a given spot.
      * @param x
      * @param y
@@ -44,9 +52,25 @@ public:
      */
     virtual vcl::vec3 normal(float x, float y) = 0;
 
+    virtual bool isObstructed(float x, float y);
+
+    /**
+     * Length of a side of the terrain.
+     * @return
+     */
+    float &getXSize();
+
+    /**
+     * Length of a side of the terrain.
+     * @return
+     */
+    float &getYSize();
+
 protected:
     vcl::mesh_drawable terrain;
     int currentLight;
+    float xSize;
+    float ySize;
 };
 
 

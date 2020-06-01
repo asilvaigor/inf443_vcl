@@ -31,10 +31,11 @@ int main() {
     camera.scale = 200;
     WaterLimits waterLimits(-100, 100, -35, 135, -30, -10);
     auto terrain = std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280, waterLimits);
-    auto terrainPt = std::static_pointer_cast<Object>(terrain);
-    auto forest = std::static_pointer_cast<Object>(std::make_shared<Forest>(scene.getShaders(), terrain));
+    auto terrainBase = std::static_pointer_cast<BaseTerrain>(terrain);
+    auto terrainObj = std::static_pointer_cast<Object>(terrain);
+    auto forest = std::static_pointer_cast<Object>(std::make_shared<Forest>(scene.getShaders(), terrainBase));
 
-    scene.addObject(terrainPt);
+    scene.addObject(terrainObj);
     scene.addObject(forest);
 
     scene.display();

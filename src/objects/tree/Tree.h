@@ -63,6 +63,8 @@ private:
     void createMeshes(float &snowCoverage);
 
     void createDrawables(Shaders &shaders);
+
+    float normalizeSnowCoverage(float &snowCoverage);
 };
 
 
