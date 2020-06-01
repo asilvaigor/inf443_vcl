@@ -6,7 +6,7 @@
 
 DebugObject::DebugObject(Shaders &shaders) : Object(false), shaders(shaders) {}
 
-void DebugObject::drawMesh(vcl::camera_scene &camera) {
+void DebugObject::drawMesh(vcl::camera_scene &camera, float) {
     for (auto& mesh : meshes){
         mesh.uniform.lights = lights;
         vcl::draw(mesh, camera);
