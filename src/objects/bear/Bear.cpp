@@ -2,10 +2,23 @@
 // Created by igor on 15/05/2020.
 //
 
+#include "utils/Texture.h"
 #include "Bear.h"
+
+std::vector<GLuint> Bear::textures;
 
 Bear::Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, vcl::vec3 pos) :
         Object(true), bear("../src/assets/models/bear.fbx", shaders["mesh"]), terrain(terrain) {
+    if (textures.empty()) {
+        Texture fur("bear_fur");
+        Texture nose(0, 0, 0);
+        Texture eyes("bear_eyes");
+        textures.push_back(fur.getId());
+        textures.push_back(nose.getId());
+        textures.push_back(eyes.getId());
+    }
+
+    bear.set_textures(textures);
     bear.set_animation("bear|walk");
     boundingSphereRadius = 1.2f;
     boundingSphere = BoundingSphere(pos, boundingSphereRadius);

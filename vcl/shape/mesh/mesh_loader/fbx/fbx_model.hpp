@@ -23,6 +23,8 @@ public:
 
     void set_animation(const std::string &animation);
 
+    void set_textures(std::vector<GLuint> &textures);
+
     void transform(vcl::mat4 &m);
 
     std::vector<mesh_skinned> meshes;
