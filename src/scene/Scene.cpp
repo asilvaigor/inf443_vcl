@@ -22,7 +22,7 @@ Scene::Scene(std::string &windowTitle) {
     shaders = Shaders::getInstance();
 
     // Creating rendering stuff
-    whiteTexture = std::make_shared<Texture>();
+    whiteTexture = std::make_shared<Texture>(255, 255, 255);
     grid = std::make_shared<Grid>(*shaders);
 
     vcl::light_source light({100, 0, 100}, {-1, 0, -1},

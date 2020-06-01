@@ -41,6 +41,8 @@ private:
     float animationTime;
     float lastTime;
 
+    static std::vector<GLuint> textures;
+
     vcl::mat4 updateTransform(float &time);
 };
 

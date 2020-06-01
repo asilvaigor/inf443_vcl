@@ -3,6 +3,8 @@
 //
 
 #include "fbx_model.hpp"
+
+#include <utility>
 #include "third_party/assimp/include/postprocess.h"
 
 namespace vcl {
@@ -68,6 +70,10 @@ void fbx_model::set_animation(const std::string &animationName) {
     }
     error.push_back(']');
     throw std::invalid_argument(error);
+}
+
+void fbx_model::set_textures(std::vector<GLuint> &ts) {
+    textures = ts;
 }
 
 void fbx_model::transform(vcl::mat4 &m) {
@@ -155,11 +161,12 @@ void fbx_model::updateBones(const aiNode *node, const aiMatrix4x4 &parent_transf
 }
 
 void fbx_model::updateDrawables(vcl::camera_scene &camera) {
-    for (auto &drawable : drawables) {
-        for (int i = 0; i < (int) bones.size(); i++)
-            drawable.uniform.bones[i] = mat4::from_assimp(bones[i].transform);
-        drawable.uniform.lights = {light};
-        drawable.draw(camera);
+    for (int i = 0; i < (int) drawables.size(); i++) {
+        for (int j = 0; j < (int) bones.size(); j++)
+            drawables[i].uniform.bones[j] = mat4::from_assimp(bones[j].transform);
+        drawables[i].uniform.lights = {light};
+        if ((int) textures.size() > i) glBindTexture(GL_TEXTURE_2D, textures[i]);
+        drawables[i].draw(camera);
     }
 }
 

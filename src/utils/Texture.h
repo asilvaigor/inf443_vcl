@@ -14,18 +14,27 @@
 class Texture {
 public:
     /**
+     * Creates a texture with a given color.
+     * @param r
+     * @param g
+     * @param b
+     */
+    explicit Texture(int r, int g, int b);
+
+    /**
      * Loads the texture's png file.
      * @param name Name of the png file located in std/assets/textures/, without the .png extension.
-     * If empty, will load a white texture.
      * @param wrap_s Opengl id of the texture placement.
      * @param wrap_t Opengl id of the texture placement.
      */
-    Texture(const std::string& name = "", GLint wrap_s = GL_REPEAT, GLint wrap_t = GL_REPEAT);
+    explicit Texture(const std::string& name, GLint wrap_s = GL_REPEAT, GLint wrap_t = GL_REPEAT);
 
     /**
      * Binds texture for it to be rendered.
      */
     void bind() const;
+
+    GLuint getId() const;
 
 private:
     GLuint id;
