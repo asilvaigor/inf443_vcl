@@ -8,6 +8,7 @@
 MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize, WaterLimits &waterLimits) :
     BaseTerrain(xSize, ySize), waterLimits(waterLimits) {
     //TODO REfactor this as a final terrain class
+    std::cout << "Loading terrain... " << std::flush;
 
     // Initializing texture
     terrainTexture = std::make_shared<Texture>("terrain");
@@ -40,6 +41,7 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize, Wat
 
     //Setting shader
     terrain.shader = shaders["terrain_mesh"];
+    std::cout << "Finished" << std::endl;
 }
 
 void MountainTerrain::drawMesh(vcl::camera_scene &camera, float) {

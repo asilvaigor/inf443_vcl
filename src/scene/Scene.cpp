@@ -20,6 +20,9 @@ Scene &Scene::getInstance(std::string windowTitle) {
 
 Scene::Scene(std::string &windowTitle) {
     gui = SceneGui::getInstance(windowTitle);
+
+    std::cout << "Initializing scene... ";
+
     shaders = Shaders::getInstance();
 
     // Creating rendering stuff
@@ -29,6 +32,8 @@ Scene::Scene(std::string &windowTitle) {
     vcl::light_source light({100, 0, 100}, {-1, 0, -1},
             gui->getCamera().perspective.z_near, gui->getCamera().perspective.z_far);
     cascadeShadow = std::make_shared<CascadeShadow>(light, 2048);
+
+    std::cout << "Finished" << std::endl;
 }
 
 Shaders &Scene::getShaders() {
@@ -46,7 +51,7 @@ void Scene::addObject(std::shared_ptr<Object> &object) {
 }
 
 void Scene::display() {
-    glViewport(0, 0, gui->getWindowWidth(), gui->getWindowHeight());
+    gui->open();
     while (gui->isRunning()) {
         gui->update();
         updateScene();

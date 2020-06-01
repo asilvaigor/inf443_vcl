@@ -28,6 +28,11 @@ public:
     ~SceneGui();
 
     /**
+     * Opens the window.
+     */
+    void open();
+
+    /**
      * Clears screen and buffers and updates checkboxes.
      */
     void update();

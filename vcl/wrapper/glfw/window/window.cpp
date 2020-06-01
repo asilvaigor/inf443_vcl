@@ -60,6 +60,7 @@ GLFWwindow* glfw_create_window(int width, int height, const std::string& title, 
     glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 8);
     glfwWindowHint(GLFW_FLOATING, 0);
+    glfwWindowHint(GLFW_VISIBLE, 0);
 
 
     GLFWwindow* window = glfwCreateWindow(width, height, title.c_str(), monitor, share);

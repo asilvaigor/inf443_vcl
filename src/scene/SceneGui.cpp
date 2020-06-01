@@ -58,9 +58,15 @@ SceneGui::SceneGui(std::string &windowTitle) : windowTitle(windowTitle) {
 }
 
 SceneGui::~SceneGui() {
-    vcl::imgui_cleanup();
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    // FIXME: There was a segfault here
+//    vcl::imgui_cleanup();
+//    glfwDestroyWindow(window);
+//    glfwTerminate();
+}
+
+void SceneGui::open() {
+    glViewport(0, 0, gui->getWindowWidth(), gui->getWindowHeight());
+    glfwShowWindow(window);
 }
 
 void SceneGui::update() {

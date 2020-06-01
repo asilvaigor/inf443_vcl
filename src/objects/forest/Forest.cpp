@@ -7,6 +7,7 @@
 
 Forest::Forest(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, int nTrees, int nBushes, int nRocks) :
         Object(false), terrain(terrain), generator(Scene::deterministic) {
+    std::cout << "Loading forest... " << std::flush;
     generateTiles();
     generateTreesAndRocks(shaders, nTrees, nRocks);
 
@@ -29,6 +30,7 @@ Forest::Forest(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, int nTre
         float snowCoverage = std::max(0.5f, 0.5f + 0.5f * pos.z / terrain->getMaxTerrainHeight());
         objects.push_back(std::make_shared<Tree>(shaders, pos, species, snowCoverage));
     }
+    std::cout << "Finished" << std::endl;
 }
 
 void Forest::drawMesh(vcl::camera_scene &, float) {
