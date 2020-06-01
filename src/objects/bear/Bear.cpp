@@ -24,7 +24,7 @@ Bear::Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, vcl::vec3 po
     boundingSphere = BoundingSphere(pos, boundingSphereRadius);
     position = pos;
     direction = {0, -1, 0};
-    deltaZ = 1.1f;
+    deltaZ = 1.05f;
     speed = 1.5f;
     speedVar = 0.75f;
     stepPhi = -0.14f;
