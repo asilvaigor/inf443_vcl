@@ -40,8 +40,6 @@ Forest::Forest(Shaders &shaders, std::shared_ptr<MountainTerrain> &terrain, int 
         float snowCoverage = 0.6f + 0.4f * pos.z / terrain->getMaxTerrainHeight();
         objects.push_back(std::make_shared<Tree>(shaders, pos, species, snowCoverage));
     }
-
-    boundingSphere = BoundingSphere({0, 0, 0}, hypotf(terrain->getXSize(), terrain->getYSize()));
 }
 
 void Forest::drawMesh(vcl::camera_scene &camera, float) {

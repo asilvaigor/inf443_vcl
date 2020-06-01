@@ -8,8 +8,10 @@
 #include <src/shaders/Shaders.h>
 #include <vcl/math/noise/PerlinNoise.h>
 #include <vcl/math/helper_functions/helper_functions.hpp>
+#include <src/objects/water/Water.h>
 #include "BaseTerrain.h"
 #include "TerrainFeature.h"
+#include "objects/water/WaterLimits.h"
 #include "utils/Texture.h"
 
 /**
@@ -23,7 +25,7 @@ public:
      * Generates the relief mesh
      * @param shaders
      */
-    MountainTerrain(Shaders &shaders, float xSize, float ySize);
+    explicit MountainTerrain(Shaders &shaders, float xSize, float ySize, WaterLimits &waterLimits);
 
     /**
      * Draws the surface in opengl;
@@ -122,9 +124,14 @@ private:
     vcl::mesh terrainMesh;
     std::shared_ptr<Texture> terrainTexture;
     std::vector<TerrainFeature> features;
+
     float xSize;
     float ySize;
     float mountainHeight;
+
+    // Lake parameters
+    WaterLimits waterLimits;
+
     vcl::vec2 lakePos;
     float lakeSig;
 };

@@ -61,6 +61,8 @@ public:
 
     float getSunAngle();
 
+    void setShowVertices(bool verticesShowState);
+
 private:
     std::string windowTitle;
     vcl::glfw_fps_counter fpsCounter;

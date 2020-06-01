@@ -14,12 +14,15 @@ public:
      * Initializes a coordinate marker at the origin
      * @param shaders
      */
-    CoordinateMarker(Shaders& shaders);
+    explicit CoordinateMarker(Shaders& shaders, vcl::vec3 position = {0.0f, 0.0f, 0.0f});
 
     void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
 
+    void setPosition(vcl::vec3 position);
+
 private:
     vcl::mesh_drawable marker;
+    vcl::vec3 position;
 };
 
 

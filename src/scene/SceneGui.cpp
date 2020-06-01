@@ -152,3 +152,7 @@ void SceneGui::mouseScrollCallback(GLFWwindow *, double xoffset, double yoffset)
 void SceneGui::keyboardInputCallback(GLFWwindow *, int, int, int, int) {
 
 }
+
+void SceneGui::setShowVertices(bool verticesShowState) {
+    verticesOn = verticesShowState;
+}

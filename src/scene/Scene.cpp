@@ -2,6 +2,7 @@
 // Created by igor on 22/04/2020.
 //
 
+#include <src/objects/boid/Boid.h>
 #include "Scene.h"
 #include "objects/forest/Forest.h"
 #include "utils/SingletonException.h"
@@ -65,9 +66,15 @@ void Scene::updateScene() {
     for (auto &obj : stillObjects) {
         // Forest should be decomposed in its objects
         auto *f = dynamic_cast<Forest *>(obj.get());
+        auto *b = dynamic_cast<Boid *>(obj.get());
         if (f != nullptr)
             for (auto &o : f->getObjects())
                 o->draw(gui->getCamera());
+        else if (b != nullptr){
+            b->updateBirds();
+            for (auto &o : b->getObjects())
+                o->draw(gui->getCamera());
+        }
         else obj->draw(gui->getCamera());
         whiteTexture->bind();
     }
