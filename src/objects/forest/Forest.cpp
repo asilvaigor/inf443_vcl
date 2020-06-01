@@ -104,7 +104,9 @@ void Forest::generateTreesAndRocks(Shaders &shaders, int nTrees, int nRocks) {
             pos.y = generator.rand(t.minY, t.maxY);
             pos.z = terrain->getTerrainHeight(pos.x, pos.y);
             float snowCoverage = std::max(0.5f, 0.5f + 0.5f * pos.z / terrain->getMaxTerrainHeight());
-            objects.push_back(std::make_shared<Rock>(shaders, pos, snowCoverage));
+            vcl::vec3 axis(generator.rand(0.7f, 1.2f), generator.rand(0.4f, 0.6f), generator.rand(0.7f, 1.2f));
+            float zAngle = generator.rand(0, M_PI);
+            objects.push_back(std::make_shared<Rock>(shaders, pos, snowCoverage, axis, zAngle));
             curNRocks++;
             t.containsObject = true;
         }

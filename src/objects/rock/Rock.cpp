@@ -7,14 +7,15 @@
 std::shared_ptr<Texture> Rock::rockTexture = nullptr;
 std::shared_ptr<Texture> Rock::snowTexture = nullptr;
 
-Rock::Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellisoidAxisSize, bool verbose) :
+Rock::Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellisoidAxisSize, float zAngle,
+        bool verbose) :
         Object(false) {
     if (Rock::rockTexture == nullptr)
         Rock::rockTexture = std::make_shared<Texture>("rock");
     if (Rock::snowTexture == nullptr)
         Rock::snowTexture = std::make_shared<Texture>("snow");
 
-    calculateMesh(base, ellisoidAxisSize);
+    calculateMesh(base, ellisoidAxisSize, zAngle);
     putSnow(snowCoverage);
 
     rock = vcl::mesh_drawable(mesh);
@@ -54,8 +55,9 @@ void Rock::drawMesh(vcl::camera_scene &camera, float) {
     vcl::draw(snow, camera);
 }
 
-void Rock::calculateMesh(vcl::vec3 &base, vcl::vec3 &ellipsoidAxisSize) {
-    mesh = vcl::mesh_primitive_semi_ellipsoid(ellipsoidAxisSize[0], ellipsoidAxisSize[1], ellipsoidAxisSize[2], base);
+void Rock::calculateMesh(vcl::vec3 &base, vcl::vec3 &ellipsoidAxisSize, float zAngle) {
+    mesh = vcl::mesh_primitive_semi_ellipsoid(ellipsoidAxisSize[0], ellipsoidAxisSize[1], ellipsoidAxisSize[2], base,
+            zAngle);
 
     for (auto &p : mesh.position) {
         const float scaling = 1.7;
@@ -85,15 +87,14 @@ void Rock::putSnow(float snowCoverage) {
         vcl::vec3 normal = (mesh.normal[c[0]] + mesh.normal[c[1]] + mesh.normal[c[2]]) / 3.0f;
         // If it has a low angle with the z axis, it will be turn into snow
         if (normal.angle(zAxis) < snowCoverage * M_PI_2) {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 3; i++)
                 if (idxMap[c[i]] == (unsigned int) n) {
                     snowMesh.position.push_back(mesh.position[c[i]]);
                     snowMesh.normal.push_back(mesh.normal[c[i]]);
                     snowMesh.texture_uv.push_back(mesh.texture_uv[c[i]]);
                     idxMap[c[i]] = snowMeshSize++;
                 }
-                snowMesh.connectivity.push_back({idxMap[c[0]], idxMap[c[1]], idxMap[c[2]]});
-            }
+            snowMesh.connectivity.push_back({idxMap[c[0]], idxMap[c[1]], idxMap[c[2]]});
         } else connectivity2.push_back(c);
     }
     mesh.connectivity = connectivity2;

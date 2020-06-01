@@ -20,8 +20,11 @@ public:
      * @param base Position of the center of the rock's base.
      * @param snowCoverage Float from 0 to 1, controls how much snow there will be in the rock.
      * @param ellisoidAxisSize Sizes of the rock's ellipsoid shape.
+     * @param zAngle Angle to rotate the rock.
+     * @param verbose
      */
-    explicit Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellisoidAxisSize = {1.0, 0.5, 1.0}, bool verbose = false);
+    explicit Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellisoidAxisSize = {1.0, 0.5, 1.0},
+            float zAngle = 0.0f, bool verbose = false);
 
     /**
      * Draws the rock in opengl;
@@ -42,7 +45,7 @@ private:
      * Calculates the rock's mesh using an ellipsoid with pelerin noise.
      * @param base
      */
-    void calculateMesh(vcl::vec3 &base, vcl::vec3 &ellisoidAxisSize);
+    void calculateMesh(vcl::vec3 &base, vcl::vec3 &ellisoidAxisSize, float zAngle);
 
     /**
      * Replaces the top triangles from the rock mesh with snow.
