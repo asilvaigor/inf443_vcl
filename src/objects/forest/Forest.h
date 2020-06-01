@@ -14,9 +14,9 @@
 class Forest : public Object {
 public:
     Forest(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain,
-           int nTrees = 100, int nBushes = 200, int nRocks = 20);
+           int nTrees = 400, int nBushes = 200, int nRocks = 50);
 
-    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
+    void drawMesh(vcl::camera_scene &camera, float time) override;
 
     std::vector<std::shared_ptr<Object>> &getObjects();
 
@@ -26,9 +26,14 @@ private:
     std::shared_ptr<BaseTerrain> &terrain;
     std::vector<std::shared_ptr<Object>> objects;
     std::vector<std::vector<ForestTile>> tiles;
+    std::vector<std::pair<int, int>> tileList;
     vcl::rand_generator generator;
 
     void generateTiles();
+
+    void generateTreesAndRocks(Shaders &shaders, int nTrees, int nRocks);
+
+    void shuffleTileList();
 };
 
 

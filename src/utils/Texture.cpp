@@ -5,7 +5,8 @@
 #include "Texture.h"
 
 Texture::Texture(int r, int g, int b) {
-    id = vcl::create_texture_gpu(vcl::image_raw(1, 1, vcl::image_color_type::rgba, {r, g, b, 255}));
+    id = vcl::create_texture_gpu(vcl::image_raw(1, 1, vcl::image_color_type::rgba,
+            {(unsigned char) r, (unsigned char) g, (unsigned char) b, 255}));
 }
 
 Texture::Texture(const std::string& name, GLint wrap_s, GLint wrap_t) {

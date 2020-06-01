@@ -12,7 +12,7 @@ Rock::Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellis
     if (Rock::rockTexture == nullptr)
         Rock::rockTexture = std::make_shared<Texture>("rock");
     if (Rock::snowTexture == nullptr)
-        Rock::rockTexture = std::make_shared<Texture>("snow");
+        Rock::snowTexture = std::make_shared<Texture>("snow");
 
     calculateMesh(base, ellisoidAxisSize);
     putSnow(snowCoverage);
