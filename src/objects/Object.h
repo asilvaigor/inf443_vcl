@@ -16,7 +16,7 @@
  */
 class Object {
 public:
-    explicit Object(bool movable);
+    explicit Object(bool movable, bool shadowless = false);
 
     /**
      * Calls vcl::draw to draw the object in the scene.
@@ -50,6 +50,12 @@ public:
     bool isMovable() const;
 
     /**
+     * If shadow should be rendered with this object.
+     * @return True if the object must be included in the depth map.
+     */
+    bool hasShadow() const;
+
+    /**
      * Sphere that covers the whole object.
      * @return
      */
@@ -68,6 +74,7 @@ public:
 
 protected:
     const bool movable;
+    const bool shadowless;
     std::vector<std::shared_ptr<vcl::light_source>> lights;
     BoundingSphere boundingSphere;
     BoundingBox boundingBox;

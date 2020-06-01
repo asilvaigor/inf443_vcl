@@ -36,8 +36,15 @@ public:
      */
     void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
 
+    vcl::vec3 &getPosition();
+
+    float &getTrunkRadius();
+
+    float &getBranchRadius();
+
 private:
     TreeSpecies &species;
+    vcl::vec3 position;
     vcl::mesh branchesMesh;
     vcl::mesh snowyBranchesMesh;
     vcl::mesh leavesMesh;
@@ -47,11 +54,13 @@ private:
     vcl::mesh_drawable leavesDrawable;
     vcl::mesh_drawable snowyLeavesDrawable;
     bool verbose;
+    float trunkRadius;
+    float branchRadius;
     static std::shared_ptr<Texture> branchTexture;
     static std::shared_ptr<Texture> leafTexture;
     static std::shared_ptr<Texture> snowTexture;
 
-    void createMeshes(vcl::vec3 &position, float &snowCoverage);
+    void createMeshes(float &snowCoverage);
 
     void createDrawables(Shaders &shaders);
 };

@@ -5,7 +5,7 @@
 #include "Object.h"
 #include "utils/Constants.h"
 
-Object::Object(bool movable) : movable(movable) {
+Object::Object(bool movable, bool shadowless) : movable(movable), shadowless(shadowless) {
     lights = {std::make_shared<vcl::light_source>(vcl::vec3(500, 0, 500), vcl::vec3(-1, 0, -1))};
 }
 
@@ -29,6 +29,10 @@ std::shared_ptr<vcl::light_source> &Object::getLight() {
 
 bool Object::isMovable() const {
     return movable;
+}
+
+bool Object::hasShadow() const {
+    return !shadowless;
 }
 
 BoundingSphere &Object::getBoundingSphere() {

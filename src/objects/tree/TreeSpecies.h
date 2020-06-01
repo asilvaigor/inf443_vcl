@@ -25,6 +25,8 @@ public:
 
     static TreeSpecies bush2();
 
+    bool shadowless; // If it is a bush, it should be shadowless.
+
     int levels{}; // >=1, Number of levels in the branches recursion.
     // 1 is only trunk, 2 is trunk with branches on it, 3 these branches will have branches etc.
     // Determines the size of all the std::vector variables below.

@@ -8,6 +8,7 @@ TreeSpecies::TreeSpecies() = default;
 
 TreeSpecies TreeSpecies::pine() {
     TreeSpecies s;
+    s.shadowless = false;
     s.levels = 2;
     s.scale = 6.0f;
     s.scaleVar = 0.5f;
@@ -53,6 +54,7 @@ TreeSpecies TreeSpecies::pine() {
 
 TreeSpecies TreeSpecies::blackTupelo() {
     TreeSpecies s;
+    s.shadowless = false;
     s.levels = 3; // Lowering to 3 to improve performance.
     s.scale = 6.0f;
     s.scaleVar = 1.0f;
@@ -89,6 +91,7 @@ TreeSpecies TreeSpecies::blackTupelo() {
 
 TreeSpecies TreeSpecies::bush1() {
     TreeSpecies s;
+    s.shadowless = false;
     s.levels = 1;
     s.scale = 0.9f;
     s.scaleVar = 0.2f;
@@ -126,6 +129,7 @@ TreeSpecies TreeSpecies::bush1() {
 
 TreeSpecies TreeSpecies::bush2() {
     TreeSpecies s;
+    s.shadowless = false;
     s.levels = 1;
     s.scale = 0.3f;
     s.scaleVar = 0.1f;

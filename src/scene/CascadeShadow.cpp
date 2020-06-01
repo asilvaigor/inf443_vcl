@@ -99,8 +99,8 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
 }
 
 void CascadeShadow::renderObject(std::shared_ptr<Object> &obj, vcl::camera_scene &camera) {
-    if (obj->getLight()->get_shadow_map_id() == lastUpdated ||
-           obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated])) {
+    if (obj->hasShadow() && (obj->getLight()->get_shadow_map_id() == lastUpdated ||
+           obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated]))) {
         // A normal object must be in the correct frustum to be rendered
         obj->setLight(lights[lastUpdated]);
         if (obj->isMovable()) {

@@ -9,8 +9,8 @@ std::shared_ptr<Texture> Tree::branchTexture = nullptr;
 std::shared_ptr<Texture> Tree::leafTexture = nullptr;
 std::shared_ptr<Texture> Tree::snowTexture = nullptr;
 
-Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species, float snowCoverage, bool verbose) :
-        Object(false), species(species) {
+Tree::Tree(Shaders &shaders, vcl::vec3 &pos, TreeSpecies &species, float snowCoverage, bool verbose) :
+        Object(false, species.shadowless), species(species), position(pos) {
     if (Tree::branchTexture == nullptr)
         branchTexture = std::make_shared<Texture>("wood");
     if (Tree::leafTexture == nullptr)
@@ -19,9 +19,14 @@ Tree::Tree(Shaders &shaders, vcl::vec3 &position, TreeSpecies &species, float sn
         snowTexture = std::make_shared<Texture>("snow");
 
     this->verbose = verbose;
-    createMeshes(position, snowCoverage);
+    createMeshes(snowCoverage);
     createDrawables(shaders);
     billboard = BillboardGenerator(shaders, this);
+
+    branchRadius = 0.5 * std::max(boundingBox.maxX - boundingBox.minX, boundingBox.maxY - boundingBox.minY);
+    if (species.nBranches[0] == 1)
+        trunkRadius = (species.length[0] + species.lengthVar[0]) * species.ratio;
+    else trunkRadius = branchRadius;
 }
 
 void Tree::drawMesh(vcl::camera_scene &camera, float) {
@@ -47,7 +52,19 @@ void Tree::drawMesh(vcl::camera_scene &camera, float) {
     }
 }
 
-void Tree::createMeshes(vcl::vec3 &position, float &snowCoverage) {
+vcl::vec3 &Tree::getPosition() {
+    return position;
+}
+
+float &Tree::getTrunkRadius() {
+    return trunkRadius;
+}
+
+float &Tree::getBranchRadius() {
+    return branchRadius;
+}
+
+void Tree::createMeshes(float &snowCoverage) {
     std::vector<vcl::vec3 *> vertices;
     int nBranches = species.nBranches[0] + (int) (Branch::rand.rand() * species.nBranchesVar[0]);
     for (int i = 0; i < nBranches; i++) {

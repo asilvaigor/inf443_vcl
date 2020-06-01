@@ -48,14 +48,15 @@ public:
      */
     float relativeSize(vcl::camera_scene &camera);
 
-private:
-    bool empty;
     float minX;
     float maxX;
     float minY;
     float maxY;
     float minZ;
     float maxZ;
+
+private:
+    bool empty;
 };
 
 
