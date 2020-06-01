@@ -12,7 +12,7 @@ class Bird : public Object {
 public:
     Bird(Shaders &shaders, vcl::vec3 pos, float scale, vcl::vec3 speed = {0, 0, 1});
 
-    void drawMesh(vcl::camera_scene &camera) override;
+    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
 
     vcl::vec3 getSpeed();
 
@@ -35,6 +35,7 @@ private:
     vcl::vec3 dp;
     vcl::vec3 ndp;
 
+    vcl::fbx_model bird;
     vcl::mesh_drawable mesh;
 };
 
