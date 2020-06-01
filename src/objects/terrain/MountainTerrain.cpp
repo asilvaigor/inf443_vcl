@@ -10,8 +10,6 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize, Wat
     //TODO REfactor this as a final terrain class
 
     // Initializing internal variables
-    light2 = std::make_shared<vcl::light_source>();
-    light3 = std::make_shared<vcl::light_source>();
     this->xSize = xSize;
     this->ySize = ySize;
 
@@ -48,27 +46,11 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize, Wat
     terrain.shader = shaders["terrain_mesh"];
 }
 
-void MountainTerrain::drawMesh(vcl::camera_scene &camera) {
-    terrain.uniform.light = light;
+void MountainTerrain::drawMesh(vcl::camera_scene &camera, float) {
+    terrain.uniform.lights = lights;
+    terrain.uniform.current_light = currentLight;
     terrainTexture->bind();
-    terrain.uniform.light2 = light2;
-    terrain.uniform.light3 = light3;
     vcl::draw(terrain, camera);
-}
-
-void MountainTerrain::setLight(std::shared_ptr<vcl::light_source> &light, int idx) {
-    switch (idx) {
-        case 1:
-            this->light = light;
-            break;
-        case 2:
-            this->light2 = light;
-            break;
-        default:
-            this->light3 = light;
-            break;
-    }
-    terrain.uniform.current_light = idx;
 }
 
 float MountainTerrain::evaluate_terrain_z(const float u, const float v) {
@@ -192,4 +174,41 @@ float &MountainTerrain::getYSize() {
     return ySize;
 }
 
+vcl::vec3 MountainTerrain::normal(float x, float y) {
+    x = x / xSize + 0.5f;
+    y = y / ySize + 0.5f;
+    const int ptControl = 1;
+    const int nPts = (2 * ptControl + 1) * (2 * ptControl + 1);
+    const float step = 0.1f;
+    const float bigStep = 1.0f;
+    const float bigStepNorm = bigStep / xSize;
+    const float stepNorm = step / xSize;
 
+    // First point
+    float z1 = 0.0f;
+    for (int i = -ptControl; i <= ptControl; i++)
+        for (int j = -ptControl; j <= ptControl; j++)
+            z1 += evaluate_terrain_z(x + stepNorm * (float) i, y + stepNorm * (float) j);
+    z1 /= nPts;
+
+    // Second point
+    x += bigStepNorm;
+    float z2 = 0.0f;
+    for (int i = -ptControl; i <= ptControl; i++)
+        for (int j = -ptControl; j <= ptControl; j++)
+            z2 += evaluate_terrain_z(x + stepNorm * (float) i, y + stepNorm * (float) j);
+    z2 /= nPts;
+
+    // Third point
+    x -= bigStepNorm;
+    y += bigStepNorm;
+    float z3 = 0.0f;
+    for (int i = -ptControl; i <= ptControl; i++)
+        for (int j = -ptControl; j <= ptControl; j++)
+            z3 += evaluate_terrain_z(x + stepNorm * (float) i, y + stepNorm * (float) j);
+    z3 /= nPts;
+
+    vcl::vec3 px(bigStep, 0.0f, z2 - z1);
+    vcl::vec3 py(0.0f, bigStep, z3 - z1);
+    return vcl::cross(px, py).normalized();
+}

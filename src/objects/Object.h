@@ -16,19 +16,20 @@
  */
 class Object {
 public:
-    Object(bool movable);
+    explicit Object(bool movable);
 
     /**
      * Calls vcl::draw to draw the object in the scene.
      * @param camera
      */
-    void draw(vcl::camera_scene &camera);
+    void draw(vcl::camera_scene &camera, float time = 0.0f);
 
     /**
      * Draws the object's mesh in screen.
      * @param camera
+     * @param time
      */
-    virtual void drawMesh(vcl::camera_scene &camera) = 0;
+    virtual void drawMesh(vcl::camera_scene &camera, float time = 0.0f) = 0;
 
     /**
      * Sets the light object that the object will be rendered with.
@@ -67,7 +68,7 @@ public:
 
 protected:
     const bool movable;
-    std::shared_ptr<vcl::light_source> light;
+    std::vector<std::shared_ptr<vcl::light_source>> lights;
     BoundingSphere boundingSphere;
     BoundingBox boundingBox;
     BillboardGenerator billboard;

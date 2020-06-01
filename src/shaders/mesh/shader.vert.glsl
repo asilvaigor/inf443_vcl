@@ -4,6 +4,8 @@ layout (location = 0) in vec4 position;
 layout (location = 1) in vec4 normal;
 layout (location = 2) in vec4 color;
 layout (location = 3) in vec2 texture_uv;
+layout (location = 4) in ivec4 bone_ids;
+layout (location = 5) in vec4 bone_weights;
 
 out struct fragment_data
 {
@@ -27,12 +29,29 @@ uniform mat4 view;
 // perspective matrix
 uniform mat4 perspective;
 
-uniform mat4 light_matrix;
+uniform mat4 light_matrices[1];
 
+uniform bool is_skinned;
+uniform mat4 bones[50];
 
 
 void main()
 {
+    vec4 true_normal;
+    vec4 true_pos;
+    if (is_skinned) {
+        mat4 bone_transform = bones[bone_ids[0]] * bone_weights[0];
+        bone_transform     += bones[bone_ids[1]] * bone_weights[1];
+        bone_transform     += bones[bone_ids[2]] * bone_weights[2];
+        bone_transform     += bones[bone_ids[3]] * bone_weights[3];
+
+        true_normal = bone_transform * vec4(normal.xyz, 0);
+        true_pos = bone_transform * position;
+    } else {
+        true_normal = normal;
+        true_pos = position;
+    }
+
     // scaling matrix
     mat4 S = mat4(scaling*scaling_axis.x,0.0,0.0,0.0, 0.0,scaling*scaling_axis.y,0.0,0.0, 0.0,0.0,scaling*scaling_axis.z,0.0, 0.0,0.0,0.0,1.0);
     // 4x4 rotation matrix
@@ -44,10 +63,10 @@ void main()
     fragment.color = color;
     fragment.texture_uv = texture_uv;
 
-    fragment.normal = R*normal;
-    vec4 position_transformed = R*S*position + T;
+    fragment.normal = R*true_normal;
+    vec4 position_transformed = R*S*true_pos + T;
 
-    fragment.light_ref_pos = light_matrix * position_transformed;
+    fragment.light_ref_pos = light_matrices[0] * position_transformed;
     fragment.position = position_transformed;
     gl_Position = perspective * view * position_transformed;
 }

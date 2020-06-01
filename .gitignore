@@ -6,3 +6,4 @@ cmake-build-debug/
 imgui.ini
 *.DS_Store
 *.psd
+*.blend1

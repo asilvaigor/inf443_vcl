@@ -5,9 +5,6 @@
 #include "FlatSurface.h"
 
 FlatSurface::FlatSurface(Shaders &shaders) : BaseTerrain(), snowTexture("snow_ground") {
-    light2 = std::make_shared<vcl::light_source>();
-    light3 = std::make_shared<vcl::light_source>();
-
     float size = 140.0;
     vcl::vec3 p00 = {-size, -size, 0};
     vcl::vec3 p10 = {size, -size, 0};
@@ -24,25 +21,17 @@ FlatSurface::FlatSurface(Shaders &shaders) : BaseTerrain(), snowTexture("snow_gr
     terrain.uniform.shading = {0.5, 0.6, 0.1, 32};
 }
 
-void FlatSurface::drawMesh(vcl::camera_scene &camera) {
-    terrain.uniform.light = light;
-    terrain.uniform.light2 = light2;
-    terrain.uniform.light3 = light3;
+void FlatSurface::drawMesh(vcl::camera_scene &camera, float) {
+    terrain.uniform.lights = lights;
+    terrain.uniform.current_light = currentLight;
     snowTexture.bind();
     vcl::draw(terrain, camera);
 }
 
-void FlatSurface::setLight(std::shared_ptr<vcl::light_source> &light, int idx) {
-    switch (idx) {
-        case 1:
-            this->light = light;
-            break;
-        case 2:
-            this->light2 = light;
-            break;
-        default:
-            this->light3 = light;
-            break;
-    }
-    terrain.uniform.current_light = idx;
+float FlatSurface::getTerrainHeight(float x, float y) {
+    return 0.0f;
+}
+
+vcl::vec3 FlatSurface::normal(float, float) {
+    return {0, 0, 1};
 }

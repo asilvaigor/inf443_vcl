@@ -22,6 +22,20 @@ BoundingSphere::BoundingSphere(vcl::mesh &mesh) {
     calculate(points);
 }
 
+BoundingSphere::BoundingSphere(std::vector<vcl::mesh> &meshes) {
+    int nVertex = 0;
+    for (auto &m : meshes)
+        nVertex += m.position.size();
+
+    std::vector<vcl::vec3 *> points;
+    points.reserve(nVertex);
+    for (auto &m : meshes)
+        for (auto &p : m.position)
+            points.push_back(&p);
+
+    calculate(points);
+}
+
 BoundingSphere::BoundingSphere(std::vector<vcl::vec3 *> &points) {
     calculate(points);
 }
@@ -81,7 +95,7 @@ void BoundingSphere::calculate(std::vector<vcl::vec3 *> &points) {
 
     // Iterating: if a point is not covered, create another sphere covering the current one and the point
     for (auto *p : points)
-        if (pt.dist(*p) > radius + FLT_EPSILON) {
+        if (pt.dist(*p) > radius + EPSILON) {
             vcl::vec3 dir = (pt - *p).normalized();
             vcl::vec3 p2 = pt + radius * dir;
             pt = 0.5f * (p2 + *p);

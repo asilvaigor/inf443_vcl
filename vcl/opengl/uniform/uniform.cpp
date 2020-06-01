@@ -54,6 +54,11 @@ void uniform(GLuint shader, const std::string& name, const mat3& m)
     glUniformMatrix3fv(location, 1, GL_TRUE, ptr);
 }
 
+void uniform(GLuint shader, const std::string& name, const mat4* mv, const int n) {
+    const GLint location = glGetUniformLocation(shader, name.c_str());
+    const float* ptr = &mv[0][0];
+    glUniformMatrix4fv(location, n, GL_TRUE, ptr);
+}
 
 
 }

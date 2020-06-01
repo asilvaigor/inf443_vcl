@@ -9,7 +9,7 @@ CoordinateMarker::CoordinateMarker(Shaders &shaders, vcl::vec3 position) : Objec
     marker.shader = shaders["mesh"];
 }
 
-void CoordinateMarker::drawMesh(vcl::camera_scene &camera) {
+void CoordinateMarker::drawMesh(vcl::camera_scene &camera, float) {
     vcl::draw(marker, camera);
 }
 

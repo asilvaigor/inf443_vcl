@@ -55,7 +55,9 @@ void Scene::display() {
 }
 
 void Scene::updateScene() {
-    cascadeShadow->update(movableObjects, stillObjects, gui, shaders);
+    float time = glfwGetTime();
+
+    cascadeShadow->update(movableObjects, stillObjects, gui, shaders, time);
     shaders->override("wireframe", gui->showVertices());
     if (gui->showGrid())
         grid->draw(gui->getCamera());
@@ -77,7 +79,7 @@ void Scene::updateScene() {
         whiteTexture->bind();
     }
     for (auto &obj : movableObjects) {
-        obj->draw(gui->getCamera());
+        obj->draw(gui->getCamera(), time);
         whiteTexture->bind();
     }
 }

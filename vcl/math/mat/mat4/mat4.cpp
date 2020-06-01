@@ -103,6 +103,14 @@ mat4 mat4::from_translation(const vcl::vec3& t)
         0,0,0,1
     };
 }
+mat4 mat4::from_assimp(const aiMatrix4x4& m) {
+    return {
+        m.a1, m.a2, m.a3, m.a4,
+        m.b1, m.b2, m.b3, m.b4,
+        m.c1, m.c2, m.c3, m.c4,
+        m.d1, m.d2, m.d3, m.d4
+    };
+}
 
 
 
@@ -335,6 +343,26 @@ float& mat4::operator()(std::size_t index1, std::size_t index2)
 	abort();
 }
 
+aiMatrix4x4 mat4::operator*(aiMatrix4x4 &m) const {
+    return {
+            m.a1 * xx + m.b1 * xy + m.c1 * xz + m.d1 * xw,
+            m.a2 * xx + m.b2 * xy + m.c2 * xz + m.d2 * xw,
+            m.a3 * xx + m.b3 * xy + m.c3 * xz + m.d3 * xw,
+            m.a4 * xx + m.b4 * xy + m.c4 * xz + m.d4 * xw,
+            m.a1 * yx + m.b1 * yy + m.c1 * yz + m.d1 * yw,
+            m.a2 * yx + m.b2 * yy + m.c2 * yz + m.d2 * yw,
+            m.a3 * yx + m.b3 * yy + m.c3 * yz + m.d3 * yw,
+            m.a4 * yx + m.b4 * yy + m.c4 * yz + m.d4 * yw,
+            m.a1 * zx + m.b1 * zy + m.c1 * zz + m.d1 * zw,
+            m.a2 * zx + m.b2 * zy + m.c2 * zz + m.d2 * zw,
+            m.a3 * zx + m.b3 * zy + m.c3 * zz + m.d3 * zw,
+            m.a4 * zx + m.b4 * zy + m.c4 * zz + m.d4 * zw,
+            m.a1 * wx + m.b1 * wy + m.c1 * wz + m.d1 * ww,
+            m.a2 * wx + m.b2 * wy + m.c2 * wz + m.d2 * ww,
+            m.a3 * wx + m.b3 * wy + m.c3 * wz + m.d3 * ww,
+            m.a4 * wx + m.b4 * wy + m.c4 * wz + m.d4 * ww
+    };
+}
 
 vcl::mat3 mat4::mat3() const
 {

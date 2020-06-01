@@ -7,7 +7,6 @@ layout (line_strip, max_vertices=4) out;
 in struct vertex_data
 {
     vec4 position;
-    vec4 normal;
 } vertex[];
 
 

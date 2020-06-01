@@ -120,7 +120,7 @@ void Branch::generate() {
 
     // Starting with a random rotation
     float rotationAngle = 0.0f;
-    if (species.rotateAngle[std::min(species.levels - 1, depth + 1)] > FLT_EPSILON)
+    if (species.rotateAngle[std::min(species.levels - 1, depth + 1)] > EPSILON)
         rotationAngle = rand.rand(0, (float) (2 * M_PI));
 
     // Iterating through the segments in the bezier spline
@@ -354,7 +354,7 @@ float Branch::calculateCurveAngle() {
 
 float Branch::calculateDownAngle(float stemOffset) {
     float angle;
-    if (species.downAngleVar[depth] >= FLT_EPSILON) {
+    if (species.downAngleVar[depth] >= EPSILON) {
         angle = species.downAngle[depth] + rand.rand() * species.downAngleVar[depth];
     } else {
         angle = species.downAngle[depth] + species.downAngleVar[depth] *
@@ -369,7 +369,7 @@ float Branch::calculateRotateAngle(float prevAngle, int d) {
     if (d == -1)
         d = depth;
     float rotateAngle;
-    if (species.rotateAngle[d] >= FLT_EPSILON) {
+    if (species.rotateAngle[d] >= EPSILON) {
         rotateAngle = prevAngle + species.rotateAngle[d] + rand.rand() * species.rotateAngleVar[d];
     } else {
         rotateAngle = prevAngle * ((float) M_PI + species.rotateAngleVar[d] +

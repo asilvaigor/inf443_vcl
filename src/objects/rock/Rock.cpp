@@ -45,11 +45,11 @@ Rock::Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellis
     }
 }
 
-void Rock::drawMesh(vcl::camera_scene &camera) {
-    rock.uniform.light = light;
+void Rock::drawMesh(vcl::camera_scene &camera, float) {
+    rock.uniform.lights = lights;
     rockTexture->bind();
     vcl::draw(rock, camera);
-    snow.uniform.light = light;
+    snow.uniform.lights = lights;
     snowTexture->bind();
     vcl::draw(snow, camera);
 }
@@ -65,7 +65,7 @@ void Rock::calculateMesh(vcl::vec3 &base, vcl::vec3 &ellipsoidAxisSize) {
         float noise;
 
         noise = vcl::perlin(scaling * p.x, scaling * p.y, octave, persistency);
-        if (p.z - base.z > FLT_EPSILON)
+        if (p.z - base.z > EPSILON)
             p.z += height * noise;
         noise = vcl::perlin(scaling * p.x, scaling * p.y, octave, persistency);
         p.x += (p.x - base.x) > 0 ? height * noise : -height * noise;

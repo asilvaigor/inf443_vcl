@@ -23,9 +23,9 @@ public:
     /**
      * Draws the grid in opengl;
      * @param camera
-     * @param light
+     * @param time
      */
-    void drawMesh(vcl::camera_scene &camera) override;
+    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
 
 private:
     vcl::mesh_drawable grid;

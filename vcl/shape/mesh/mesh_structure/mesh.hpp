@@ -31,7 +31,7 @@ struct mesh
     buffer<uint3> connectivity;
 
     /** Fill all per-vertex attributes with default values if they are empty (ex. color to white, and 0 for texture-uv)*/
-    void fill_empty_fields();
+    virtual void fill_empty_fields();
     /** Add a mesh structure to the current one (concatenate per-vertex attributes, and add triangle indices accordingly)*/
     void push_back(const mesh& mesh_to_add);
 

@@ -49,6 +49,11 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
 
 void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id)
 {
+    load_data(drawable, camera, shader, texture_id);
+    vcl::draw(drawable.data); opengl_debug();
+}
+
+void load_data(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id) {
     if (mesh_drawable::shaderOverride != (GLuint) 0)
         shader = mesh_drawable::shaderOverride;
 
@@ -70,20 +75,20 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
 
     // Associating textures
     auto texture_sampler = glGetUniformLocation(shader, "texture_sampler");
-    auto shadow_map_still_1 = glGetUniformLocation(shader, "shadow_map_still_1");
-    auto shadow_map_movable_1 = glGetUniformLocation(shader, "shadow_map_movable_1");
-    auto shadow_map_still_2 = glGetUniformLocation(shader, "shadow_map_still_2");
-    auto shadow_map_movable_2 = glGetUniformLocation(shader, "shadow_map_movable_2");
-    auto shadow_map_still_3 = glGetUniformLocation(shader, "shadow_map_still_3");
-    auto shadow_map_movable_3 = glGetUniformLocation(shader, "shadow_map_movable_3");
+    auto shadow_map_0 = glGetUniformLocation(shader, "shadow_map_0");
+    auto shadow_map_1 = glGetUniformLocation(shader, "shadow_map_1");
+    auto shadow_map_2 = glGetUniformLocation(shader, "shadow_map_2");
+    auto shadow_map_3 = glGetUniformLocation(shader, "shadow_map_3");
+    auto shadow_map_4 = glGetUniformLocation(shader, "shadow_map_4");
+    auto shadow_map_5 = glGetUniformLocation(shader, "shadow_map_5");
     glUseProgram(shader);
     glUniform1i(texture_sampler, 0);
-    glUniform1i(shadow_map_still_1, 1);
-    glUniform1i(shadow_map_movable_1, 2);
-    glUniform1i(shadow_map_still_2, 3);
-    glUniform1i(shadow_map_movable_2, 4);
-    glUniform1i(shadow_map_still_3, 5);
-    glUniform1i(shadow_map_movable_3, 6);
+    glUniform1i(shadow_map_0, 1);
+    glUniform1i(shadow_map_1, 2);
+    glUniform1i(shadow_map_2, 3);
+    glUniform1i(shadow_map_3, 4);
+    glUniform1i(shadow_map_4, 5);
+    glUniform1i(shadow_map_5, 6);
 
     // Bind texture only if id != 0
     if(texture_id!=0) {
@@ -108,13 +113,26 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
     uniform(shader, "specular", drawable.uniform.shading.specular);    opengl_debug();
     uniform(shader, "specular_exponent", drawable.uniform.shading.specular_exponent); opengl_debug();
 
-    uniform(shader, "current_light", drawable.uniform.current_light);  opengl_debug();
-    uniform(shader, "light_matrix", drawable.uniform.light->get_matrix()); opengl_debug();
-    uniform(shader, "light_matrix_2", drawable.uniform.light2->get_matrix()); opengl_debug();
-    uniform(shader, "light_matrix_3", drawable.uniform.light3->get_matrix()); opengl_debug();
-    uniform(shader, "light_pos", drawable.uniform.light->get_pos());    opengl_debug();
-    uniform(shader, "light_color", drawable.uniform.light->get_color()); opengl_debug();
-    uniform(shader, "shadow_map_id", drawable.uniform.light->get_shadow_map_id()); opengl_debug();
+    if (drawable.uniform.lights.size() == 1)
+        uniform(shader, "shadow_map_id", drawable.uniform.lights[0]->get_shadow_map_id()); opengl_debug();
+
+    std::vector<mat4> v;
+    if (drawable.uniform.lights.size() == 1 || mesh_drawable::shaderOverride != (GLuint) 0) {
+        v = {drawable.uniform.lights[drawable.uniform.current_light]->get_matrix()};
+        uniform(shader, "light_matrices", v.data(), v.size()); opengl_debug();
+    } else {
+        v.reserve(drawable.uniform.lights.size());
+        for (auto &l : drawable.uniform.lights)
+            v.push_back(l->get_matrix());
+        uniform(shader, "light_matrices", v.data(), v.size()); opengl_debug();
+    }
+
+    uniform(shader, "light_pos", drawable.uniform.lights[0]->get_pos());    opengl_debug();
+    uniform(shader, "light_color", drawable.uniform.lights[0]->get_color()); opengl_debug();
+
+    uniform(shader, "is_skinned", !drawable.uniform.bones.empty()); opengl_debug();
+    if (!drawable.uniform.bones.empty())
+        uniform(shader, "bones", drawable.uniform.bones.data(), drawable.uniform.bones.size()); opengl_debug();
 
     vcl::draw(drawable.data); opengl_debug();
 

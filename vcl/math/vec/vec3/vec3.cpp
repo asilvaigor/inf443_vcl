@@ -13,6 +13,10 @@ vec3::buffer_stack(float x_arg, float y_arg, float z_arg)
     :x(x_arg),y(y_arg),z(z_arg)
 {}
 
+vec3 vec3::from_assimp(const aiVector3D & v) {
+    return {v.x, v.y, v.z};
+}
+
 const float& vec3::operator[](std::size_t index) const
 {
     switch(index) {

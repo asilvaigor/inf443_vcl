@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vcl/containers/buffer_stack/buffer_stack.hpp"
+#include "third_party/assimp/include/vector3.h"
 #include <iostream>
 
 namespace vcl {
@@ -25,6 +26,8 @@ template <> struct buffer_stack<float, 3> {
      * vec3(x,y,z), or vec3{x,y,z}, or vec3 p = {x,y,z}; */
 	buffer_stack<float, 3>(float x,float y,float z);
     ///@}
+
+    static vec3 from_assimp(const aiVector3D &v);
 
     /** Return 3 */
     size_t size() const;

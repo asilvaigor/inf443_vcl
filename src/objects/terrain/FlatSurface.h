@@ -22,15 +22,25 @@ public:
     /**
      * Draws the surface in opengl;
      * @param camera
+     * @param time
      */
-    void drawMesh(vcl::camera_scene &camera) override;
+    void drawMesh(vcl::camera_scene &camera , float time = 0.0f) override;
 
     /**
-     * Sets a new light to the terrain.
-     * @param light
-     * @param idx
+     * Returns the height of the terrain at a given point.
+     * @param x Must be within terrain boundaries.
+     * @param y Must be within terrain boundaries.
+     * @return z value of the terrain.
      */
-    void setLight(std::shared_ptr<vcl::light_source> &light, int idx) override;
+    float getTerrainHeight(float x, float y) override;
+
+    /**
+     * Calculates the vector normal to the terrain's ground in a given spot.
+     * @param x
+     * @param y
+     * @return Normal vector.
+     */
+    vcl::vec3 normal(float x, float y);
 
 private:
     const Texture snowTexture;

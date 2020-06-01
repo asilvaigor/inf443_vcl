@@ -4,6 +4,11 @@
 
 #include "BaseTerrain.h"
 
-BaseTerrain::BaseTerrain() : Object(false){}
+BaseTerrain::BaseTerrain() : Object(false) {}
 
 BaseTerrain::~BaseTerrain() {}
+
+void BaseTerrain::setLight(std::vector<std::shared_ptr<vcl::light_source>> &lights, int currentLight) {
+    this->lights = lights;
+    this->currentLight = currentLight;
+}

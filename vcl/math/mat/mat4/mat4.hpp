@@ -2,6 +2,9 @@
 
 #include "../mat/mat.hpp"
 #include "../../vec/vec4/vec4.hpp"
+#include "third_party/assimp/include/mesh.h"
+#include "third_party/assimp/include/scene.h"
+#include "third_party/assimp/include/Importer.hpp"
 
 
 
@@ -69,6 +72,8 @@ template <> struct mat<4,4> {
      *  */
     static mat4 from_translation(const vcl::vec3& t);
 
+    static mat4 from_assimp(const aiMatrix4x4& m);
+
     vec4 row(std::size_t offset) const;
     vec4 col(std::size_t offset) const;
     mat4& set_row(std::size_t offset, const vec4& v);
@@ -81,6 +86,7 @@ template <> struct mat<4,4> {
     const float& operator()(std::size_t index1, std::size_t index2) const;
     float& operator()(std::size_t index1, std::size_t index2);
 
+    aiMatrix4x4 operator*(aiMatrix4x4 &m) const;
 
     vcl::mat3 mat3() const;
     mat4& set_mat3(const vcl::mat3& m);

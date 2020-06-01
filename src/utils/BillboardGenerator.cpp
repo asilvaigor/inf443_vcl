@@ -62,10 +62,10 @@ void BillboardGenerator::draw(vcl::camera_scene &camera, std::shared_ptr<vcl::li
         glDepthMask(false);
 
     glBindTexture(GL_TEXTURE_2D, textures[0]);
-    quad1.uniform.light = light;
+    quad1.uniform.lights = {light};
     vcl::draw(quad1, camera);
     glBindTexture(GL_TEXTURE_2D, textures[1]);
-    quad2.uniform.light = light;
+    quad2.uniform.lights = {light};
     vcl::draw(quad2, camera);
 
     if (!shaders->isOverridden())
