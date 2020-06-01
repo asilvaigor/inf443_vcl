@@ -164,6 +164,8 @@ public:
 
     vec3 toEuler();
 
+    mat3 getRotationMatrix();
+
 private:
     // [w, (x, y, z)]
     float w, x, y, z;

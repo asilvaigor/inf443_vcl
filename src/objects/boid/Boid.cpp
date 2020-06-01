@@ -83,22 +83,6 @@ void Boid::birdLimitSpeed(Bird *bird) {
     } else if (speed < speedMinLimit){
         bird->setFutureSpeed(bird->getFutureSpeed() / speed * speedMinLimit);
     }
-
-//    vcl::vec3 newSpeed = bird->getFutureSpeed().normalized();
-//    vcl::vec3 currentSpeed = bird->getSpeed().normalized();
-//
-//    float angle = asin(vcl::cross(newSpeed, currentSpeed).norm());
-//    float dangle = 0.05;
-
-//    if (fabs(angle) > dangle){
-//        vcl::mat3  rotation = vcl::rotation_from_axis_angle_mat3(vcl::cross(newSpeed, currentSpeed), 0.0005);
-//        newSpeed = rotation*newSpeed;
-//        bird->setFutureSpeed(newSpeed*bird->getFutureSpeed().norm());
-////        std::cout << "here";
-//    }
-//    if (vcl::dot(newSpeed, currentSpeed) <= 0)
-//        std::cout << "dot < 0\n";
-
 }
 
 void Boid::birdAvoidOthers(Bird *bird) {

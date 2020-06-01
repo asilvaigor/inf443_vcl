@@ -34,7 +34,7 @@ int main() {
 
     // Adding boid to the scene
     auto boid = std::static_pointer_cast<Object>(std::make_shared<Boid>
-            (scene.getShaders(), 100, 0, 100, 0, 100, 0, 100));
+            (scene.getShaders(), 10, 0, 100, 0, 100, 0, 100));
 
     scene.addObject(boid);
 

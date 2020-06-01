@@ -55,7 +55,7 @@ int main() {
 
     // Adding boid to the scene
     auto boid = std::static_pointer_cast<Object>(std::make_shared<Boid>
-                                                         (scene.getShaders(), 200, -140, 140, -140, 140, -10, 100,
+                                                         (scene.getShaders(), 20, -140, 140, -140, 140, -10, 100,
                                                                  terrainPtr));
 
     scene.addObject(boid);

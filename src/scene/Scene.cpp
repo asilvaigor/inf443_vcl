@@ -78,7 +78,7 @@ void Scene::updateScene() {
         else if (b != nullptr){
             b->updateBirds();
             for (auto &o : b->getObjects())
-                o->draw(gui->getCamera());
+                o->draw(gui->getCamera(), time);
         }
         else obj->draw(gui->getCamera());
         whiteTexture->bind();

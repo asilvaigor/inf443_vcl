@@ -13,7 +13,7 @@ int main() {
     vcl::camera_scene &camera = scene.getGui()->getCamera();
 
     auto bird = std::static_pointer_cast<Object>(std::make_shared<Bird>
-            (scene.getShaders(), vcl::vec3(0, 0, 0), 1, vcl::vec3(-1,-1,-1)));
+            (scene.getShaders(), vcl::vec3(0, 0, 0), 1, vcl::vec3(-1,-1,0)));
 
     scene.addObject(bird);
 

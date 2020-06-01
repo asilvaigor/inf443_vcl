@@ -8,6 +8,7 @@
 
 #include <math.h>
 #include "vcl/math/vec/vec.hpp"
+#include "vcl/math/mat/mat.hpp"
 #include "quaternion.hpp"
 
 namespace vcl {
@@ -261,5 +262,15 @@ vec3 quaternion::toEuler() {
 
     return {roll, pitch, yaw};
 }
+
+mat3 quaternion::getRotationMatrix() {
+        float norm = this->norm();
+        float x = this->x/norm;
+        float y = this->y/norm;
+        float z = this->z/norm;
+        return {w*w+x*x-y*y-z*z, 2*x*y-2*w*z, 2*x*z+2*w*y,
+                2*x*y+2*w*z, w*w+y*y-x*x-z*z, 2*y*z-2*w*x,
+                2*x*z-2*w*y, 2*y*z+2*w*x, w*w+z*z-x*x-y*y};
+    }
 
 }
