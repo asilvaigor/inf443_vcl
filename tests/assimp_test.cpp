@@ -17,7 +17,7 @@ void printNodes(aiNode* n) {
 
 int main() {
     Assimp::Importer Importer;
-    std::string file("../src/assets/models/bear.fbx");
+    std::string file("../src/assets/models/bird.fbx");
 
     const aiScene *pScene = Importer.ReadFile(file.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals |
                                                             aiProcess_FlipUVs | aiProcess_FindDegenerates);

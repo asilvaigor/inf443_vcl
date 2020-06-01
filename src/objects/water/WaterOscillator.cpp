@@ -39,10 +39,10 @@ void WaterOscillator::setShaders(Shaders &shaders) {
     meshDrawable.shader = shaders["mesh"];
 }
 
-void WaterOscillator::setLight(std::shared_ptr<vcl::light_source> light) {
+void WaterOscillator::setLights(std::vector<std::shared_ptr<vcl::light_source>> lights) {
     // Must be on debug mode
     assert(debug);
-    meshDrawable.uniform.light = std::move(light);
+    meshDrawable.uniform.lights = std::move(lights);
 }
 
 vcl::mesh_drawable &WaterOscillator::getMesh() {

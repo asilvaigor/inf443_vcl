@@ -35,7 +35,7 @@ Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscill
     waterMeshDrawable.uniform.color_alpha = 0.9;
 }
 
-void Water::drawMesh(vcl::camera_scene &camera) {
+void Water::drawMesh(vcl::camera_scene &camera, float time) {
     // TODO fix this mess
 
     // Enable use of alpha component as color blending for transparent elements
@@ -48,7 +48,7 @@ void Water::drawMesh(vcl::camera_scene &camera) {
     //  - They are supposed to be display from furthest to nearest elements
     glDepthMask(false);
 
-    waterMeshDrawable.uniform.light = light;
+    waterMeshDrawable.uniform.lights = lights;
 
     // Updating animation
     std::chrono::duration<double> duration = std::chrono::system_clock::now() - timer;
@@ -71,7 +71,7 @@ void Water::drawMesh(vcl::camera_scene &camera) {
     // Drawing oscillators
     for (auto& oscillator: oscillators){
         if (oscillator.getDebugState()){
-            oscillator.setLight(light);
+            oscillator.setLights(lights);
             vcl::draw(oscillator.getMesh(), camera);
         }
     }

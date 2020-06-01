@@ -4,20 +4,28 @@
 
 #include "Bird.h"
 
-Bird::Bird(Shaders &shaders, vcl::vec3 pos, float scale, vcl::vec3 speed) : Object(true), p(pos), dp(speed) {
+Bird::Bird(Shaders &shaders, vcl::vec3 pos, float scale, vcl::vec3 speed) : Object(true), p(pos), dp(speed),
+    bird("../src/assets/models/bird.fbx", shaders["mesh"]){
+    bird.set_animation("Take 001");
     mesh = vcl::mesh_primitive_cone();
     mesh.shader = shaders["mesh"];
     mesh.uniform.transform.scaling = scale;
 }
 
-void Bird::drawMesh(vcl::camera_scene &camera) {
+void Bird::drawMesh(vcl::camera_scene &camera, float time) {
+    bird.set_light(lights[0]);
+//    auto transform = updateTransform(time);
+//    bear.transform(transform);
+    bird.draw(camera, time);
+//    lastTime = time;
+    
     // Adjusting mesh rotation and angle
-    mesh.uniform.light = light;
+    mesh.uniform.lights = lights;
     mesh.uniform.transform.rotation = vcl::rotation_between_vector_mat3({0, 0, 1}, dp);
     mesh.uniform.transform.translation = p;
     ndp = dp;
 
-    vcl::draw(mesh, camera);
+//    vcl::draw(mesh, camera);
 }
 
 vcl::vec3 Bird::getSpeed() {

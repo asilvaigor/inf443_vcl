@@ -27,7 +27,7 @@ Boid::Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, 
     timer = std::chrono::system_clock::now();
 }
 
-void Boid::drawMesh(vcl::camera_scene &camera) {
+void Boid::drawMesh(vcl::camera_scene &camera, float time) {
     throw std::invalid_argument("Boid drawMesh should not be called because of bounding spheres. "
                                 "Draw each of the objects separately.");
 }

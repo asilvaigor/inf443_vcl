@@ -34,6 +34,11 @@ float fbx_model::draw(vcl::camera_scene &camera, float time) {
         updateAnimationTime(time);
     }
 
+//    std::cout << animation_map[cur_animation]->mDuration << "\n";
+//    std::cout << animation_map[cur_animation]->mTicksPerSecond << "\n";
+//    std::cout << animation_time << "\n";
+//    std::cout << node_anim->mScalingKeys[scaling_idx].mTime;
+
     last_time = time;
     if (!cur_animation.empty())
         return (float) (animation_time / animation_map[cur_animation]->mDuration);
@@ -178,6 +183,7 @@ void fbx_model::updateAnimationTime(float &time) {
 }
 
 aiVector3D fbx_model::calc_interpolated_scaling(const aiNodeAnim *node_anim) const {
+
     if (node_anim->mNumScalingKeys == 1)
         return node_anim->mScalingKeys[0].mValue;
 

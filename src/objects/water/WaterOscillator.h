@@ -19,7 +19,7 @@ public:
 
     void setShaders(Shaders& shaders);
 
-    void setLight(std::shared_ptr<vcl::light_source> light);
+    void setLights(std::vector<std::shared_ptr<vcl::light_source>> lights);
 
     float getCharge();
 

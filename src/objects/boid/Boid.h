@@ -15,7 +15,7 @@ public:
     Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, float maxY, float minZ, float maxZ,
          std::shared_ptr<MountainTerrain> terrain = nullptr);
 
-    void drawMesh(vcl::camera_scene &camera) override;
+    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
 
     void updateBirds();
 
@@ -41,7 +41,7 @@ private:
     std::chrono::time_point<std::chrono::system_clock> timer;
 
     // TODO do not hardcode these variables
-    const float centeringFactor = 0.0001f;
+    const float centeringFactor = 0.00005f;
     const float visualRange = 10.0f;
 
     const float minDistance = 2.0f;
