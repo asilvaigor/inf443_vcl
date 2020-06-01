@@ -36,7 +36,8 @@ private:
     vcl::vec3 ndp;
 
     vcl::fbx_model bird;
-    vcl::mesh_drawable mesh;
+
+    static std::vector<GLuint> textures;
 };
 
 

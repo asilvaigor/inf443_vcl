@@ -2,14 +2,19 @@
 // Created by Aloysio Galvão Lopes on 2020-05-30.
 //
 
+#include "utils/Texture.h"
 #include "Bird.h"
 
+std::vector<GLuint> Bird::textures;
+
 Bird::Bird(Shaders &shaders, vcl::vec3 pos, float scale, vcl::vec3 speed) : Object(true), p(pos), dp(speed),
-    bird("../src/assets/models/bird.fbx", shaders["mesh"]){
-    bird.set_animation("Take 001");
-    mesh = vcl::mesh_primitive_cone();
-    mesh.shader = shaders["mesh"];
-    mesh.uniform.transform.scaling = scale;
+    bird("../src/assets/models/bird.fbx", shaders["mesh"]) {
+    if (textures.empty()) {
+        Texture feathers("bird");
+        textures.push_back(feathers.getId());
+    }
+    bird.set_textures(textures);
+    bird.set_animation("bird|fly");
 }
 
 void Bird::drawMesh(vcl::camera_scene &camera, float time) {
@@ -20,9 +25,9 @@ void Bird::drawMesh(vcl::camera_scene &camera, float time) {
 //    lastTime = time;
     
     // Adjusting mesh rotation and angle
-    mesh.uniform.lights = lights;
-    mesh.uniform.transform.rotation = vcl::rotation_between_vector_mat3({0, 0, 1}, dp);
-    mesh.uniform.transform.translation = p;
+//    mesh.uniform.lights = lights;
+//    mesh.uniform.transform.rotation = vcl::rotation_between_vector_mat3({0, 0, 1}, dp);
+//    mesh.uniform.transform.translation = p;
     ndp = dp;
 
 //    vcl::draw(mesh, camera);
