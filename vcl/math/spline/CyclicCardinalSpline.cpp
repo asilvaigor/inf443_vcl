@@ -30,6 +30,10 @@ void vcl::CyclicCardinalSpline::addKeyFrame(vcl::vec3 position, float time) {
 
 vcl::vec3 vcl::CyclicCardinalSpline::interpolation(float time) {
     // Interpolating position
+    if (time < 0){
+        time = fmod(-time, duration);
+        time = duration-time;
+    }
     time = fmod(time, duration);
 
     int idx = indexAtValue(time)+1;
@@ -51,7 +55,6 @@ vcl::vec3 vcl::CyclicCardinalSpline::interpolation(float time) {
 }
 
 int vcl::CyclicCardinalSpline::indexAtValue(float time) {
-
     if (time >= maxT)
         return keyframes.size()-1;
 

@@ -22,6 +22,9 @@ Bird::Bird(Shaders &shaders, vcl::vec3 pos, float scale, vcl::vec3 speed, float 
 void Bird::drawMesh(vcl::camera_scene &camera, float time) {
     bird.set_light(lights[0]);
 
+    // TODO add scaling to birds
+    // TODO Add bounding sphere
+
     //Rotation using euler angles
     vcl::vec3 projDpXY = {dp.x, dp.y, 0};
 

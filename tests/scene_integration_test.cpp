@@ -2,10 +2,6 @@
 // Created by Aloysio Galvão Lopes on 2020-05-30.
 //
 
-//
-// Created by Aloysio Galvão Lopes on 2020-05-30.
-//
-
 #include <src/objects/marker/CoordinateMarker.h>
 #include "scene/Scene.h"
 #include "shaders/Shaders.h"

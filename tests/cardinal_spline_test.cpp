@@ -63,7 +63,6 @@ int main() {
     while (t < tf){
         traj.push_back(spline.position(t));
         t+= dt;
-//        std::cout << t << "\n";
     }
 
     auto drawer2 = std::static_pointer_cast<Object>(std::make_shared<TrajectoryDrawer>(scene.getShaders(), traj));
