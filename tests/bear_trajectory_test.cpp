@@ -4,6 +4,8 @@
 
 #include <vcl/math/spline/CyclicCardinalSpline.h>
 #include <src/objects/debug/TrajectoryDrawer.h>
+#include <src/objects/debug/DebugObject.h>
+#include <src/objects/forest/Forest.h>
 #include "scene/Scene.h"
 #include "shaders/Shaders.h"
 #include "objects/bear/Bear.h"
@@ -39,12 +41,16 @@ int main() {
     WaterLimits waterLimits(-100, 100, -35, 135, -30, -10);
     std::shared_ptr<BaseTerrain> terrain = std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280, waterLimits);
     std::shared_ptr<Object> terrainObj = std::dynamic_pointer_cast<Object>(terrain);
+    auto forest = std::static_pointer_cast<Object>(std::make_shared<Forest>(scene.getShaders(), terrain));
+    std::shared_ptr<Forest> forestPtr = std::static_pointer_cast<Forest>(forest);
+
     scene.addObject(terrainObj);
+    scene.addObject(forest);
 
     // Cyclic spline
     // Adding positions
     std::vector<vcl::vec3> keyframes;
-    keyframes.emplace_back(50, 0, 5);
+    keyframes.emplace_back(50, -100, 5);
     keyframes.emplace_back(50, 50, 5);
     keyframes.emplace_back(0, 50, 5);
     keyframes.emplace_back(0, 0, 5);
@@ -75,7 +81,7 @@ int main() {
 
     // Adding bear companion
     auto companion = std::static_pointer_cast<Object>(std::make_shared<BearCompanion>(
-            scene.getShaders(), spline, 0.0f, bearPos));
+            scene.getShaders(), spline, 6.0f, bearPos));
     scene.addObject(companion);
 
     std::shared_ptr<BearCompanion> bearCompanionPtr = std::static_pointer_cast<BearCompanion>(companion);
@@ -83,10 +89,8 @@ int main() {
     // Creating bear
 
     bear = std::static_pointer_cast<Object>(
-            std::make_shared<Bear>(scene.getShaders(), terrain, bearCompanionPtr, bearPos));
+            std::make_shared<Bear>(scene.getShaders(), terrain, bearCompanionPtr, forestPtr, bearPos));
     scene.addObject(bear);
-
-
 
     scene.display();
     return 0;

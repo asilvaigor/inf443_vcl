@@ -34,10 +34,10 @@ private:
 
     // TODO make this global
     const float T = 1.0/60;
-    const float frictionFactor = 0.1f;
+    const float frictionFactor = 0.01f;
     const float distanceDipole = 5.0f;
-    const float dipoleOffset = 10.0f;
-    const float charge = 1.0f;
+    const float dipoleOffset = 8.0f;
+    const float charge = 15.0f;
 
     void positionUpdate(float time);
 

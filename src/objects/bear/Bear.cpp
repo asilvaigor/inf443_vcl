@@ -9,9 +9,9 @@
 std::vector<GLuint> Bear::textures;
 
 Bear::Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, std::shared_ptr<BearCompanion> &companion,
-           std::shared_ptr<vcl::vec3> &pos) :
+        std::shared_ptr<Forest> &forest, std::shared_ptr<vcl::vec3> &pos) :
         Object(true), bear("../src/assets/models/bear.fbx", shaders["mesh"]), terrain(terrain),
-        companion(companion), pos(pos){
+        companion(companion), forest(forest), pos(pos){
     if (textures.empty()) {
         Texture fur("bear_fur");
         Texture nose(0, 0, 0);
@@ -35,7 +35,8 @@ Bear::Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, std::shared_
     animationTime = 0.0f;
     lastTime = 0.0f;
 
-    //TODO
+    //TODO remove this initialization
+    poses.push_back({50, 0, 5});
 }
 
 void Bear::drawMesh(vcl::camera_scene &camera, float time) {
@@ -47,9 +48,8 @@ void Bear::drawMesh(vcl::camera_scene &camera, float time) {
 }
 
 vcl::mat4 Bear::updateTransform(float &time) {
-    vcl::vec2 field = companion->getFieldAt({position.x, position.y});
-    direction = {field.x, field.y, 0};
-    direction = direction.normalized();
+    // Updating direction vector
+    updateDirection();
 
     // Calculating floor rotation
     auto floorNormal = terrain->normal(position.x, position.y);
@@ -88,4 +88,25 @@ vcl::mat4 Bear::updateTransform(float &time) {
     *pos = position;
 
     return {orientation, positionAdjusted};
+}
+
+void Bear::updateDirection() {
+    vcl::vec2 field = companion->getFieldAt({position.x, position.y});
+    vcl::vec2 pos2d = {position.x, position.y};
+
+    std::vector<std::shared_ptr<Object>> & objs = forest->getObjects();
+
+    for (auto& obj: objs){
+        vcl::vec2 c = {obj->getPosition().x, obj->getPosition().y};
+
+        // For first charge
+        float d = vcl::norm(pos2d-c);
+//        std::cout << d << "\n";
+        if (d > 0.01)
+            field += k*(pos2d-c)/(pow(d,3));
+
+    }
+
+    direction = {field.x, field.y, 0};
+    direction = direction.normalized();
 }
