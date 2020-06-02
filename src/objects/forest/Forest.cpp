@@ -15,7 +15,7 @@ Forest::Forest(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, int nTre
     std::cout << "Finished" << std::endl;
 }
 
-void Forest::drawMesh(vcl::camera_scene &, float) {
+void Forest::drawMesh(vcl::camera_scene &) {
     throw std::invalid_argument("Forest drawMesh should not be called because of bounding spheres. "
                                 "Draw each of the objects separately.");
 }

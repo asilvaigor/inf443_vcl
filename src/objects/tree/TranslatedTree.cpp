@@ -18,12 +18,12 @@ TranslatedTree::TranslatedTree(std::shared_ptr<Tree> &tree, vcl::vec3 &translati
     billboard = BillboardGenerator(&tree->getBillboard(), translation);
 }
 
-void TranslatedTree::drawMesh(vcl::camera_scene &camera, float time) {
+void TranslatedTree::drawMesh(vcl::camera_scene &camera) {
     tree->branchesDrawable.uniform.transform.translation = translation;
     tree->snowyBranchesDrawable.uniform.transform.translation = translation;
     tree->leavesDrawable.uniform.transform.translation = translation;
     tree->snowyLeavesDrawable.uniform.transform.translation = translation;
-    tree->drawMesh(camera, time);
+    tree->drawMesh(camera);
 }
 
 const float &TranslatedTree::getBranchRadius() {

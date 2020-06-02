@@ -24,7 +24,7 @@ public:
      * @param camera
      * @param time
      */
-    void drawMesh(vcl::camera_scene &camera, float time) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
     const float &getBranchRadius();
 

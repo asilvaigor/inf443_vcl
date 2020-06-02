@@ -21,7 +21,7 @@ FlatSurface::FlatSurface(Shaders &shaders) : BaseTerrain(280, 280), snowTexture(
     terrain.uniform.shading = {0.5, 0.6, 0.1, 32};
 }
 
-void FlatSurface::drawMesh(vcl::camera_scene &camera, float) {
+void FlatSurface::drawMesh(vcl::camera_scene &camera) {
     terrain.uniform.lights = lights;
     terrain.uniform.current_light = currentLight;
     snowTexture.bind();

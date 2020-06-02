@@ -15,9 +15,9 @@ public:
     Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, float maxY, float minZ, float maxZ,
          std::shared_ptr<MountainTerrain> terrain = nullptr);
 
-    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
-    void updateBirds();
+    void update(float time) override;
 
     void birdFlyCenter(Bird* bird);
 
@@ -39,8 +39,7 @@ private:
     float minX, minY, minZ;
     vcl::rand_generator generator;
     std::shared_ptr<MountainTerrain> terrain;
-
-    std::chrono::time_point<std::chrono::system_clock> timer;
+    float curTime;
 
     // TODO do not hardcode these variables
     const float centeringFactor = 0.00005f;

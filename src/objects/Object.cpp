@@ -11,10 +11,12 @@ Object::Object(bool movable, bool shadowless) : movable(movable), shadowless(sha
 
 Object::~Object() = default;
 
-void Object::draw(vcl::camera_scene &camera, float time) {
+void Object::update(float time) {}
+
+void Object::draw(vcl::camera_scene &camera) {
     if (boundingSphere.isInCameraFrustum(camera)) {
         if (boundingBox.relativeSize(camera) > Constants::BILLBOARD_RATIO_THRESHOLD || billboard.empty())
-            drawMesh(camera, time);
+            drawMesh(camera);
         else billboard.draw(camera, lights[0]);
     }
 }

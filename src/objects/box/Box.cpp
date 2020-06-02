@@ -9,13 +9,9 @@ Box::Box(Shaders &shaders, vcl::vec3 base) : Object(false) {
     boundingSphere = BoundingSphere(mesh);
     box = vcl::mesh_drawable(mesh);
     box.shader = shaders["mesh"];
-
-    for (auto &pt : mesh.position)
-        boundingBox.update(pt);
-    billboard = BillboardGenerator(shaders, this);
 }
 
-void Box::drawMesh(vcl::camera_scene &camera, float) {
+void Box::drawMesh(vcl::camera_scene &camera) {
     box.uniform.lights = lights;
     vcl::draw(box, camera);
 }

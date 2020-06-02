@@ -17,9 +17,10 @@ Bird::Bird(Shaders &shaders, vcl::vec3 pos, float scale, vcl::vec3 speed, float 
     }
     bird.set_textures(textures);
     bird.set_animation("bird|fly");
+    curTime = 0;
 }
 
-void Bird::drawMesh(vcl::camera_scene &camera, float time) {
+void Bird::drawMesh(vcl::camera_scene &camera) {
     bird.set_light(lights[0]);
 
     // TODO add scaling to birds
@@ -52,7 +53,11 @@ void Bird::drawMesh(vcl::camera_scene &camera, float time) {
 
     // Bird draw
     bird.transform(transform);
-    bird.draw(camera, time);
+    bird.draw(camera, curTime);
+}
+
+void Bird::update(float time) {
+    curTime = time;
 }
 
 vcl::vec3 Bird::getSpeed() {

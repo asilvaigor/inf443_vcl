@@ -14,7 +14,7 @@
 #include "objects/bear/BearCompanion.h"
 
 int main() {
-    auto scene = Scene::getInstance("Bear Test");
+    auto scene = Scene::getInstance("Bear Trajectory Test");
     vcl::camera_scene & camera = scene.getGui()->getCamera();
 
     // Camera settings
@@ -89,7 +89,7 @@ int main() {
     // Creating bear
 
     bear = std::static_pointer_cast<Object>(
-            std::make_shared<Bear>(scene.getShaders(), terrain, bearCompanionPtr, forestPtr, bearPos));
+            std::make_shared<Bear>(scene.getShaders(), terrain, bearCompanionPtr, bearPos, forestPtr));
     scene.addObject(bear);
 
     scene.display();

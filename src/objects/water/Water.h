@@ -25,7 +25,7 @@ public:
      * Draws mesh in opengl
      * @param camera
      */
-    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
 private:
     // Mesh related variables

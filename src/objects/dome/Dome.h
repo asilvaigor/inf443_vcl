@@ -13,7 +13,7 @@ class Dome : public Object {
 public:
     explicit Dome(Shaders &shaders);
 
-    void drawMesh(vcl::camera_scene &camera, float time) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
 private:
     vcl::mesh mesh;

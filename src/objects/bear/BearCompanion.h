@@ -14,7 +14,9 @@ public:
     BearCompanion(Shaders& shaders, vcl::CyclicCardinalSpline& trajectory, float initialS,
             std::shared_ptr<vcl::vec3> bearPosition);
 
-    void drawMesh(vcl::camera_scene &camera, float time) override;
+    void drawMesh(vcl::camera_scene &camera) override;
+
+    void update(float time) override;
 
     vcl::vec2 getFieldAt(vcl::vec2 pos);
 

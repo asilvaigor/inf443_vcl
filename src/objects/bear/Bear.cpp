@@ -9,9 +9,9 @@
 std::vector<GLuint> Bear::textures;
 
 Bear::Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, std::shared_ptr<BearCompanion> &companion,
-        std::shared_ptr<Forest> &forest, std::shared_ptr<vcl::vec3> &pos) :
+           std::shared_ptr<vcl::vec3> &pos, std::shared_ptr<Forest> forest) :
         Object(true), bear("../src/assets/models/bear.fbx", shaders["mesh"]), terrain(terrain),
-        companion(companion), forest(forest), pos(pos){
+        companion(companion), forest(forest), pos(pos) {
     if (textures.empty()) {
         Texture fur("bear_fur");
         Texture nose(0, 0, 0);
@@ -39,11 +39,14 @@ Bear::Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, std::shared_
     poses.push_back({50, 0, 5});
 }
 
-void Bear::drawMesh(vcl::camera_scene &camera, float time) {
+void Bear::drawMesh(vcl::camera_scene &camera) {
+    animationTime = bear.draw(camera, lastTime);
+}
+
+void Bear::update(float time) {
     bear.set_light(lights[0]);
     auto transform = updateTransform(time);
     bear.transform(transform);
-    animationTime = bear.draw(camera, time);
     lastTime = time;
 }
 
@@ -94,17 +97,19 @@ void Bear::updateDirection() {
     vcl::vec2 field = companion->getFieldAt({position.x, position.y});
     vcl::vec2 pos2d = {position.x, position.y};
 
-    std::vector<std::shared_ptr<Object>> & objs = forest->getObjects();
+    if (forest != nullptr) {
+        std::vector<std::shared_ptr<Object>> &objs = forest->getObjects();
 
-    for (auto& obj: objs){
-        vcl::vec2 c = {obj->getPosition().x, obj->getPosition().y};
+        for (auto &obj: objs) {
+            vcl::vec2 c = {obj->getPosition().x, obj->getPosition().y};
 
-        // For first charge
-        float d = vcl::norm(pos2d-c);
+            // For first charge
+            float d = vcl::norm(pos2d - c);
 //        std::cout << d << "\n";
-        if (d > 0.01)
-            field += k*(pos2d-c)/(pow(d,3));
+            if (d > 0.01)
+                field += k * (pos2d - c) / (pow(d, 3));
 
+        }
     }
 
     direction = {field.x, field.y, 0};

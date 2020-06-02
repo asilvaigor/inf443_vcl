@@ -22,9 +22,8 @@ public:
     /**
      * Draws the surface in opengl;
      * @param camera
-     * @param time
      */
-    void drawMesh(vcl::camera_scene &camera , float time = 0.0f) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
     /**
      * Returns the height of the terrain at a given point.

@@ -21,7 +21,7 @@ Scene &Scene::getInstance(std::string windowTitle) {
 Scene::Scene(std::string &windowTitle) {
     gui = SceneGui::getInstance(windowTitle);
 
-    std::cout << "Initializing scene... ";
+    std::cout << "Initializing scene... " << std::flush;
 
     shaders = Shaders::getInstance();
 
@@ -65,6 +65,8 @@ void Scene::haveCameraFollow(std::shared_ptr<Object> &object) {
 
 void Scene::updateScene() {
     float time = glfwGetTime();
+    for (auto &obj : movableObjects)
+        obj->update(time);
 
     cascadeShadow->update(movableObjects, stillObjects, gui, shaders, time);
     shaders->override("wireframe", gui->showVertices());
@@ -75,20 +77,19 @@ void Scene::updateScene() {
     for (auto &obj : stillObjects) {
         // Forest should be decomposed in its objects
         auto *f = dynamic_cast<Forest *>(obj.get());
-        auto *b = dynamic_cast<Boid *>(obj.get());
         if (f != nullptr)
             for (auto &o : f->getObjects())
                 o->draw(gui->getCamera());
-        else if (b != nullptr){
-            b->updateBirds();
-            for (auto &o : b->getObjects())
-                o->draw(gui->getCamera(), time);
-        }
         else obj->draw(gui->getCamera());
         whiteTexture->bind();
     }
     for (auto &obj : movableObjects) {
-        obj->draw(gui->getCamera(), time);
+        // Boid should be decomposed in its objects
+        auto *b = dynamic_cast<Boid *>(obj.get());
+        if (b != nullptr)
+            for (auto &o : b->getObjects())
+                o->draw(gui->getCamera());
+        else obj->draw(gui->getCamera());
         whiteTexture->bind();
     }
 }

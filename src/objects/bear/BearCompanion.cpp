@@ -20,17 +20,19 @@ BearCompanion::BearCompanion(Shaders& shaders, vcl::CyclicCardinalSpline &trajec
     chargeMesh.uniform.shading = shaders["mesh"];
 }
 
-void BearCompanion::drawMesh(vcl::camera_scene &camera, float time) {
-    positionUpdate(time);
+void BearCompanion::drawMesh(vcl::camera_scene &camera) {
     mesh.uniform.transform.translation = position;
     mesh.uniform.transform.rotation = vcl::rotation_between_vector_mat3({0, 0, 1}, dp);
-
     vcl::draw(mesh, camera);
 
     chargeMesh.uniform.transform.translation = pc1;
     vcl::draw(chargeMesh, camera);
     chargeMesh.uniform.transform.translation = pc2;
     vcl::draw(chargeMesh, camera);
+}
+
+void BearCompanion::update(float time) {
+    positionUpdate(time);
 }
 
 void BearCompanion::positionUpdate(float time) {

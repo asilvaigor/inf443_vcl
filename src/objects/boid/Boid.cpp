@@ -9,7 +9,7 @@
 
 Boid::Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, float maxY, float minZ, float maxZ,
            std::shared_ptr<MountainTerrain> terrain)
-        : Object(false),  minX(minX), maxX(maxX), maxY(maxY), minY(minY), minZ(minZ), maxZ(maxZ),
+        : Object(true),  minX(minX), maxX(maxX), maxY(maxY), minY(minY), minZ(minZ), maxZ(maxZ),
         generator(Scene::deterministic), terrain(std::move(terrain)){
 
 
@@ -24,10 +24,10 @@ Boid::Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, 
     }
 
     // Setting current time
-    timer = std::chrono::system_clock::now();
+    curTime = 0;
 }
 
-void Boid::drawMesh(vcl::camera_scene &camera, float time) {
+void Boid::drawMesh(vcl::camera_scene &camera) {
     throw std::invalid_argument("Boid drawMesh should not be called because of bounding spheres. "
                                 "Draw each of the objects separately.");
 }
@@ -36,12 +36,9 @@ std::vector<std::shared_ptr<Object>> &Boid::getObjects() {
     return birds;
 }
 
-void Boid::updateBirds() {
-    // Updating animation
-    std::chrono::duration<double> duration = std::chrono::system_clock::now() - timer;
-
+void Boid::update(float time) {
     // TODO add animation framerate or some kind of animator
-    if (duration.count() > 1/60){
+    if (time - curTime > 1.0f / 60.0f) {
         for (auto& obj : birds){
             auto bird = dynamic_cast<Bird *>(obj.get());
 
@@ -55,8 +52,9 @@ void Boid::updateBirds() {
             auto bird = dynamic_cast<Bird *>(obj.get());
             bird->stepSpeed();
             bird->stepPosition();
+            bird->update(time);
         }
-        timer = std::chrono::system_clock::now();
+        curTime = time;
     }
 }
 
