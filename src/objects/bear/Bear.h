@@ -32,7 +32,6 @@ public:
 private:
     vcl::fbx_model bear;
     std::shared_ptr<BaseTerrain> &terrain;
-    vcl::vec3 position;
     vcl::vec3 direction;
     float boundingSphereRadius;
     float deltaZ;

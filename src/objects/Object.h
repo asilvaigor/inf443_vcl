@@ -19,6 +19,11 @@ public:
     explicit Object(bool movable, bool shadowless = false);
 
     /**
+     * Destructor
+     */
+    virtual ~Object();
+
+    /**
      * Calls vcl::draw to draw the object in the scene.
      * @param camera
      */
@@ -67,10 +72,9 @@ public:
      */
     BoundingBox &getBoundingBox();
 
-    /**
-     * Destructor
-     */
-    virtual ~Object();
+    vcl::vec3 &getPosition();
+
+    vcl::mat3 &getOrientation();
 
 protected:
     const bool movable;
@@ -79,6 +83,8 @@ protected:
     BoundingSphere boundingSphere;
     BoundingBox boundingBox;
     BillboardGenerator billboard;
+    vcl::vec3 position;
+    vcl::mat3 orientation;
 };
 
 

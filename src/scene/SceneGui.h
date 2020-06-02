@@ -58,6 +58,12 @@ public:
      */
     bool showGrid();
 
+    /**
+     * Makes the camera follow a given object.
+     * @param object
+     */
+    void haveCameraFollow(std::shared_ptr<Object> &object);
+
     vcl::camera_scene &getCamera();
 
     int getWindowWidth();
@@ -74,6 +80,9 @@ private:
     float sunAngle;
     bool verticesOn;
     bool gridOn;
+    vcl::mat3 objectOrientation;
+    static vcl::mat3 followedOrientation;
+    static std::shared_ptr<Object> followedObject;
 
     static std::shared_ptr<SceneGui> gui;
     static GLFWwindow *window;

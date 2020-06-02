@@ -36,15 +36,12 @@ public:
      */
     void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
 
-    vcl::vec3 &getPosition();
-
     float &getTrunkRadius();
 
     float &getBranchRadius();
 
 private:
     TreeSpecies &species;
-    vcl::vec3 position;
     vcl::mesh branchesMesh;
     vcl::mesh snowyBranchesMesh;
     vcl::mesh leavesMesh;

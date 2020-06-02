@@ -50,19 +50,19 @@ vcl::mat4 Bear::updateTransform(float &time) {
     float angy = atan2(floorNormal.x, floorNormal.z);
     float siny = std::sin(angy);
     float cosy = std::cos(angy);
-    vcl::mat3 floor_rot(cosy, 0, -siny,
-                        -sinx * siny, cosx, -sinx * cosy,
-                        cosx * siny, sinx, cosx * cosy);
+    orientation = {cosy, 0, -siny,
+                   -sinx * siny, cosx, -sinx * cosy,
+                   cosx * siny, sinx, cosx * cosy};
 
     // Adjusting position with animation change of height
     vcl::vec3 positionAdjusted = position + floorNormal * deltaZ;
     boundingSphere = BoundingSphere(positionAdjusted, boundingSphereRadius);
 
     // Updating position with velocity
-    auto speedDir = floor_rot * direction;
+    auto speedDir = orientation * direction;
     float speedCur = speed + speedVar * std::sin(((animationTime + stepPhi) / stepPeriod) * 2.0f * (float) M_PI);
     position += speedDir * speedCur * (time - lastTime);
     position.z = terrain->getTerrainHeight(positionAdjusted.x, positionAdjusted.y);
 
-    return {floor_rot, positionAdjusted};
+    return {orientation, positionAdjusted};
 }

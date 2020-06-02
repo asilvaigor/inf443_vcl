@@ -1,6 +1,7 @@
 #include "vec3.hpp"
 
 #include <iostream>
+#include <assert.h>
 #include "vcl/base/base.hpp"
 
 namespace vcl {
@@ -109,7 +110,12 @@ float vec3::dist(const vec3 &v) {
 }
 
 float vec3::angle(const vec3 &v) {
-    return acosf(dot(*this, v) / (norm() * v.norm()));
+    assert(norm() > 1e-6f);
+    assert(v.norm() > 1e-6f);
+    float cos = dot(*this, v) / (norm() * v.norm());
+    if (cos > 1.0f - 1e-6f)
+        return 0.0f;
+    return acosf(cos);
 }
 
 float dot(const vec3& a,const vec3& b) {

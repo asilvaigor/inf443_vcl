@@ -4,8 +4,13 @@
 
 #include "Water.h"
 
+std::shared_ptr<Texture> Water::waterTexture = nullptr;
+
 Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscillator> &oscillators)
-        : Object(true), waterLimits(waterLimits), oscillators(oscillators){
+        : Object(true, true), waterLimits(waterLimits), oscillators(oscillators){
+    if (waterTexture == nullptr)
+        waterTexture = std::make_shared<Texture>(Texture("water"));
+
     uDimensionSize = 100;
     vDimensionSize = 100;
     xSize = fabs(waterLimits.getX2()-waterLimits.getX1());
@@ -21,18 +26,15 @@ Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscill
     }
 
     // Adding shader
-    waterMeshDrawable.shader = shaders["mesh"];
-    waterMeshDrawable.uniform.shading.specular = 0.8f;
-    waterMeshDrawable.uniform.shading.diffuse = 0.3f;
-    waterMeshDrawable.uniform.shading.ambiant = 0.1f;
-
+    waterMeshDrawable.shader = shaders["water_mesh"];
+    waterMeshDrawable.uniform.shading = {0.5f, 0.6f, 1.0f, 128};
 
     // Setting current time
     timer = std::chrono::system_clock::now();
     std::chrono::system_clock::now();
 
     waterMeshDrawable.uniform.color = {15.0f/255.0f, 94.0f/255.0f, 156.0f/255.0f};
-    waterMeshDrawable.uniform.color_alpha = 0.9;
+    waterMeshDrawable.uniform.color_alpha = 0.5;
 }
 
 void Water::drawMesh(vcl::camera_scene &camera, float time) {
@@ -63,6 +65,7 @@ void Water::drawMesh(vcl::camera_scene &camera, float time) {
         update_mesh();
         timer = std::chrono::system_clock::now();
     }
+    waterTexture->bind();
     vcl::draw(waterMeshDrawable, camera);
 
 //    // TODO dont forget to erase this
@@ -79,6 +82,7 @@ void Water::drawMesh(vcl::camera_scene &camera, float time) {
 
 void Water::initialize_mesh() {
     waterMesh.position.resize(uDimensionSize*vDimensionSize);
+    waterMesh.texture_uv.resize(uDimensionSize*vDimensionSize);
     waterPositions.resize(uDimensionSize);
     waterVerticalSpeeds.resize(uDimensionSize);
 
@@ -101,6 +105,8 @@ void Water::initialize_mesh() {
             // Initializing height matrix
             waterPositions[ku][kv] = {x, y, waterLimits.getWaterLevel()};
             waterVerticalSpeeds[ku][kv] = 0.0f;
+            waterMesh.texture_uv[kv+uDimensionSize*ku] = {(float) ku / (float) (0.3f*uDimensionSize),
+                                                          (float) kv / (float) (0.3f*vDimensionSize)};
         }
     }
 

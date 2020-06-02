@@ -10,6 +10,7 @@
 #include "objects/Object.h"
 #include "WaterOscillator.h"
 #include "WaterLimits.h"
+#include "utils/Texture.h"
 #include <chrono>
 
 class Water : public Object {
@@ -39,6 +40,8 @@ private:
     std::vector<std::vector<vcl::vec3>> waterPositions;
     std::vector<std::vector<float>> waterVerticalSpeeds;
     std::vector<WaterOscillator>& oscillators;
+
+    static std::shared_ptr<Texture> waterTexture;
 
     void update_mesh();
     void initialize_mesh();

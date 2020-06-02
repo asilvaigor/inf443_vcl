@@ -67,6 +67,7 @@ struct camera_scene
     bool is_inside_frustum(vec3 &pt);
 };
 
+vec3 trackball_projection(float x, float y, float radius=1.0f);
 
 /** Compute a 4x4 perspective matrix */
 mat4 perspective_matrix(float angle_of_view, float image_aspect, float z_near, float z_far);

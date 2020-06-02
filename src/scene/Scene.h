@@ -49,6 +49,12 @@ public:
      */
     void display();
 
+    /**
+     * This will make the camera follow a given object.
+     * @param object
+     */
+    void haveCameraFollow(std::shared_ptr<Object> &object);
+
     static bool deterministic;
 
 private:
