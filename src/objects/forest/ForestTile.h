@@ -15,7 +15,6 @@ public:
 
     std::shared_ptr<Object> tree;
     std::shared_ptr<Object> rock;
-    std::vector<std::shared_ptr<Object>> bushes;
     float minX, maxX, minY, maxY;
     float treeProb;
     float bushProb;
