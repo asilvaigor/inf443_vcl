@@ -26,17 +26,16 @@ void vcl::CardinalSpline::addKeyFrame(vcl::vec3 position, float time) {
 }
 
 vcl::vec3 vcl::CardinalSpline::position(float time) {
-    assert(time >= minT && time <= maxT);
 
     return interpolation(time);
 }
 
 int vcl::CardinalSpline::indexAtValue(float time)
 {
+    assert(time >= minT && time <= maxT);
     int k=0;
     while(keyframes[k+1].w < time)
         ++k;
-
 
     return k;
 }
@@ -63,6 +62,13 @@ vcl::vec3 vcl::CardinalSpline::interpolation(float time) {
     if (idx != (int)keyframes.size()-1)
         p3 = {keyframes[idx+2].x, keyframes[idx+2].y, keyframes[idx+2].z}; // = p_{i+2}
 
+    interpolationFunction(time, t0, t1, t2, t3, p0, p1, p2, p3);
+
+    return interpol;
+}
+
+void vcl::CardinalSpline::interpolationFunction(float time, float t0, float t1, float t2, float t3, const vcl::vec3 &p0,
+                                           const vcl::vec3 &p1, const vcl::vec3 &p2, const vcl::vec3 &p3) {
     float s = (time-t1)/(t2-t1);
 
     vec3 d1 = 2*K*((p2-p0)/(t2-t0));
@@ -72,7 +78,5 @@ vcl::vec3 vcl::CardinalSpline::interpolation(float time) {
     float s2 = s*s;
 
     // Current point
-    vec3 p = (2*s3-3*s2+1)*p1+(s3-2*s2+s)*d1+(-2*s3+3*s2)*p2+(s3-s2)*d2;
-
-    return p;
+    interpol = (2*s3-3*s2+1)*p1+(s3-2*s2+s)*d1+(-2*s3+3*s2)*p2+(s3-s2)*d2;
 }
