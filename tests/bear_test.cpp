@@ -11,7 +11,8 @@
 int main() {
     auto scene = Scene::getInstance("Bear Test");
 
-    std::shared_ptr<BaseTerrain> terrain = std::make_shared<FlatSurface>(scene.getShaders());
+    WaterLimits waterLimits(-100, 100, -35, 135, -30, -10);
+    std::shared_ptr<BaseTerrain> terrain = std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280, waterLimits);
     std::shared_ptr<Object> terrainObj = std::dynamic_pointer_cast<Object>(terrain);
     scene.addObject(terrainObj);
 
