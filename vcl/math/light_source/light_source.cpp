@@ -124,11 +124,8 @@ void light_source::calculate_color() {
 
     float angles[] = {M_PI / 4, 1.75 * M_PI / 4, M_PI / 2};
 
-    // Moon color
-    if (angle < 0)
-        color = {1, 1, 1};
     // Sun in the sky color
-    else if (sunAngle < angles[0])
+    if (sunAngle < angles[0])
         color = white;
     // Sunset color
     else if (sunAngle < angles[1]) {

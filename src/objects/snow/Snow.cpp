@@ -33,8 +33,6 @@ Snow::Snow(Shaders &shaders, int nParticles) :
     accelerations.resize(nParticles);
     for (int i = 0; i < nParticles; i++)
         velocities[i].z = -gravity * flakeMass / airDamping;
-
-    boundingSphere = BoundingSphere({0, 0, 0}, 1000);
 }
 
 void Snow::drawMesh(vcl::camera_scene &camera, float time) {

@@ -89,7 +89,7 @@ void SceneGui::update() {
     ImGui::Begin("Options", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
     ImGui::Checkbox("Vertices", &verticesOn);
     ImGui::Checkbox("Grid", &gridOn);
-    ImGui::SliderAngle("Sun Angle", &sunAngle, -180, 180);
+    ImGui::SliderAngle("Sun Angle", &sunAngle, -90, 90);
 
     if (followedObject != nullptr)
         haveCameraFollow(followedObject);

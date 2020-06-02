@@ -18,7 +18,7 @@ class light_source {
 public:
     light_source();
 
-    light_source(vec3 pos, vec3 dir, float camera_z_near = 0.01f, float camera_z_far = 25.0f, int shadow_map_id = 1);
+    light_source(vec3 pos, vec3 dir, float camera_z_near = 0.01f, float camera_z_far = 25.0f, int shadow_map_id = -1);
 
     void update(camera_scene &camera, vec3 &pos, vec3 &dir);
 

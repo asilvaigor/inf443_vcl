@@ -10,8 +10,8 @@ int main() {
     std::string windowTitle = "Dome Test";
     auto scene = Scene::getInstance(windowTitle);
 
-    auto forest = std::static_pointer_cast<Object>(std::make_shared<Dome>(scene.getShaders()));
-    scene.addObject(forest);
+    auto dome = std::static_pointer_cast<Object>(std::make_shared<Dome>(scene.getShaders()));
+    scene.addObject(dome);
 
     scene.display();
     return 0;

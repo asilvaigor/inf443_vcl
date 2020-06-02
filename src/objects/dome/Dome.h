@@ -6,17 +6,19 @@
 #define PGM_DOME_H
 
 
-#include <src/objects/Object.h>
+#include "objects/Object.h"
+#include "utils/Texture.h"
 
 class Dome : public Object {
 public:
     explicit Dome(Shaders &shaders);
 
-    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
+    void drawMesh(vcl::camera_scene &camera, float time) override;
 
 private:
     vcl::mesh mesh;
     vcl::mesh_drawable meshDrawable;
+    Texture texture;
 };
 
 

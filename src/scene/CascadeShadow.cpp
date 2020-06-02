@@ -5,6 +5,7 @@
 #include <src/objects/boid/Boid.h>
 #include "objects/terrain/BaseTerrain.h"
 #include "objects/forest/Forest.h"
+#include "objects/dome/Dome.h"
 #include "CascadeShadow.h"
 
 CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
@@ -51,8 +52,8 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
         // If camera has changed or objects have moved, update the objects
         if (mustUpdate) {
             float sunAngle = gui->getSunAngle();
-            vcl::vec3 lightPos(500.0f * std::cos((float) (0.5 * M_PI) - sunAngle), 0.0f,
-                               500.0f * std::sin((float) (0.5 * M_PI) - sunAngle));
+            vcl::vec3 lightPos(1000.0f * std::cos((float) (0.5 * M_PI) - sunAngle), 0.0f,
+                               1000.0f * std::sin((float) (0.5 * M_PI) - sunAngle));
             vcl::vec3 lightDir = -lightPos.normalized();
             lights[lastUpdated]->update(camera, lightPos, lightDir);
             lastCamera[lastUpdated] = camera;
@@ -90,7 +91,7 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
             // A forest will be decomposed in its objects
             for (auto &o : f->getObjects())
                 renderObject(o, camera);
-        } else if(b != nullptr){
+        } else if (b != nullptr) {
             // A boid will be decomposed in its birds
             for (auto &o : b->getObjects())
                 renderObject(o, camera);
@@ -99,10 +100,12 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
 }
 
 void CascadeShadow::renderObject(std::shared_ptr<Object> &obj, vcl::camera_scene &camera) {
+    auto dome = std::static_pointer_cast<Dome>(obj);
+    obj->setLight(lights[lastUpdated]);
+
     if (obj->hasShadow() && (obj->getLight()->get_shadow_map_id() == lastUpdated ||
            obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated]))) {
         // A normal object must be in the correct frustum to be rendered
-        obj->setLight(lights[lastUpdated]);
         if (obj->isMovable()) {
             obj->draw(camera, lastTime[lastUpdated]);
             nMovableObjects[lastUpdated]++;
