@@ -3,6 +3,7 @@
 //
 
 #include <vcl/math/spline/CardinalSpline.h>
+#include <vcl/math/spline/CyclicCardinalSpline.h>
 #include "scene/Scene.h"
 #include "shaders/Shaders.h"
 #include "objects/marker/CoordinateMarker.h"
@@ -37,18 +38,18 @@ int main() {
     scene.addObject(marker);
 
     // Adding positions
-    vcl::CardinalSpline spline;
+    vcl::CyclicCardinalSpline spline(5);
     std::vector<vcl::vec3> keyframes;
     keyframes.emplace_back(10, 0, 10);
-    keyframes.emplace_back(10, 10, 0);
-    keyframes.emplace_back(0, 10, 10);
+    keyframes.emplace_back(10, 0, 0);
+    keyframes.emplace_back(0, 0, 10);
     keyframes.emplace_back(0, 0, 0);
 
     //Adding positions to spline
-    spline.addKeyFrame(keyframes[0], 0);
+    spline.addKeyFrame(keyframes[0], 4);
     spline.addKeyFrame(keyframes[1], 2);
     spline.addKeyFrame(keyframes[2], 1);
-    spline.addKeyFrame(keyframes[3], 4);
+    spline.addKeyFrame(keyframes[3], 0);
 
     // Adding trajectory lines
     auto drawer = std::static_pointer_cast<Object>(std::make_shared<TrajectoryDrawer>(scene.getShaders(), keyframes));
@@ -56,13 +57,13 @@ int main() {
 
     // Trajectory
     const float dt = 0.01;
-    float t = 2;
-    float tf = 4;
+    float t = 0;
+    float tf = 6;
     std::vector<vcl::vec3 > traj;
     while (t < tf){
         traj.push_back(spline.position(t));
         t+= dt;
-        std::cout << t << "\n";
+//        std::cout << t << "\n";
     }
 
     auto drawer2 = std::static_pointer_cast<Object>(std::make_shared<TrajectoryDrawer>(scene.getShaders(), traj));
@@ -75,6 +76,7 @@ int main() {
     debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, keyframes[1]));
     debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, keyframes[2]));
     debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, keyframes[3]));
+    debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, spline.position(7.5)));
     scene.addObject(debugObject);
 
     scene.display();
