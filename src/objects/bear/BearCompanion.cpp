@@ -6,53 +6,26 @@
 
 #include "BearCompanion.h"
 
-BearCompanion::BearCompanion(Shaders& shaders, vcl::CyclicCardinalSpline &trajectory,
-        float initialS, std::shared_ptr<vcl::vec3> bearPosition) :
-    Object(true, true), s(initialS), trajectory(trajectory), bearPosition(std::move(bearPosition)){
+BearCompanion::BearCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS,
+                             std::shared_ptr<vcl::vec3> bearPosition, bool debug) :
+    CompanionObject(shaders, debug), s(initialS), trajectory(trajectory), bearPosition(std::move(bearPosition)){
     dp = trajectory.position(s+ds)-trajectory.position(s-ds);
     position = trajectory.position(s);
     updateChargesPositions();
-    currentTime = 0;
-
-    mesh = vcl::mesh_primitive_cone(2, {0, 0, 0}, {0, 0, 3});
-    mesh.uniform.shading = shaders["mesh"];
-    chargeMesh = vcl::mesh_primitive_sphere(2);
-    chargeMesh.uniform.shading = shaders["mesh"];
 }
 
-void BearCompanion::drawMesh(vcl::camera_scene &camera, float time) {
-    positionUpdate(time);
-    mesh.uniform.transform.translation = position;
-    mesh.uniform.transform.rotation = vcl::rotation_between_vector_mat3({0, 0, 1}, dp);
+void BearCompanion::update(float time) {
+    currentTime = time;
+    dp = trajectory.position(s+ds)-trajectory.position(s-ds);
 
-    vcl::draw(mesh, camera);
+    vcl::vec3 dist = *bearPosition-position;
 
-    chargeMesh.uniform.transform.translation = pc1;
-    vcl::draw(chargeMesh, camera);
-    chargeMesh.uniform.transform.translation = pc2;
-    vcl::draw(chargeMesh, camera);
-}
+    float movingForce = vcl::dot(dist.normalized(), dp.normalized());
 
-void BearCompanion::positionUpdate(float time) {
-    if (time-currentTime > T){
-        currentTime = time;
-        dp = trajectory.position(s+ds)-trajectory.position(s-ds);
+    s += movingForce*frictionFactor;
 
-        vcl::vec3 dist = *bearPosition-position;
-
-        float movingForce = vcl::dot(dist.normalized(), dp.normalized());
-
-        s += movingForce*frictionFactor;
-
-        position = trajectory.position(s);
-        updateChargesPositions();
-    }
-}
-
-void BearCompanion::updateChargesPositions() {
-    vcl::vec3 dir = dp.normalized();
-    pc1 = position+dir*dipoleOffset;
-    pc2 = pc1+dir*distanceDipole;
+    position = trajectory.position(s);
+    updateChargesPositions();
 }
 
 vcl::vec2 BearCompanion::getFieldAt(vcl::vec2 pos) {
