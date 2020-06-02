@@ -50,3 +50,7 @@ vcl::vec3 & Object::getPosition() {
 vcl::mat3 & Object::getOrientation() {
     return orientation;
 }
+
+BillboardGenerator & Object::getBillboard() {
+    return billboard;
+}

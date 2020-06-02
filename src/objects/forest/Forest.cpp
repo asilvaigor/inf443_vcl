@@ -4,6 +4,7 @@
 
 #include "Forest.h"
 #include "scene/Scene.h"
+#include "objects/tree/TranslatedTree.h"
 
 Forest::Forest(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, int nTrees, int nBushes, int nRocks) :
         Object(false), terrain(terrain), generator(Scene::deterministic) {
@@ -11,26 +12,6 @@ Forest::Forest(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, int nTre
     generateTiles();
     generateTreesAndRocks(shaders, nTrees, nRocks);
     generateBushes(shaders, nBushes);
-
-    float minX = -0.5f * terrain->getXSize();
-    float maxX = 0.5f * terrain->getXSize();
-    float minY = -0.5f * terrain->getXSize();
-    float maxY = 0.5f * terrain->getXSize();
-
-    auto bush1 = TreeSpecies::bush1();
-    auto bush2 = TreeSpecies::bush2();
-
-    for (int i = 0; i < nBushes; i++) {
-        auto &species = generator.rand() > 0 ? bush1 : bush2;
-        vcl::vec3 pos(generator.rand(minX, maxX), generator.rand(minY, maxY), 0.0f);
-        while (terrain->isObstructed(pos.x, pos.y)) {
-            pos.x = generator.rand(minX, maxX);
-            pos.y = generator.rand(minY, maxY);
-        }
-        pos.z = terrain->getTerrainHeight(pos.x, pos.y);
-        float snowCoverage = std::max(0.5f, 0.5f + 0.5f * pos.z / terrain->getMaxTerrainHeight());
-        objects.push_back(std::make_shared<Tree>(shaders, pos, species, snowCoverage));
-    }
     std::cout << "Finished" << std::endl;
 }
 
@@ -68,11 +49,26 @@ void Forest::generateTiles() {
 }
 
 void Forest::generateTreesAndRocks(Shaders &shaders, int nTrees, int nRocks) {
+    std::cout << "Loading trees and rocks... " << std::flush;
     auto pine = TreeSpecies::pine();
     auto tupelo = TreeSpecies::blackTupelo();
     const float pineToTupeloRatio = 0.6f;
+    const int maxUniqueTrees = 50;
+    const float minSnowCoverage = 0.4;
+    const float maxSnowCoverage = 0.7;
     int curNTrees = 0;
     int curNRocks = 0;
+
+    // Generating all the trees
+    vcl::vec3 origin;
+    for (int i = 0; i < maxUniqueTrees; i++) {
+        if (generator.rand(0, 1) < pineToTupeloRatio)
+            trees.push_back(std::make_shared<Tree>(
+                    shaders, origin, pine, generator.rand(minSnowCoverage, maxSnowCoverage)));
+        else trees.push_back(std::make_shared<Tree>(
+                shaders, origin, tupelo, generator.rand(minSnowCoverage, maxSnowCoverage)));
+    }
+
     shuffleTileList();
 
     std::vector<std::pair<int, int>> next({{-1, -1},
@@ -101,10 +97,8 @@ void Forest::generateTreesAndRocks(Shaders &shaders, int nTrees, int nRocks) {
                 pos.x = generator.rand(t.minX, t.maxX);
                 pos.y = generator.rand(t.minY, t.maxY);
                 pos.z = terrain->getTerrainHeight(pos.x, pos.y);
-                float snowCoverage = std::max(0.5f, 0.5f + 0.5f * pos.z / terrain->getMaxTerrainHeight());
-                if (generator.rand(0, 1) < pineToTupeloRatio)
-                    objects.push_back(std::make_shared<Tree>(shaders, pos, pine, snowCoverage));
-                else objects.push_back(std::make_shared<Tree>(shaders, pos, tupelo, snowCoverage));
+                objects.push_back(std::make_shared<TranslatedTree>(
+                        trees[round(generator.rand(0, maxUniqueTrees - 1))], pos));
                 curNTrees++;
                 t.tree = objects.back();
                 t.containsObject = true;
@@ -113,7 +107,7 @@ void Forest::generateTreesAndRocks(Shaders &shaders, int nTrees, int nRocks) {
                 pos.x = generator.rand(t.minX, t.maxX);
                 pos.y = generator.rand(t.minY, t.maxY);
                 pos.z = terrain->getTerrainHeight(pos.x, pos.y);
-                float snowCoverage = std::max(0.5f, 0.5f + 0.5f * pos.z / terrain->getMaxTerrainHeight());
+                float snowCoverage = generator.rand(minSnowCoverage, maxSnowCoverage);
                 vcl::vec3 axis(generator.rand(0.7f, 1.2f), generator.rand(0.4f, 0.6f), generator.rand(0.7f, 1.2f));
                 float zAngle = generator.rand(0, M_PI);
                 objects.push_back(std::make_shared<Rock>(shaders, pos, snowCoverage, axis, zAngle));
@@ -129,10 +123,21 @@ void Forest::generateTreesAndRocks(Shaders &shaders, int nTrees, int nRocks) {
 }
 
 void Forest::generateBushes(Shaders &shaders, int nBushes) {
+    std::cout << "Loading bushes... " << std::flush;
     auto bush1 = TreeSpecies::bush1();
     auto bush2 = TreeSpecies::bush2();
     const float bush1to2Ratio = 0.5f;
+    const int maxUniqueBushes = 50;
     int curNBushes = 0;
+
+    // Generating all the bushes
+    vcl::vec3 origin;
+    for (int i = 0; i < maxUniqueBushes; i++) {
+        if (generator.rand(0, 1) < bush1to2Ratio)
+            bushes.push_back(std::make_shared<Tree>(shaders, origin, bush1, generator.rand(0.4, 0.7)));
+        else bushes.push_back(std::make_shared<Tree>(shaders, origin, bush2, generator.rand(0.4, 0.7)));
+    }
+
     shuffleTileList();
 
     while (curNBushes < nBushes) {
@@ -149,7 +154,7 @@ void Forest::generateBushes(Shaders &shaders, int nBushes) {
                 pos.y = generator.rand(t.minY, t.maxY);
                 if (t.containsObject) {
                     if (t.tree != nullptr) {
-                        auto tree = std::static_pointer_cast<Tree>(t.tree);
+                        auto tree = std::static_pointer_cast<TranslatedTree>(t.tree);
                         while (hypot(pos.x - tree->getPosition().x, pos.y - tree->getPosition().y) <
                                tree->getTrunkRadius()) {
                             pos.x = generator.rand(t.minX, t.maxX);
@@ -164,10 +169,8 @@ void Forest::generateBushes(Shaders &shaders, int nBushes) {
                     }
                 }
                 pos.z = terrain->getTerrainHeight(pos.x, pos.y);
-                float snowCoverage = std::max(0.5f, 0.5f + 0.5f * pos.z / terrain->getMaxTerrainHeight());
-                if (generator.rand(0, 1) < bush1to2Ratio)
-                    objects.push_back(std::make_shared<Tree>(shaders, pos, bush1, snowCoverage));
-                else objects.push_back(std::make_shared<Tree>(shaders, pos, bush2, snowCoverage));
+                objects.push_back(std::make_shared<TranslatedTree>(
+                        bushes[round(generator.rand(0, maxUniqueBushes - 1))], pos));
                 curNBushes++;
                 t.bushProb -= 1.0f;
             }

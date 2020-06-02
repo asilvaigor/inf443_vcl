@@ -76,6 +76,8 @@ public:
 
     vcl::mat3 &getOrientation();
 
+    BillboardGenerator &getBillboard();
+
 protected:
     const bool movable;
     const bool shadowless;

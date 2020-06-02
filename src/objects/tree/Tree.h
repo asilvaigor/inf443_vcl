@@ -40,16 +40,17 @@ public:
 
     float &getBranchRadius();
 
+    vcl::mesh_drawable branchesDrawable;
+    vcl::mesh_drawable snowyBranchesDrawable;
+    vcl::mesh_drawable leavesDrawable;
+    vcl::mesh_drawable snowyLeavesDrawable;
+
 private:
     TreeSpecies &species;
     vcl::mesh branchesMesh;
     vcl::mesh snowyBranchesMesh;
     vcl::mesh leavesMesh;
     vcl::mesh snowyLeavesMesh;
-    vcl::mesh_drawable branchesDrawable;
-    vcl::mesh_drawable snowyBranchesDrawable;
-    vcl::mesh_drawable leavesDrawable;
-    vcl::mesh_drawable snowyLeavesDrawable;
     bool verbose;
     float trunkRadius;
     float branchRadius;

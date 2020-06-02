@@ -11,10 +11,12 @@ BillboardGenerator::BillboardGenerator() {
     fbos = nullptr;
     textures = nullptr;
     depths = nullptr;
+    reference = nullptr;
 }
 
 BillboardGenerator::BillboardGenerator(Shaders &shaders, Object *object) {
     isEmpty = false;
+    reference = nullptr;
     this->shaders = &shaders;
 
     auto corners = object->getBoundingBox().getCorners();
@@ -44,6 +46,11 @@ BillboardGenerator::BillboardGenerator(Shaders &shaders, Object *object) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+BillboardGenerator::BillboardGenerator(BillboardGenerator *billboard, vcl::vec3 &translation) :
+        reference(billboard), translation(translation) {
+    isEmpty = billboard->empty();
+}
+
 BillboardGenerator::~BillboardGenerator() {
     if (!empty()) {
         // FIXME: Opengl throwing multiple errors when deleting these, not sure why.
@@ -57,6 +64,13 @@ BillboardGenerator::~BillboardGenerator() {
 }
 
 void BillboardGenerator::draw(vcl::camera_scene &camera, std::shared_ptr<vcl::light_source> &light) {
+    if (reference != nullptr) {
+        reference->quad1.uniform.transform.translation = translation;
+        reference->quad2.uniform.transform.translation = translation;
+        reference->draw(camera, light);
+        return;
+    }
+
     // Depth mask has to be disabled to use alpha channel correctly
     if (!shaders->isOverridden())
         glDepthMask(false);

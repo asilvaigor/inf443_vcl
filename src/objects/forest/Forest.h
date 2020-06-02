@@ -25,6 +25,8 @@ public:
 private:
     std::shared_ptr<BaseTerrain> &terrain;
     std::vector<std::shared_ptr<Object>> objects;
+    std::vector<std::shared_ptr<Tree>> trees;
+    std::vector<std::shared_ptr<Tree>> bushes;
     std::vector<std::vector<ForestTile>> tiles;
     std::vector<std::pair<int, int>> tileList;
     vcl::rand_generator generator;
