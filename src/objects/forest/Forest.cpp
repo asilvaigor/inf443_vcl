@@ -10,6 +10,7 @@ Forest::Forest(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, int nTre
     std::cout << "Loading forest... " << std::flush;
     generateTiles();
     generateTreesAndRocks(shaders, nTrees, nRocks);
+    generateBushes(shaders, nBushes);
 
     float minX = -0.5f * terrain->getXSize();
     float maxX = 0.5f * terrain->getXSize();
@@ -74,43 +75,106 @@ void Forest::generateTreesAndRocks(Shaders &shaders, int nTrees, int nRocks) {
     int curNRocks = 0;
     shuffleTileList();
 
-    std::vector<std::pair<int, int>> next({{-1, -1}, {-1, 0}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}});
-    for (auto &p : tileList) {
-        int i = p.first;
-        int j = p.second;
-        auto &t = tiles[i][j];
-        if (t.isObstructed || t.containsObject)
-            continue;
-        for (auto &n : next)
-            if (i + n.first >= 0 && i + n.first < (int) tiles.size() &&
-                j + n.second >= 0 && j + n.second < (int) tiles[0].size() &&
-                tiles[i + n.first][j + n.second].containsObject)
+    std::vector<std::pair<int, int>> next({{-1, -1},
+                                           {-1, 0},
+                                           {-1, 1},
+                                           {0,  -1},
+                                           {0,  1},
+                                           {1,  -1},
+                                           {1,  0},
+                                           {1,  1}});
+    while (curNTrees < nTrees && curNRocks < nRocks) {
+        for (auto &p : tileList) {
+            int i = p.first;
+            int j = p.second;
+            auto &t = tiles[i][j];
+            if (t.isObstructed || t.containsObject)
+                continue;
+            for (auto &n : next)
+                if (i + n.first >= 0 && i + n.first < (int) tiles.size() &&
+                    j + n.second >= 0 && j + n.second < (int) tiles[0].size() &&
+                    tiles[i + n.first][j + n.second].containsObject)
+                    continue;
+
+            if (curNTrees < nTrees && generator.rand(0, 1) < t.treeProb) {
+                vcl::vec3 pos;
+                pos.x = generator.rand(t.minX, t.maxX);
+                pos.y = generator.rand(t.minY, t.maxY);
+                pos.z = terrain->getTerrainHeight(pos.x, pos.y);
+                float snowCoverage = std::max(0.5f, 0.5f + 0.5f * pos.z / terrain->getMaxTerrainHeight());
+                if (generator.rand(0, 1) < pineToTupeloRatio)
+                    objects.push_back(std::make_shared<Tree>(shaders, pos, pine, snowCoverage));
+                else objects.push_back(std::make_shared<Tree>(shaders, pos, tupelo, snowCoverage));
+                curNTrees++;
+                t.tree = objects.back();
+                t.containsObject = true;
+            } else if (curNRocks < nRocks && generator.rand(0, 1) < t.rockProb) {
+                vcl::vec3 pos;
+                pos.x = generator.rand(t.minX, t.maxX);
+                pos.y = generator.rand(t.minY, t.maxY);
+                pos.z = terrain->getTerrainHeight(pos.x, pos.y);
+                float snowCoverage = std::max(0.5f, 0.5f + 0.5f * pos.z / terrain->getMaxTerrainHeight());
+                vcl::vec3 axis(generator.rand(0.7f, 1.2f), generator.rand(0.4f, 0.6f), generator.rand(0.7f, 1.2f));
+                float zAngle = generator.rand(0, M_PI);
+                objects.push_back(std::make_shared<Rock>(shaders, pos, snowCoverage, axis, zAngle));
+                curNRocks++;
+                t.rock = objects.back();
+                t.containsObject = true;
+            }
+
+            if (curNTrees == nTrees && curNRocks == nRocks)
+                break;
+        }
+    }
+}
+
+void Forest::generateBushes(Shaders &shaders, int nBushes) {
+    auto bush1 = TreeSpecies::bush1();
+    auto bush2 = TreeSpecies::bush2();
+    const float bush1to2Ratio = 0.5f;
+    int curNBushes = 0;
+    shuffleTileList();
+
+    while (curNBushes < nBushes) {
+        for (auto &p : tileList) {
+            int i = p.first;
+            int j = p.second;
+            auto &t = tiles[i][j];
+            if (t.isObstructed)
                 continue;
 
-        if (curNTrees < nTrees && generator.rand(0, 1) < t.treeProb) {
-            vcl::vec3 pos;
-            pos.x = generator.rand(t.minX, t.maxX);
-            pos.y = generator.rand(t.minY, t.maxY);
-            pos.z = terrain->getTerrainHeight(pos.x, pos.y);
-            float snowCoverage = std::max(0.5f, 0.5f + 0.5f * pos.z / terrain->getMaxTerrainHeight());
-            if (generator.rand(0, 1) < pineToTupeloRatio)
-                objects.push_back(std::make_shared<Tree>(shaders, pos, pine, snowCoverage));
-            else objects.push_back(std::make_shared<Tree>(shaders, pos, tupelo, snowCoverage));
-            curNTrees++;
-            t.containsObject = true;
-        } else if (curNRocks < nRocks && generator.rand(0, 1) < t.rockProb) {
-            vcl::vec3 pos;
-            pos.x = generator.rand(t.minX, t.maxX);
-            pos.y = generator.rand(t.minY, t.maxY);
-            pos.z = terrain->getTerrainHeight(pos.x, pos.y);
-            float snowCoverage = std::max(0.5f, 0.5f + 0.5f * pos.z / terrain->getMaxTerrainHeight());
-            objects.push_back(std::make_shared<Rock>(shaders, pos, snowCoverage));
-            curNRocks++;
-            t.containsObject = true;
-        }
+            if (generator.rand(0, 1) < t.bushProb) {
+                vcl::vec3 pos;
+                pos.x = generator.rand(t.minX, t.maxX);
+                pos.y = generator.rand(t.minY, t.maxY);
+                if (t.containsObject) {
+                    if (t.tree != nullptr) {
+                        auto tree = std::static_pointer_cast<Tree>(t.tree);
+                        while (hypot(pos.x - tree->getPosition().x, pos.y - tree->getPosition().y) <
+                               tree->getBranchRadius()) {
+                            pos.x = generator.rand(t.minX, t.maxX);
+                            pos.y = generator.rand(t.minY, t.maxY);
+                        }
+                    } else {
+                        auto &bb = t.rock->getBoundingBox();
+                        while (bb.minX < pos.x && pos.x < bb.maxX && bb.minY < pos.y && pos.y < bb.maxY) {
+                            pos.x = generator.rand(t.minX, t.maxX);
+                            pos.y = generator.rand(t.minY, t.maxY);
+                        }
+                    }
+                }
+                pos.z = terrain->getTerrainHeight(pos.x, pos.y);
+                float snowCoverage = std::max(0.5f, 0.5f + 0.5f * pos.z / terrain->getMaxTerrainHeight());
+                if (generator.rand(0, 1) < bush1to2Ratio)
+                    objects.push_back(std::make_shared<Tree>(shaders, pos, bush1, snowCoverage));
+                else objects.push_back(std::make_shared<Tree>(shaders, pos, bush2, snowCoverage));
+                curNBushes++;
+                t.bushProb -= 1.0f;
+            }
 
-        if (curNTrees == nTrees && curNRocks == nRocks)
-            break;
+            if (curNBushes == nBushes)
+                break;
+        }
     }
 }
 

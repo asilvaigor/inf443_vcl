@@ -138,12 +138,14 @@ mesh mesh_primitive_ellipsoid(float a, float b, float c, const vec3& p0, size_t 
     return shape;
 }
 
-mesh mesh_primitive_semi_ellipsoid(float a, float b, float c, const vec3& p0, size_t Nu, size_t Nv)
+mesh mesh_primitive_semi_ellipsoid(float a, float b, float c, const vec3& p0, float zAngle, size_t Nu, size_t Nv)
 {
     assert(Nu>=4);
     assert(Nv>=4);
 
     mesh shape;
+    float sinz = std::sin(zAngle);
+    float cosz = std::cos(zAngle);
     for( size_t ku=0; ku<Nu; ++ku ) {
         for( size_t kv=0; kv<Nv; ++kv ) {
             // Parametric coordinates
@@ -155,8 +157,10 @@ mesh mesh_primitive_semi_ellipsoid(float a, float b, float c, const vec3& p0, si
             const float phi   = static_cast<float>( 2*3.14159f*u );
 
             // Spherical coordinates
-            const float x = a * std::sin(theta) * std::cos(phi);
-            const float y = b * std::sin(theta) * std::sin(phi);
+            const float x1 = a * std::sin(theta) * std::cos(phi);
+            const float y1 = b * std::sin(theta) * std::sin(phi);
+            const float x = cosz * x1 - sinz * y1;
+            const float y = sinz * x1 + cosz * y1;
             const float z = c * std::cos(theta);
 
 
