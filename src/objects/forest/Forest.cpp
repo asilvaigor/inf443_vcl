@@ -151,7 +151,7 @@ void Forest::generateBushes(Shaders &shaders, int nBushes) {
                     if (t.tree != nullptr) {
                         auto tree = std::static_pointer_cast<Tree>(t.tree);
                         while (hypot(pos.x - tree->getPosition().x, pos.y - tree->getPosition().y) <
-                               tree->getBranchRadius()) {
+                               tree->getTrunkRadius()) {
                             pos.x = generator.rand(t.minX, t.maxX);
                             pos.y = generator.rand(t.minY, t.maxY);
                         }

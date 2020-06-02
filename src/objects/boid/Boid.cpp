@@ -135,3 +135,7 @@ void Boid::birdBound(Bird *bird) {
 //    vertDist = vertDist*vertDist;
     bird->addFutureSpeed({0.0f, 0.0f, turnFactor});
 }
+
+std::shared_ptr<Object> & Boid::getBird(int idx) {
+    return birds[idx];
+}

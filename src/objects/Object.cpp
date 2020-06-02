@@ -42,3 +42,11 @@ BoundingSphere &Object::getBoundingSphere() {
 BoundingBox &Object::getBoundingBox() {
     return boundingBox;
 }
+
+vcl::vec3 & Object::getPosition() {
+    return position;
+}
+
+vcl::mat3 & Object::getOrientation() {
+    return orientation;
+}

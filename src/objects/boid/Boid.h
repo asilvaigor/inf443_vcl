@@ -31,6 +31,8 @@ public:
 
     std::vector<std::shared_ptr<Object>> &getObjects();
 
+    std::shared_ptr<Object> &getBird(int idx);
+
 private:
     std::vector<std::shared_ptr<Object>> birds;
     float maxX, maxY, maxZ;

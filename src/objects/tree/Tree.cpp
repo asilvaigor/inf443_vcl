@@ -10,7 +10,7 @@ std::shared_ptr<Texture> Tree::leafTexture = nullptr;
 std::shared_ptr<Texture> Tree::snowTexture = nullptr;
 
 Tree::Tree(Shaders &shaders, vcl::vec3 &pos, TreeSpecies &species, float snowCoverage, bool verbose) :
-        Object(false, species.shadowless), species(species), position(pos) {
+        Object(false, species.shadowless), species(species) {
     if (Tree::branchTexture == nullptr)
         branchTexture = std::make_shared<Texture>("wood");
     if (Tree::leafTexture == nullptr)
@@ -18,6 +18,7 @@ Tree::Tree(Shaders &shaders, vcl::vec3 &pos, TreeSpecies &species, float snowCov
     if (Tree::snowTexture == nullptr)
         snowTexture = std::make_shared<Texture>("snow");
 
+    position = pos;
     this->verbose = verbose;
     snowCoverage = normalizeSnowCoverage(snowCoverage);
     createMeshes(snowCoverage);
@@ -51,10 +52,6 @@ void Tree::drawMesh(vcl::camera_scene &camera, float) {
         snowTexture->bind();
         vcl::draw(snowyLeavesDrawable, camera);
     }
-}
-
-vcl::vec3 &Tree::getPosition() {
-    return position;
 }
 
 float &Tree::getTrunkRadius() {

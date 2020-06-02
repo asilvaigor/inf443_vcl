@@ -8,8 +8,9 @@
 std::vector<GLuint> Bird::textures;
 
 Bird::Bird(Shaders &shaders, vcl::vec3 pos, float scale, vcl::vec3 speed, float turning) :
-    Object(true), p(pos), dp(speed), turining(turning),
+    Object(true), dp(speed), turining(turning),
     bird("../src/assets/models/bird.fbx", shaders["mesh"]) {
+    position = pos;
     if (textures.empty()) {
         Texture feathers("bird");
         textures.push_back(feathers.getId());
@@ -43,8 +44,8 @@ void Bird::drawMesh(vcl::camera_scene &camera, float time) {
         gamma = -M_PI_2;
     vcl::mat3 cRotation = vcl::rotation_from_axis_angle_mat3(dp, gamma);
 
-    vcl::mat3 R = cRotation*bRotation*aRotation;
-    vcl::mat4 transform = {R, p};
+    orientation = cRotation*bRotation*aRotation;
+    vcl::mat4 transform = {orientation, position};
 
     // Bird draw
     bird.transform(transform);
@@ -67,12 +68,8 @@ vcl::vec3 Bird::getFutureSpeed() {
     return ndp;
 }
 
-vcl::vec3 Bird::getPosition() {
-    return p;
-}
-
 void Bird::setPosition(vcl::vec3 pos) {
-    p = pos;
+    position = pos;
 }
 
 void Bird::stepSpeed() {
@@ -81,5 +78,5 @@ void Bird::stepSpeed() {
 }
 
 void Bird::stepPosition() {
-    p += dp;
+    position += dp;
 }

@@ -104,7 +104,7 @@ void camera_scene::apply_translation_orthogonal_to_screen_plane(float tr)
     translation += (alpha+0.5f) * orientation * vec3{0.0f, 0.0f, tr};
 }
 
-static vec3 trackball_projection(float x, float y, float radius=1.0f)
+vec3 trackball_projection(float x, float y, float radius)
 {
     const float d = std::sqrt(x*x + y*y);
     float z = 0;

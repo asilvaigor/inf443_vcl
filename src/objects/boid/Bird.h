@@ -22,8 +22,6 @@ public:
 
     void setFutureSpeed(vcl::vec3 speed);
 
-    vcl::vec3 getPosition();
-
     void setPosition(vcl::vec3 pos);
 
     void stepSpeed();
@@ -31,7 +29,6 @@ public:
     void stepPosition();
 
 private:
-    vcl::vec3 p;
     vcl::vec3 dp;
     vcl::vec3 odp;
     vcl::vec3 ndp;

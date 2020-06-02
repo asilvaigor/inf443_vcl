@@ -59,6 +59,10 @@ void Scene::display() {
     }
 }
 
+void Scene::haveCameraFollow(std::shared_ptr<Object> &object) {
+    gui->haveCameraFollow(object);
+}
+
 void Scene::updateScene() {
     float time = glfwGetTime();
 

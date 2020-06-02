@@ -13,6 +13,8 @@ int SceneGui::windowWidth;
 int SceneGui::windowHeight;
 vcl::camera_control_glfw SceneGui::cameraControl;
 vcl::camera_scene SceneGui::camera;
+vcl::mat3 SceneGui::followedOrientation = vcl::mat3::identity();
+std::shared_ptr<Object> SceneGui::followedObject = nullptr;
 
 std::shared_ptr<SceneGui> &SceneGui::getInstance(std::string _windowTitle) {
     if (gui != nullptr)
@@ -39,6 +41,8 @@ SceneGui::SceneGui(std::string &windowTitle) : windowTitle(windowTitle) {
     sunAngle = 0.25 * M_PI;
     verticesOn = false;
     gridOn = false;
+    followedObject = nullptr;
+    followedOrientation.rotate_x(M_PI_2);
 
     // Initial camera parameters
     glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
@@ -87,6 +91,9 @@ void SceneGui::update() {
     ImGui::Checkbox("Grid", &gridOn);
     ImGui::SliderAngle("Sun Angle", &sunAngle, -180, 180);
 
+    if (followedObject != nullptr)
+        haveCameraFollow(followedObject);
+
     opengl_debug();
 }
 
@@ -110,6 +117,14 @@ bool SceneGui::showVertices() {
 
 bool SceneGui::showGrid() {
     return gridOn;
+}
+
+void SceneGui::haveCameraFollow(std::shared_ptr<Object> &obj) {
+    followedObject = obj;
+    camera.translation = -obj->getPosition();
+    float alpha = 0.1;
+    objectOrientation = alpha * obj->getOrientation() + (1 - alpha) * objectOrientation;
+    camera.orientation = objectOrientation * followedOrientation;
 }
 
 vcl::camera_scene &SceneGui::getCamera() {
@@ -143,7 +158,9 @@ void SceneGui::windowSizeCallback(GLFWwindow *, int, int) {
 }
 
 void SceneGui::cursorPositionCallback(GLFWwindow *w, double xpos, double ypos) {
-    cameraControl.update_mouse_move(camera, w, float(xpos), float(ypos));
+    if (followedObject == nullptr)
+        cameraControl.update_mouse_move(camera, w, float(xpos), float(ypos));
+    else cameraControl.update_mouse_move(camera, followedOrientation, w, float(xpos), float(ypos));
 }
 
 void SceneGui::mouseClickCallback(GLFWwindow *, int button, int action, int mods) {
