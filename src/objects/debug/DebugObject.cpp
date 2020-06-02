@@ -13,7 +13,7 @@ void DebugObject::drawMesh(vcl::camera_scene &camera, float) {
     }
 }
 
-void DebugObject::addMesh(vcl::mesh_drawable &mesh) {
+void DebugObject::addMesh(vcl::mesh_drawable mesh) {
     mesh.shader = shaders["mesh"];
     meshes.emplace_back(mesh);
 }

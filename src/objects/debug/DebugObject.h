@@ -13,7 +13,7 @@ public:
 
     void drawMesh(vcl::camera_scene &camera, float time) override;
 
-    void addMesh(vcl::mesh_drawable& mesh);
+    void addMesh(vcl::mesh_drawable mesh);
 
 private:
     std::vector<vcl::mesh_drawable> meshes;
