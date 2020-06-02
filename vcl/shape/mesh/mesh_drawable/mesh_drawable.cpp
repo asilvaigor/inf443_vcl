@@ -53,6 +53,12 @@ void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shad
     vcl::draw(drawable.data); opengl_debug();
 }
 
+void draw_snow(const mesh_drawable& drawable, const camera_scene& camera)
+{
+    load_data_snow(drawable, camera, drawable.shader, drawable.texture_id);
+    vcl::draw(drawable.data); opengl_debug();
+}
+
 void load_data(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id) {
     if (mesh_drawable::shaderOverride != (GLuint) 0)
         shader = mesh_drawable::shaderOverride;
@@ -135,8 +141,46 @@ void load_data(const mesh_drawable& drawable, const camera_scene& camera, GLuint
         uniform(shader, "bones", drawable.uniform.bones.data(), drawable.uniform.bones.size()); opengl_debug();
 
     vcl::draw(drawable.data); opengl_debug();
+}
 
+void load_data_snow(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id) {
+    if (mesh_drawable::shaderOverride != (GLuint) 0)
+        shader = mesh_drawable::shaderOverride;
 
+    // If shader is, skip display
+    if(shader==0)
+        return ;
+
+    // Check that the shader is a valid one
+    if( glIsProgram(shader)==GL_FALSE ) {
+        std::cout<<"No valid shader set to display mesh: skip display"<<std::endl;
+        return;
+    }
+
+    // Switch shader program only if necessary
+    GLint current_shader = 0;
+    glGetIntegerv(GL_CURRENT_PROGRAM, &current_shader); opengl_debug();
+    if(shader!=GLuint(current_shader))
+        glUseProgram(shader); opengl_debug();
+
+    // Associating textures
+    auto texture_sampler = glGetUniformLocation(shader, "texture_sampler");
+    glUseProgram(shader);
+    glUniform1i(texture_sampler, 0);
+
+    // Bind texture only if id != 0
+    if(texture_id!=0) {
+        assert(glIsTexture(texture_id));
+        glBindTexture(GL_TEXTURE_2D, texture_id);  opengl_debug();
+    }
+
+    // Send all uniform values to the shader
+    uniform(shader, "translation", drawable.uniform.transform.translation);  opengl_debug();
+    uniform(shader, "scaling", drawable.uniform.transform.scaling);          opengl_debug();
+    uniform(shader, "color", drawable.uniform.color);                        opengl_debug();
+    uniform(shader, "camera_dir", camera.camera_direction());                opengl_debug();
+    uniform(shader,"perspective",camera.perspective.matrix());         opengl_debug();
+    uniform(shader,"view",camera.view_matrix());                       opengl_debug();
 }
 
 }
