@@ -29,6 +29,7 @@ int main() {
 
     camera.orientation = Rz*Rx;
     camera.scale = 200;
+
     WaterLimits waterLimits(-100, 100, -35, 135, -30, -10);
     auto terrain = std::make_shared<MountainTerrain>(scene.getShaders(), 280, 280, waterLimits);
     auto terrainBase = std::static_pointer_cast<BaseTerrain>(terrain);
