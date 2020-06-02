@@ -7,8 +7,8 @@
 #include "BearCompanion.h"
 
 BearCompanion::BearCompanion(Shaders& shaders, vcl::CyclicCardinalSpline &trajectory,
-        float initialS, std::shared_ptr<Bear> bear) :
-    Object(true, true), s(initialS), trajectory(trajectory), bear(std::move(bear)){
+        float initialS, std::shared_ptr<Bear>& bear) :
+    Object(true, true), s(initialS), trajectory(trajectory), bear(bear){
     dp = trajectory.position(s+ds)-trajectory.position(s-ds);
     position = trajectory.position(s);
     currentTime = 0;

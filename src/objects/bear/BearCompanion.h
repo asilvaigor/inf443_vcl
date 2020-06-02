@@ -12,7 +12,7 @@
 
 class BearCompanion : public Object{
 public:
-    BearCompanion(Shaders& shaders, vcl::CyclicCardinalSpline& trajectory, float initialS, std::shared_ptr<Bear>);
+    BearCompanion(Shaders& shaders, vcl::CyclicCardinalSpline& trajectory, float initialS, std::shared_ptr<Bear>& bear);
 
     void drawMesh(vcl::camera_scene &camera, float time) override;
 
@@ -21,7 +21,7 @@ private:
     float ds = 0.01;
     vcl::CyclicCardinalSpline& trajectory;
     vcl::mesh_drawable mesh;
-    std::shared_ptr<Bear> bear;
+    std::shared_ptr<Bear>& bear;
 
     vcl::vec3 dp;
     vcl::vec3 p;

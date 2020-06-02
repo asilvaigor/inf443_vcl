@@ -79,11 +79,11 @@ int main() {
             std::make_shared<Bear>(scene.getShaders(), terrain, pos));
     scene.addObject(bear);
 
-    auto bearPtr = std::static_pointer_cast<Bear>(bear);
+    std::shared_ptr<Bear> bearPtr = std::static_pointer_cast<Bear>(bear);
 
     // Adding bear companion
     auto companion = std::static_pointer_cast<Object>(std::make_shared<BearCompanion>(
-            scene.getShaders(), spline, 0.0f, std::static_pointer_cast<Bear>(bearPtr)));
+            scene.getShaders(), spline, 0.0f, bearPtr));
     scene.addObject(companion);
 
 
