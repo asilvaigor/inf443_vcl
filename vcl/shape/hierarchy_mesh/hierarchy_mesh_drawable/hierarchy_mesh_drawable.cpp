@@ -112,7 +112,7 @@ void hierarchy_mesh_drawable::update_local_to_global_coordinates()
     }
 }
 
-void draw(const hierarchy_mesh_drawable& hierarchy, const camera_scene& camera, int shader)
+void draw(const hierarchy_mesh_drawable& hierarchy, camera_scene& camera, int shader)
 {
     const size_t N = hierarchy.elements.size();
     for(size_t k=0; k<N; ++k)

@@ -89,7 +89,7 @@ std::shared_ptr<Bear> addBear(Scene &scene, std::shared_ptr<BaseTerrain> &terrai
 }
 
 void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_ptr<Bear> &bear) {
-    scene.getGui()->getCamera().scale = 5;
+    scene.getGui()->getCamera().set_scale(5);
 
     // Spline
     // Adding positions

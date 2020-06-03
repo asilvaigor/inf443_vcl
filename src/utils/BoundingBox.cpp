@@ -58,7 +58,7 @@ float BoundingBox::relativeSize(vcl::camera_scene &camera) {
 
     float xMin = std::numeric_limits<float>::max(), yMin = std::numeric_limits<float>::max(),
             xMax = std::numeric_limits<float>::lowest(), yMax = std::numeric_limits<float>::lowest();
-    auto cameraMatrix = camera.perspective.matrix() * camera.view_matrix();
+    auto cameraMatrix = camera.get_perspective_view_matrix();
     auto corners = getCorners();
 
     for (auto &pt : corners) {

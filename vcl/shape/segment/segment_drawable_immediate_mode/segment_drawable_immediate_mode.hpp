@@ -24,7 +24,7 @@ public:
 
     segments_gpu data_gpu;
 
-    void draw(GLuint shader, const camera_scene& camera);
+    void draw(GLuint shader, camera_scene& camera);
 
 private:
     bool initialized;

@@ -108,9 +108,9 @@ void BillboardGenerator::calculateVirtualCamera(vcl::camera_scene &camera, vcl::
     // Picking the angle to cover perfectly the bounding box face at the required distance
     float angle = 2 * std::atan(height / (2 * dist));
 
-    camera.scale = 1.0f;
-    camera.perspective = vcl::perspective_structure(angle, width / height, Constants::CAMERA_Z_NEAR,
-                                                    Constants::CAMERA_Z_FAR);
+    camera.set_scale(1.0f);
+    camera.set_perspective(vcl::perspective_structure(angle, width / height, Constants::CAMERA_Z_NEAR,
+                                                    Constants::CAMERA_Z_FAR));
     vcl::mat3 r;
     if (xIsConstant) {
         r.rotate_y(M_PI_2);
@@ -118,15 +118,17 @@ void BillboardGenerator::calculateVirtualCamera(vcl::camera_scene &camera, vcl::
     } else {
         r.rotate_x(M_PI_2);
     }
-    camera.orientation = r;
+    camera.set_orientation(r);
+    vcl::vec3 t;
     if (xIsConstant) {
-        camera.translation.x = -p1.x + camera.orientation.xz + dist;
-        camera.translation.y = -0.5f * (p1.y + p3.y) + camera.orientation.yz;
+        t.x = -p1.x + camera.get_orientation().xz + dist;
+        t.y = -0.5f * (p1.y + p3.y) + camera.get_orientation().yz;
     } else {
-        camera.translation.x = -0.5f * (p1.x + p3.x) + camera.orientation.xz;
-        camera.translation.y = -p1.y + camera.orientation.yz + dist;
+        t.x = -0.5f * (p1.x + p3.x) + camera.get_orientation().xz;
+        t.y = -p1.y + camera.get_orientation().yz + dist;
     }
-    camera.translation.z = -0.5f * (p1.z + p2.z) + camera.orientation.zz;
+    t.z = -0.5f * (p1.z + p2.z) + camera.get_orientation().zz;
+    camera.set_translation(t);
 
     // Setting the texture sizes
     if (xIsConstant) {

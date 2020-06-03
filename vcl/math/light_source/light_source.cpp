@@ -21,7 +21,7 @@ void light_source::update(camera_scene &camera, vec3 &p, vec3 &d) {
     pos = p;
     dir = d;
     calculate_color();
-    auto corners = camera.calculate_frustum_corners(camera_z_near, camera_z_far);
+    auto corners = camera.get_frustum_corners(camera_z_near, camera_z_far);
     vec3 centroid;
     float z_min = std::numeric_limits<float>::max();
     float z_max = std::numeric_limits<float>::lowest();

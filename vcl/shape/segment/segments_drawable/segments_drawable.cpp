@@ -16,11 +16,11 @@ segments_drawable::segments_drawable(const std::vector<vec3>& data_arg)
     :uniform(),data(segments_gpu(data_arg)),shader(0)
 {}
 
-void draw(const segments_drawable& shape, const camera_scene& camera)
+void draw(const segments_drawable& shape, camera_scene& camera)
 {
     draw(shape, camera, shape.shader);
 }
-void draw(const segments_drawable& shape, const camera_scene& camera, GLuint shader)
+void draw(const segments_drawable& shape, camera_scene& camera, GLuint shader)
 {
     // Check shader and only switch if necessary
     if( glIsProgram(shader)==GL_FALSE ) {
@@ -42,8 +42,7 @@ void draw(const segments_drawable& shape, const camera_scene& camera, GLuint sha
     uniform(shader, "color", shape.uniform.color);                        opengl_debug();
 
 
-    uniform(shader,"perspective",camera.perspective.matrix());            opengl_debug();
-    uniform(shader,"view",camera.view_matrix());                          opengl_debug();
+    uniform(shader,"perspective_view",camera.get_perspective_view_matrix());  opengl_debug();
 
     vcl::draw(shape.data);                                                opengl_debug();
 }

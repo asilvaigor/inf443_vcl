@@ -16,7 +16,7 @@ int main() {
     vcl::camera_scene & camera = scene.getGui()->getCamera();
 
 //    // Camera settings
-//    camera.translation = {-50, -50, 0};
+//    camera.set_translation({-50, -50, 0});
 //
 //    float phi = M_PI_2-M_PI_4/2;
 //    float theta = M_PI_2+M_PI_4;
@@ -30,12 +30,12 @@ int main() {
 //                          0,0,1};
 
 
-//    camera.orientation = Rz*Rx;
-//    camera.scale = 200;
-    std::vector<WaterOscillator> oscillators;
-    oscillators.emplace_back(vcl::vec2(0.0f, 0.0f), 0.1f, 0.01, 1, 1, true);
-    oscillators.emplace_back(vcl::vec2(20.0f, 20.0f), 0.01f, 0.01, 10, 1, true);
-    oscillators.emplace_back(vcl::vec2(-30.0f, -30.0f), 0.01f, 0.01, 10, 1, true);
+//    camera.set_orientation(Rz*Rx);
+//    camera.set_scale(200);
+    auto oscillators = std::make_shared<std::vector<WaterOscillator>>();
+    oscillators->emplace_back(vcl::vec2(0.0f, 0.0f), 0.1f, 0.01, 1, 1, true);
+    oscillators->emplace_back(vcl::vec2(20.0f, 20.0f), 0.01f, 0.01, 10, 1, true);
+    oscillators->emplace_back(vcl::vec2(-30.0f, -30.0f), 0.01f, 0.01, 10, 1, true);
 
     WaterLimits waterLimits(10, 280, 10, 280, 0, 1);
 

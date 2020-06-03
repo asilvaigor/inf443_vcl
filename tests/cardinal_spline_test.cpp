@@ -15,7 +15,7 @@ int main() {
     vcl::camera_scene & camera = scene.getGui()->getCamera();
 
     // Camera settings
-    camera.translation = {0, 0, 0};
+    camera.set_translation({0, 0, 0});
 
     float phi = M_PI_2-M_PI_4/2;
     float theta = M_PI_2+M_PI_4;
@@ -29,8 +29,8 @@ int main() {
                           0,0,1};
 
 
-    camera.orientation = Rz*Rx;
-    camera.scale = 30;
+    camera.set_orientation(Rz*Rx);
+    camera.set_scale(30);
     scene.getGui()->setShowVertices(true);
 
     // Adding marker to origin
@@ -38,18 +38,18 @@ int main() {
     scene.addObject(marker);
 
     // Adding positions
-    vcl::CyclicCardinalSpline spline(5);
-    std::vector<vcl::vec3> keyframes;
-    keyframes.emplace_back(10, 0, 10);
-    keyframes.emplace_back(10, 0, 0);
-    keyframes.emplace_back(0, 0, 10);
-    keyframes.emplace_back(0, 0, 0);
+    auto spline = std::make_shared<vcl::CyclicCardinalSpline>(5);
+    auto keyframes = std::make_shared<std::vector<vcl::vec3>>();
+    keyframes->emplace_back(10, 0, 10);
+    keyframes->emplace_back(10, 0, 0);
+    keyframes->emplace_back(0, 0, 10);
+    keyframes->emplace_back(0, 0, 0);
 
     //Adding positions to spline
-    spline.addKeyFrame(keyframes[0], 4);
-    spline.addKeyFrame(keyframes[1], 2);
-    spline.addKeyFrame(keyframes[2], 1);
-    spline.addKeyFrame(keyframes[3], 0);
+    spline->addKeyFrame((*keyframes)[0], 4);
+    spline->addKeyFrame((*keyframes)[1], 2);
+    spline->addKeyFrame((*keyframes)[2], 1);
+    spline->addKeyFrame((*keyframes)[3], 0);
 
     // Adding trajectory lines
     auto drawer = std::static_pointer_cast<Object>(std::make_shared<TrajectoryDrawer>(scene.getShaders(), keyframes));
@@ -59,9 +59,9 @@ int main() {
     const float dt = 0.01;
     float t = 0;
     float tf = 6;
-    std::vector<vcl::vec3 > traj;
+    auto traj = std::make_shared<std::vector<vcl::vec3>>();
     while (t < tf){
-        traj.push_back(spline.position(t));
+        traj->push_back(spline->position(t));
         t+= dt;
     }
 
@@ -71,11 +71,11 @@ int main() {
     // Printing positions
     auto debugObject = std::static_pointer_cast<Object>(std::make_shared<DebugObject>(scene.getShaders()));
     auto debugObjectPtr = std::static_pointer_cast<DebugObject>(debugObject);
-    debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, keyframes[0]));
-    debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, keyframes[1]));
-    debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, keyframes[2]));
-    debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, keyframes[3]));
-    debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, spline.position(7.5)));
+    debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, (*keyframes)[0]));
+    debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, (*keyframes)[1]));
+    debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, (*keyframes)[2]));
+    debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, (*keyframes)[3]));
+    debugObjectPtr->addMesh(vcl::mesh_primitive_sphere(1.0, spline->position(7.5)));
     scene.addObject(debugObject);
 
     scene.display();

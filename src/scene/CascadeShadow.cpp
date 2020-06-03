@@ -22,9 +22,11 @@ CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
     for (int i = 0; i < nCascades; i++) {
         zN = zF;
         zF = light.get_z_far() / std::max(1.0f, (4.0f * (float) (nCascades - i - 1)));
+        zNearFarList.push_back({zN, zF});
         lights.emplace_back(std::make_shared<vcl::light_source>(light.get_pos(), light.get_dir(), zN, zF, i));
         lights.emplace_back(std::make_shared<vcl::light_source>(light.get_pos(), light.get_dir(), zN, zF, i));
     }
+    zNearFarList.push_back({zNearFarList[0].first, zNearFarList.back().second});
 }
 
 void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects,
@@ -41,9 +43,10 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
 
         vcl::camera_scene &camera = gui->getCamera();
         vcl::camera_scene &prevCamera = lastCamera[lastUpdated];
-        mustUpdate |= std::fabs(prevCamera.perspective.image_aspect - camera.perspective.image_aspect) > 1e-6;
-        mustUpdate |= prevCamera.camera_position().dist(camera.camera_position()) > 1.0f;
-        mustUpdate |= prevCamera.camera_direction().angle(camera.camera_direction()) > 1e-2f;
+        mustUpdate |= std::fabs(prevCamera.get_perspective().image_aspect -
+                camera.get_perspective().image_aspect) > 1e-6;
+        mustUpdate |= prevCamera.get_position().dist(camera.get_position()) > 1.0f;
+        mustUpdate |= prevCamera.get_direction().angle(camera.get_direction()) > 1e-2f;
         mustUpdate |= std::fabs(gui->getSunAngle() - lastSunAngle[lastUpdated]) > 1e-3f;
         float timeThreshold = nMovableObjects[lastUpdated] > 0 ? 1e-3f : 1.0f;
         mustUpdate |= (lastUpdated % 2 == 1) && (time - lastTime[lastUpdated] > timeThreshold);
@@ -73,9 +76,12 @@ void CascadeShadow::update(std::vector<std::shared_ptr<Object> > &movableObjects
     maps->unbind_all(gui->getWindowWidth(), gui->getWindowHeight());
 }
 
+std::vector<std::pair<float, float> > &CascadeShadow::getZNearFarList() {
+    return zNearFarList;
+}
+
 void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::camera_scene &camera) {
     maps->bind(lastUpdated);
-    camera.calculate_frustum_planes();
     nMovableObjects[lastUpdated] = 0;
 
     for (auto &obj : objects) {
@@ -104,7 +110,7 @@ void CascadeShadow::renderObject(std::shared_ptr<Object> &obj, vcl::camera_scene
 
     // A normal object must be in the correct frustum to be rendered
     if (obj->hasShadow() && (obj->getLight()->get_shadow_map_id() == lastUpdated ||
-           obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated]))) {
+                             obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated]))) {
         obj->setLight(lights[lastUpdated]);
         nMovableObjects[lastUpdated]++;
         obj->draw(camera);

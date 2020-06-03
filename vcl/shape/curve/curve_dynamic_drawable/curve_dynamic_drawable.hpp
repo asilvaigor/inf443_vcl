@@ -22,7 +22,7 @@ public:
     void add_point(const vec3& p);
 
     /** Display the curve */
-    void draw(GLuint shader, const camera_scene& camera);
+    void draw(GLuint shader, camera_scene& camera);
 
 private:
 

@@ -22,9 +22,7 @@ uniform float scaling = 1.0;                                         // user def
 uniform vec3 scaling_axis = vec3(1.0,1.0,1.0);                       // user defined scaling
 
 // view transform
-uniform mat4 view;
-// perspective matrix
-uniform mat4 perspective;
+uniform mat4 perspective_view;
 
 uniform mat4 light_matrices[6];
 
@@ -48,5 +46,5 @@ void main()
         fragment.light_ref_pos[i] = light_matrices[i] * position_transformed;
 
     fragment.position = position_transformed;
-    gl_Position = perspective * view * position_transformed;
+    gl_Position = perspective_view * position_transformed;
 }

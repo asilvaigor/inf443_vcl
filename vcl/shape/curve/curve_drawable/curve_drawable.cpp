@@ -16,12 +16,12 @@ curve_drawable::curve_drawable(const std::vector<vec3>& data_arg)
     :uniform(),data(curve_gpu(data_arg)),shader(0)
 {}
 
-void draw(const curve_drawable& drawable, const camera_scene& camera)
+void draw(curve_drawable& drawable, camera_scene& camera)
 {
     draw(drawable, camera, drawable.shader);
 }
 
-void draw(const curve_drawable& drawable, const camera_scene& camera, GLuint shader)
+void draw(curve_drawable& drawable, camera_scene& camera, GLuint shader)
 {
 
     // If shader is 0, use the current one
@@ -45,8 +45,7 @@ void draw(const curve_drawable& drawable, const camera_scene& camera, GLuint sha
     uniform(shader, "color", drawable.uniform.color);                        opengl_debug();
     uniform(shader, "scaling", drawable.uniform.transform.scaling);          opengl_debug();
 
-    uniform(shader,"perspective",camera.perspective.matrix());      opengl_debug();
-    uniform(shader,"view",camera.view_matrix());                    opengl_debug();
+    uniform(shader,"perspective_view",camera.get_perspective_view_matrix()); opengl_debug();
 
     vcl::draw(drawable.data);                                                opengl_debug();
 }

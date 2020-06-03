@@ -20,7 +20,7 @@ int main() {
     vcl::camera_scene &camera = scene.getGui()->getCamera();
 
     // Camera settings
-    camera.translation = {-50, -50, 0};
+    camera.set_translation({-50, -50, 0});
 
     float phi = M_PI_2-M_PI_4/2;
     float theta = M_PI_2+M_PI_4;
@@ -34,8 +34,8 @@ int main() {
                           0,0,1};
 
 
-    camera.orientation = Rz*Rx;
-    camera.scale = 200;
+    camera.set_orientation(Rz*Rx);
+    camera.set_scale(200);
 
     // Adding terrain
     WaterLimits waterLimits(-100, 100, -35, 135, -30, -10);

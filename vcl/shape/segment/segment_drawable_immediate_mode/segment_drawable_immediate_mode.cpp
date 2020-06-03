@@ -17,7 +17,7 @@ void segment_drawable_immediate_mode::init()
 
 
 
-void segment_drawable_immediate_mode::draw(GLuint shader, const camera_scene& camera)
+void segment_drawable_immediate_mode::draw(GLuint shader, camera_scene& camera)
 {
     if(initialized==false)
     {
@@ -37,8 +37,7 @@ void segment_drawable_immediate_mode::draw(GLuint shader, const camera_scene& ca
     uniform(shader, "p1", uniform_parameter.p1);                    opengl_debug();
     uniform(shader, "p2", uniform_parameter.p2);                    opengl_debug();
 
-    uniform(shader,"perspective",camera.perspective.matrix());      opengl_debug();
-    uniform(shader,"view",camera.view_matrix());                    opengl_debug();
+    uniform(shader,"perspective_view",camera.get_perspective_view_matrix());      opengl_debug();
 
     vcl::draw(data_gpu);                                            opengl_debug();
 }

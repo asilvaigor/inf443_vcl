@@ -47,7 +47,7 @@ void Snow::update(float time) {
     float dt = time - lastTime;
     if (camera == nullptr)
         return;
-    vcl::vec3 cam = camera->camera_position();
+    vcl::vec3 cam = camera->get_position();
 
     for (int i = 0; i < nParticles; i++) {
         auto &p = particles[i].uniform.transform.translation;

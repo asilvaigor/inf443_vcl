@@ -12,8 +12,8 @@ int main() {
     vcl::vec3 lightDir(-1, 0, -1);
     vcl::light_source light;
     vcl::camera_scene camera;
-    camera.perspective = vcl::perspective_structure(
-            40 * 3.14f / 180, 1.28, 0.01f, 500.0f);
+    camera.set_perspective(vcl::perspective_structure(
+            40 * 3.14f / 180, 1.28, 0.01f, 500.0f));
     light.update(camera, lightPos, lightDir);
 
     std::cout << light.get_matrix() * vcl::vec4(0, 0, 0, 1) << std::endl;
