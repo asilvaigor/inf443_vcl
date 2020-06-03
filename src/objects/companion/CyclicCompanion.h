@@ -5,12 +5,13 @@
 #ifndef PGM_CYCLICCOMPANION_H
 #define PGM_CYCLICCOMPANION_H
 
-#include "CardinalSplineCompanion.h"
+#include "ActivatableCompanion.h"
 #include "vcl.hpp"
 
-class CyclicCompanion : public CardinalSplineCompanion {
+class CyclicCompanion : public ActivatableCompanion {
 public:
-    CyclicCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS, bool debug=true);
+    CyclicCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS, bool active = false
+            , bool debug=true);
 
     void update(float time) override;
 private:

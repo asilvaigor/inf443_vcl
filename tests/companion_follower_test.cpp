@@ -7,6 +7,7 @@
 #include <src/objects/debug/DebugObject.h>
 #include <src/objects/companion/CyclicCompanion.h>
 #include <src/objects/companion/CompanionFollower.h>
+#include <src/objects/companion/OneWayCompanion.h>
 #include "scene/Scene.h"
 #include "shaders/Shaders.h"
 
@@ -41,7 +42,7 @@ int main() {
     keyframes.emplace_back(0, 50, -10);
     keyframes.emplace_back(0, 0, 5);
 
-    vcl::CyclicCardinalSpline spline((float) keyframes.size());
+    vcl::CardinalSpline spline;
 
     // Drawing trajectory
     //Adding positions to spline
@@ -51,7 +52,7 @@ int main() {
     // Trajectory
     const float dt = 0.01;
     float t = 0;
-    float tf = (float) keyframes.size();
+    float tf = 3;
     std::vector<vcl::vec3> traj;
     while (t <= tf) {
         traj.push_back(spline.position(t));
@@ -61,15 +62,20 @@ int main() {
     auto drawer = std::static_pointer_cast<Object>(std::make_shared<TrajectoryDrawer>(scene.getShaders(), traj));
     scene.addObject(drawer);
 
-    // Adding bear companion
-    auto companion = std::static_pointer_cast<Object>(std::make_shared<CyclicCompanion>(
+    // Adding cyclic companion
+    auto companion = std::static_pointer_cast<Object>(std::make_shared<OneWayCompanion>(
             scene.getShaders(), spline, 0.0f));
-    std::shared_ptr<DipoleCompanion> companionPtr = std::static_pointer_cast<DipoleCompanion>(companion);
+    std::shared_ptr<ActivatableCompanion> companionPtr = std::static_pointer_cast<ActivatableCompanion>(companion);
     scene.addObject(companion);
 
     // Adding companion follower to the scene
+    std::vector<std::shared_ptr<ActivatableCompanion>> companions;
+    companions.emplace_back(companionPtr);
+
+    std::vector<float> transitionTimes;
+
     auto follower = std::static_pointer_cast<Object>(std::make_shared<CompanionFollower>(
-            scene.getShaders(), companionPtr));
+            scene.getShaders(), companions, transitionTimes));
     scene.addObject(follower);
 
     scene.display();

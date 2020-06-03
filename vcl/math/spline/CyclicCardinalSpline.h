@@ -15,6 +15,8 @@ public:
 
     void addKeyFrame(vcl::vec3 position, float time) override;
 
+    float getDuration() override;
+
 protected:
     std::vector<vcl::vec4> adaptedKeyFrames;
     float duration;

@@ -80,3 +80,7 @@ void vcl::CardinalSpline::interpolationFunction(float time, float t0, float t1, 
     // Current point
     interpol = (2*s3-3*s2+1)*p1+(s3-2*s2+s)*d1+(-2*s3+3*s2)*p2+(s3-s2)*d2;
 }
+
+float vcl::CardinalSpline::getDuration() {
+    return maxT;
+}

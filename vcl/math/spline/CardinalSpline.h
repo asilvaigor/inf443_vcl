@@ -17,6 +17,8 @@ public:
 
     vcl::vec3 position(float time);
 
+    virtual float getDuration();
+
 protected:
     std::vector<vcl::vec4> keyframes;
     bool initializedLimits;
