@@ -45,6 +45,8 @@ void Snow::drawMesh(vcl::camera_scene &camera) {
 
 void Snow::update(float time) {
     float dt = time - lastTime;
+    if (camera == nullptr)
+        return;
     vcl::vec3 cam = camera->camera_position();
 
     for (int i = 0; i < nParticles; i++) {

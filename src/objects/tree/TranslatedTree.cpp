@@ -19,6 +19,7 @@ TranslatedTree::TranslatedTree(std::shared_ptr<Tree> &tree, vcl::vec3 &translati
 }
 
 void TranslatedTree::drawMesh(vcl::camera_scene &camera) {
+    tree->setLight(lights[0]);
     tree->branchesDrawable.uniform.transform.translation = translation;
     tree->snowyBranchesDrawable.uniform.transform.translation = translation;
     tree->leavesDrawable.uniform.transform.translation = translation;

@@ -5,7 +5,6 @@
 #include <src/objects/boid/Boid.h>
 #include "objects/terrain/BaseTerrain.h"
 #include "objects/forest/Forest.h"
-#include "objects/dome/Dome.h"
 #include "CascadeShadow.h"
 
 CascadeShadow::CascadeShadow(vcl::light_source &light, int mapResolution)
@@ -100,12 +99,13 @@ void CascadeShadow::render(std::vector<std::shared_ptr<Object> > &objects, vcl::
 }
 
 void CascadeShadow::renderObject(std::shared_ptr<Object> &obj, vcl::camera_scene &camera) {
-    auto dome = std::static_pointer_cast<Dome>(obj);
-    obj->setLight(lights[lastUpdated]);
+    if (!obj->hasShadow())
+        obj->setLight(lights[lastUpdated]);
 
     // A normal object must be in the correct frustum to be rendered
     if (obj->hasShadow() && (obj->getLight()->get_shadow_map_id() == lastUpdated ||
            obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated]))) {
+        obj->setLight(lights[lastUpdated]);
         nMovableObjects[lastUpdated]++;
         obj->draw(camera);
     }
