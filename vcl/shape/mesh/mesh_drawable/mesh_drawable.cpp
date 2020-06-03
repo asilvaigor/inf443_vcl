@@ -84,17 +84,11 @@ void load_data(mesh_drawable& drawable, camera_scene& camera, GLuint shader, GLu
     auto shadow_map_0 = glGetUniformLocation(shader, "shadow_map_0");
     auto shadow_map_1 = glGetUniformLocation(shader, "shadow_map_1");
     auto shadow_map_2 = glGetUniformLocation(shader, "shadow_map_2");
-    auto shadow_map_3 = glGetUniformLocation(shader, "shadow_map_3");
-    auto shadow_map_4 = glGetUniformLocation(shader, "shadow_map_4");
-    auto shadow_map_5 = glGetUniformLocation(shader, "shadow_map_5");
     glUseProgram(shader);
     glUniform1i(texture_sampler, 0);
     glUniform1i(shadow_map_0, 1);
     glUniform1i(shadow_map_1, 2);
     glUniform1i(shadow_map_2, 3);
-    glUniform1i(shadow_map_3, 4);
-    glUniform1i(shadow_map_4, 5);
-    glUniform1i(shadow_map_5, 6);
 
     // Bind texture only if id != 0
     if(texture_id!=0) {

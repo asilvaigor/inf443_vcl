@@ -11,7 +11,7 @@ out struct fragment_data
     vec4 normal;
     vec4 color;
     vec2 texture_uv;
-    vec4 light_ref_pos[6];
+    vec4 light_ref_pos[3];
 } fragment;
 
 
@@ -24,7 +24,7 @@ uniform vec3 scaling_axis = vec3(1.0,1.0,1.0);                       // user def
 // view transform
 uniform mat4 perspective_view;
 
-uniform mat4 light_matrices[6];
+uniform mat4 light_matrices[3];
 
 void main()
 {
@@ -42,7 +42,7 @@ void main()
     fragment.normal = R*normal;
     vec4 position_transformed = R*S*position + T;
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 3; i++)
         fragment.light_ref_pos[i] = light_matrices[i] * position_transformed;
 
     fragment.position = position_transformed;
