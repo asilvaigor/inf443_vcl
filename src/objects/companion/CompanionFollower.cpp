@@ -5,12 +5,13 @@
 #include "CompanionFollower.h"
 
 CompanionFollower::CompanionFollower(Shaders &shaders, std::vector<std::shared_ptr<ActivatableCompanion>> &companions,
-                                     std::vector<float> &trasitionTimes,
-                                     bool debug) :
-    Object(true), companions(companions), trasitionTimes(trasitionTimes), currentCompanionIndex(0), debug(debug)
+                                     std::vector<float> &trasitionTimes, vcl::vec3 initialPosition, bool debug) :
+    Object(true), companions(companions), trasitionTimes(trasitionTimes),
+    currentCompanionIndex(0), debug(debug)
 {
     assert(!companions.empty());
     assert(trasitionTimes.size() == companions.size()-1);
+    position = initialPosition;
 
     // Setting um meshes if in debug mode
     if (debug){
@@ -90,10 +91,10 @@ void CompanionFollower::updateDp() {
 }
 
 int CompanionFollower::getTransitionIndex(float time) {
-//    int k = 0;
-//    while (trasitionTimes[k] < time &&)
-//        k++;
-//    return k-1;
+    int k = 0;
+    while (trasitionTimes[k] < time && k <= trasitionTimes.size())
+        k++;
+    return k;
 }
 
 

@@ -11,7 +11,7 @@
 class CompanionFollower : public Object {
 public:
     CompanionFollower(Shaders &shaders, std::vector<std::shared_ptr<ActivatableCompanion>> &companions,
-            std::vector<float> &trasitionTimes, bool debug = true);
+                      std::vector<float> &trasitionTimes, vcl::vec3 initialPosition = {0, 0, 0}, bool debug = true);
 
     void drawMesh(vcl::camera_scene &camera) override;
 
