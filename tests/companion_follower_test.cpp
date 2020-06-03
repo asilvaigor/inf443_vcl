@@ -68,17 +68,17 @@ int main() {
     // Adding cyclic companion
     auto companion1 = std::static_pointer_cast<Object>(std::make_shared<CyclicCompanion>(
             scene.getShaders(), spline1, 0.0f));
-    std::shared_ptr<ActivatableCompanion> companionPtr1 = std::static_pointer_cast<ActivatableCompanion>(companion1);
+    std::shared_ptr<DipoleCompanion> companionPtr1 = std::static_pointer_cast<DipoleCompanion>(companion1);
     scene.addObject(companion1);
 
     // Adding cyclic companion
     auto companion = std::static_pointer_cast<Object>(std::make_shared<OneWayCompanion>(
             scene.getShaders(), spline, 0.0f));
-    std::shared_ptr<ActivatableCompanion> companionPtr = std::static_pointer_cast<ActivatableCompanion>(companion);
+    std::shared_ptr<DipoleCompanion> companionPtr = std::static_pointer_cast<DipoleCompanion>(companion);
     scene.addObject(companion);
 
     // Adding companion follower to the scene
-    std::vector<std::shared_ptr<ActivatableCompanion>> companions;
+    std::vector<std::shared_ptr<DipoleCompanion>> companions;
     companions.emplace_back(companionPtr);
     companions.emplace_back(companionPtr1);
 

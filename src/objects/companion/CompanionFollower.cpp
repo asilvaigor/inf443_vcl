@@ -4,7 +4,7 @@
 
 #include "CompanionFollower.h"
 
-CompanionFollower::CompanionFollower(Shaders &shaders, std::vector<std::shared_ptr<ActivatableCompanion>> &companions,
+CompanionFollower::CompanionFollower(Shaders &shaders, std::vector<std::shared_ptr<DipoleCompanion>> &companions,
                                      std::vector<float> &trasitionTimes, vcl::vec3 initialPosition, bool debug) :
     Object(true), companions(companions), trasitionTimes(trasitionTimes),
     currentCompanionIndex(0), debug(debug)
@@ -55,10 +55,6 @@ void CompanionFollower::update(float time) {
     }
     else position+=dp;
 
-    // Activate the companion if necessary
-    if (dist  < activationRadius && !companions[currentCompanionIndex]->getActivationState())
-        companions[currentCompanionIndex]->setActivationState(true);
-
     // Making orientation matrix match speed vector and angle
     // Rotation using euler angles
     vcl::vec3 projDpXY = {dp.x, dp.y, 0};
@@ -84,6 +80,15 @@ void CompanionFollower::update(float time) {
 //    vcl::mat3 cRotation = vcl::rotation_from_axis_angle_mat3(dp, gamma);
 
     orientation = bRotation*aRotation;
+
+    // Companion specific updates
+    // Activate the companion if necessary
+    auto* activableCompanion = dynamic_cast<ActivatableCompanion*>(companions[currentCompanionIndex].get());
+    if (activableCompanion != nullptr){
+        activableCompanion->setActivationState(
+                dist < activationRadius && !activableCompanion->getActivationState());
+    }
+
 }
 
 void CompanionFollower::updateDp() {

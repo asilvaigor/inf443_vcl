@@ -7,10 +7,11 @@
 
 #include "objects/Object.h"
 #include "ActivatableCompanion.h"
+#include "DipoleCompanion.h"
 
 class CompanionFollower : public Object {
 public:
-    CompanionFollower(Shaders &shaders, std::vector<std::shared_ptr<ActivatableCompanion>> &companions,
+    CompanionFollower(Shaders &shaders, std::vector<std::shared_ptr<DipoleCompanion>> &companions,
                       std::vector<float> &trasitionTimes, vcl::vec3 initialPosition = {0, 0, 0}, bool debug = true);
 
     void drawMesh(vcl::camera_scene &camera) override;
@@ -27,7 +28,7 @@ private:
     vcl::mesh_drawable axisMarkerMesh;
 
     // Companion
-    std::vector<std::shared_ptr<ActivatableCompanion>> &companions;
+    std::vector<std::shared_ptr<DipoleCompanion>> &companions;
     std::vector<float> &trasitionTimes;
 
     // State variables
