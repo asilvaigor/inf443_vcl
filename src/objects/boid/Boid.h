@@ -39,7 +39,6 @@ private:
     float minX, minY, minZ;
     vcl::rand_generator generator;
     std::shared_ptr<BaseTerrain> terrain;
-    float curTime;
 
     // TODO do not hardcode these variables
     const float centeringFactor = 0.00005f;
@@ -50,7 +49,7 @@ private:
 
     const float matchingFactor = 0.1f;
 
-    const float turnFactor = 0.01f;
+    const float turnFactor = 0.001f;
 
     const float speedMaxLimit = 1.0f;
     const float speedMinLimit = 0.5f;

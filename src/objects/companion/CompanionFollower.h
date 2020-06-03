@@ -38,7 +38,7 @@ private:
 
     // Constants
     const float quadraticSpeedThreshold = 10;
-    const float maxSpeedFactor = 0.4;
+    const float maxSpeedFactor = 1;
     const float activationRadius = 10;
 
     // In debug mode

@@ -17,7 +17,7 @@ Bird::Bird(Shaders &shaders, vcl::vec3 pos, float scale, vcl::vec3 speed, float 
     }
     bird.set_textures(textures);
     bird.set_animation("bird|fly");
-    curTime = 0;
+    animationTime = 0;
 }
 
 void Bird::drawMesh(vcl::camera_scene &camera) {
@@ -39,25 +39,41 @@ void Bird::drawMesh(vcl::camera_scene &camera) {
     float beta = -dp.angle({0, 0, 1})+M_PI_2;
     vcl::mat3 bRotation = vcl::rotation_from_axis_angle_mat3(bAxis, beta);
 
-    vcl::vec3 projDpo = {odp.x, odp.y, 1};
-    vcl::vec3 projNdp = {ndp.x, ndp.y, 1};
-    float gamma = projDpo.angle(projNdp)*turining;
-    if (gamma > M_PI_2)
-        gamma = M_PI_2;
-    else if (gamma < -M_PI_2)
-        gamma = -M_PI_2;
-    vcl::mat3 cRotation = vcl::rotation_from_axis_angle_mat3(dp, gamma);
+    vcl::mat3 cRotation = vcl::rotation_from_axis_angle_mat3(dp, turining);
 
     orientation = cRotation*bRotation*aRotation;
     vcl::mat4 transform = {orientation, position};
 
     // Bird draw
     bird.transform(transform);
-    bird.draw(camera, curTime);
+    bird.draw(camera, animationTime);
 }
 
 void Bird::update(float time) {
-    curTime = time;
+    vcl::vec3 projDpo = {odp.x, odp.y, 1};
+    vcl::vec3 projNdp = {ndp.x, ndp.y, 1};
+    float targetAngle = projDpo.angle(projNdp)*maxTurnFactor;
+    if (targetAngle > M_PI_2)
+        targetAngle = M_PI_2;
+    else if (targetAngle < -M_PI_2)
+        targetAngle = -M_PI_2;
+    turining += turnFactor*(targetAngle-turining);
+
+    // Animation part
+
+    float animationNormalizedPosition = fmod(animationTime, animationMaxTime);
+    float animationTargetPosition = animationNormalizedPosition+animationSpeed;
+    float animationSpeedFactor = 1.0f;
+    float inclination = dp.angle({0,0,1});
+    if (inclination >= M_PI_2+M_PI_4){
+        animationTargetPosition = 0.6;
+    } else {
+        animationSpeedFactor = (M_PI_2+M_PI_4-inclination)/(M_PI_2+M_PI_4)*0.6+0.4;
+        animationSpeedFactor += (fabs(turining))/M_PI_2;
+    }
+
+    if (fabs(animationNormalizedPosition-animationTargetPosition) >= animationSpeed/2)
+    animationTime += animationSpeed*animationSpeedFactor;
 }
 
 vcl::vec3 Bird::getSpeed() {
@@ -87,4 +103,8 @@ void Bird::stepSpeed() {
 
 void Bird::stepPosition() {
     position += dp;
+}
+
+float Bird::getRotation() {
+    return turining;
 }

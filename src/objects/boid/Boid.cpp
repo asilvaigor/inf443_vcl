@@ -22,9 +22,6 @@ Boid::Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, 
 
         birds.push_back(std::make_shared<Bird>(shaders, pos, scale, speed));
     }
-
-    // Setting current time
-    curTime = 0;
 }
 
 void Boid::drawMesh(vcl::camera_scene &camera) {
@@ -52,7 +49,6 @@ void Boid::update(float time) {
         bird->stepPosition();
         bird->update(time);
     }
-    curTime = time;
 }
 
 void Boid::birdFlyCenter(Bird* bird) {
@@ -109,26 +105,38 @@ void Boid::birdMatchOthers(Bird *bird){
 }
 
 void Boid::birdBound(Bird *bird) {
-    if (bird->getPosition().x <= minX)
-        bird->addFutureSpeed({turnFactor, 0.0f, 0.0f});
-    if (bird->getPosition().x >= maxX)
-        bird->addFutureSpeed({-turnFactor, 0.0f, 0.0f});
-    if (bird->getPosition().y <= minY)
-        bird->addFutureSpeed({0.0f, turnFactor, 0.0f});
-    if (bird->getPosition().y >= maxY)
-        bird->addFutureSpeed({0.0f, -turnFactor, 0.0f});
-    if (bird->getPosition().z <= minZ)
-        bird->addFutureSpeed({0.0f, 0.0f, turnFactor});
+    float dist;
+    if (bird->getPosition().x <= minX){
+        dist = minX-bird->getPosition().x;
+        bird->addFutureSpeed({dist*turnFactor, 0.0f, 0.0f});
+    }
+    else if (bird->getPosition().x >= maxX){
+        dist = bird->getPosition().x-maxX;
+        bird->addFutureSpeed({-dist*turnFactor, 0.0f, 0.0f});
+    }
+    if (bird->getPosition().y <= minY){
+        dist = minY-bird->getPosition().y;
+        bird->addFutureSpeed({0.0f, dist*turnFactor, 0.0f});
+    }
+    else if (bird->getPosition().y >= maxY){
+        dist = bird->getPosition().y-maxY;
+        bird->addFutureSpeed({0.0f, -dist*turnFactor, 0.0f});
+    }
+    if (bird->getPosition().z <= minZ){
+        dist = minZ-bird->getPosition().z;
+        bird->addFutureSpeed({0.0f, 0.0f, dist*turnFactor});
+    }
 
     float vertDist = maxZ - bird->getPosition().z;
     vertDist = vertDist*vertDist;
 
     bird->addFutureSpeed({0.0f, 0.0f, -turnFactor/vertDist});
     if (terrain != nullptr &&
-    bird->getPosition().z <= terrainMargin+terrain->getTerrainHeight(bird->getPosition().x, bird->getPosition().y))
-//    vertDist = bird->getPosition().z-terrain->getTerrainHeight(bird->getPosition().x, bird->getPosition().y);
-//    vertDist = vertDist*vertDist;
-    bird->addFutureSpeed({0.0f, 0.0f, turnFactor});
+    bird->getPosition().z <= terrainMargin+terrain->getTerrainHeight(bird->getPosition().x, bird->getPosition().y)){
+        dist = terrainMargin+terrain->getTerrainHeight(bird->getPosition().x, bird->getPosition().y)
+                - bird->getPosition().z;
+        bird->addFutureSpeed({0.0f, 0.0f, dist*turnFactor});
+    }
 }
 
 std::shared_ptr<Object> & Boid::getBird(int idx) {

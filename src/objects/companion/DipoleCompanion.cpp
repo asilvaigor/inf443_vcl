@@ -5,6 +5,8 @@
 #include "DipoleCompanion.h"
 
 DipoleCompanion::DipoleCompanion(Shaders &shaders, bool debug) : CompanionObject(shaders, debug) {
+    rotation = 0;
+
     // Setting up debug meshes
     if (debug){
         // TODO do not hardcode constants
@@ -71,4 +73,8 @@ vcl::vec3 DipoleCompanion::getNegativeChargePosition() {
 
 void DipoleCompanion::update(float time) {
     updateChargesPositions();
+}
+
+float DipoleCompanion::getRotationAngle() {
+    return rotation;
 }

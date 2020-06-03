@@ -20,12 +20,15 @@ public:
     vcl::vec3 getFieldAt(vcl::vec3 pos);
 
     vcl::vec3 getNegativeChargePosition();
+
+    float getRotationAngle();
 protected:
     // Mesh
     vcl::mesh_drawable chargeMesh;
 
     // Charges variables
     vcl::vec3 pc1, pc2;
+    float rotation;
 
     // TODO make this global
     const float T = 1.0/60;

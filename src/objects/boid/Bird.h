@@ -10,7 +10,7 @@
 
 class Bird : public Object {
 public:
-    Bird(Shaders &shaders, vcl::vec3 pos, float scale, vcl::vec3 speed = {1, 0, 0}, float turning = 50);
+    Bird(Shaders &shaders, vcl::vec3 pos, float scale, vcl::vec3 speed = {1, 0, 0}, float turning = 0);
 
     void drawMesh(vcl::camera_scene &camera) override;
 
@@ -19,6 +19,8 @@ public:
     vcl::vec3 getSpeed();
 
     vcl::vec3 getFutureSpeed();
+
+    float getRotation();
 
     void addFutureSpeed(vcl::vec3 speed);
 
@@ -31,13 +33,19 @@ public:
     void stepPosition();
 
 private:
-    float curTime;
+    float animationTime;
     vcl::vec3 dp;
     vcl::vec3 odp;
     vcl::vec3 ndp;
     float turining;
 
     vcl::fbx_model bird;
+
+    // TODO move somewhere else
+    const float turnFactor = 0.05f;
+    const float maxTurnFactor = 100.0f;
+    const float animationMaxTime = 1;
+    const float animationSpeed = 0.03f;
 
     static std::vector<GLuint> textures;
 };

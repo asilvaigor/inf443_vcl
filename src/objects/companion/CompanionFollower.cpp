@@ -71,16 +71,14 @@ void CompanionFollower::update(float time) {
     vcl::mat3 bRotation = vcl::rotation_from_axis_angle_mat3(bAxis, beta);
 
     // TODO make set angle
-//    vcl::vec3 projDpo = {odp.x, odp.y, 1};
-//    vcl::vec3 projNdp = {ndp.x, ndp.y, 1};
-//    float gamma = projDpo.angle(projNdp)*turining;
-//    if (gamma > M_PI_2)
-//        gamma = M_PI_2;
-//    else if (gamma < -M_PI_2)
-//        gamma = -M_PI_2;
-//    vcl::mat3 cRotation = vcl::rotation_from_axis_angle_mat3(dp, gamma);
+    float gamma = (*companions)[currentCompanionIndex]->getRotationAngle();
+    if (gamma > M_PI_2)
+        gamma = M_PI_2;
+    else if (gamma < -M_PI_2)
+        gamma = -M_PI_2;
+    vcl::mat3 cRotation = vcl::rotation_from_axis_angle_mat3(dp, gamma);
 
-    orientation = bRotation*aRotation;
+    orientation = cRotation*bRotation*aRotation;
 
     // Companion specific updates
     // Activate the companion if necessary
