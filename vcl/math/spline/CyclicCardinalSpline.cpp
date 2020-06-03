@@ -60,3 +60,7 @@ int vcl::CyclicCardinalSpline::indexAtValue(float time) {
 
     return CardinalSpline::indexAtValue(time);
 }
+
+float vcl::CyclicCardinalSpline::getDuration() {
+    return duration;
+}
