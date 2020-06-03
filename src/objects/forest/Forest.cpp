@@ -5,6 +5,7 @@
 #include "Forest.h"
 #include "scene/Scene.h"
 #include "objects/tree/TranslatedTree.h"
+#include "utils/Constants.h"
 
 Forest::Forest(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, int nTrees, int nBushes, int nRocks) :
         Object(false), terrain(terrain), generator(Scene::deterministic) {
@@ -15,9 +16,73 @@ Forest::Forest(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, int nTre
     std::cout << "Finished" << std::endl;
 }
 
-void Forest::drawMesh(vcl::camera_scene &) {
-    throw std::invalid_argument("Forest drawMesh should not be called because of bounding spheres. "
-                                "Draw each of the objects separately.");
+void Forest::drawMesh(vcl::camera_scene &camera) {
+    std::vector<std::shared_ptr<TranslatedTree>> drawableTrees;
+    std::vector<std::shared_ptr<Rock>> drawableRocks;
+
+    // Drawing billboards and storing elements
+    for(auto &obj : objects) {
+        if (obj->getBoundingSphere().isInCameraFrustum(camera)) {
+            if (obj->getBoundingBox().relativeSize(camera) > Constants::BILLBOARD_RATIO_THRESHOLD ||
+                obj->getBillboard().empty()) {
+                auto t = std::dynamic_pointer_cast<TranslatedTree>(obj);
+                auto r = std::dynamic_pointer_cast<Rock>(obj);
+                if (t != nullptr)
+                    drawableTrees.push_back(t);
+                else if (r != nullptr)
+                    drawableRocks.push_back(r);
+                else throw std::invalid_argument("Something in forest is not a tree or rock...");
+            } else obj->getBillboard().draw(camera, obj->getLight());
+        }
+    }
+
+    // Drawing trees
+    if (Tree::branchTexture != nullptr)
+        Tree::branchTexture->bind();
+    for (auto &t : drawableTrees)
+        if (t->getReference()->hasBranches()) {
+            t->getReference()->branchesDrawable.uniform.lights = {t->getLight()};
+            t->getReference()->branchesDrawable.uniform.transform.translation = t->getTranslation();
+            vcl::draw(t->getReference()->branchesDrawable, camera);
+        }
+    if (Tree::leafTexture != nullptr)
+        Tree::leafTexture->bind();
+    for (auto &t : drawableTrees)
+        if (t->getReference()->hasLeaves()) {
+            t->getReference()->leavesDrawable.uniform.lights = {t->getLight()};
+            t->getReference()->leavesDrawable.uniform.transform.translation = t->getTranslation();
+            vcl::draw(t->getReference()->leavesDrawable, camera);
+        }
+    if (Tree::snowTexture != nullptr)
+        Tree::snowTexture->bind();
+    for (auto &t : drawableTrees) {
+        if (t->getReference()->hasSnowyBranches()) {
+            t->getReference()->snowyBranchesDrawable.uniform.lights = {t->getLight()};
+            t->getReference()->snowyBranchesDrawable.uniform.transform.translation = t->getTranslation();
+            vcl::draw(t->getReference()->snowyBranchesDrawable, camera);
+        }
+        if (t->getReference()->hasSnowyLeaves()) {
+            t->getReference()->snowyLeavesDrawable.uniform.lights = {t->getLight()};
+            t->getReference()->snowyLeavesDrawable.uniform.transform.translation = t->getTranslation();
+            vcl::draw(t->getReference()->snowyLeavesDrawable, camera);
+        }
+    }
+
+    // Drawing rocks
+    if (Rock::snowTexture != nullptr)
+        Rock::snowTexture->bind();
+    for (auto &r : drawableRocks)
+        if (r->hasRock()) {
+            r->rockDrawable.uniform.lights = {r->getLight()};
+            vcl::draw(r->rockDrawable, camera);
+        }
+    if (Rock::rockTexture != nullptr)
+        Rock::rockTexture->bind();
+    for (auto &r : drawableRocks)
+        if (r->hasSnow()) {
+            r->snowDrawable.uniform.lights = {r->getLight()};
+            vcl::draw(r->snowDrawable, camera);
+        }
 }
 
 std::vector<std::shared_ptr<Object>> &Forest::getObjects() {
@@ -65,8 +130,9 @@ void Forest::generateTreesAndRocks(Shaders &shaders, int nTrees, int nRocks) {
         if (generator.rand(0, 1) < pineToTupeloRatio)
             trees.push_back(std::make_shared<Tree>(
                     shaders, origin, pine, generator.rand(minSnowCoverage, maxSnowCoverage)));
-        else trees.push_back(std::make_shared<Tree>(
-                shaders, origin, tupelo, generator.rand(minSnowCoverage, maxSnowCoverage)));
+        else
+            trees.push_back(std::make_shared<Tree>(
+                    shaders, origin, tupelo, generator.rand(minSnowCoverage, maxSnowCoverage)));
     }
 
     shuffleTileList();
@@ -79,7 +145,7 @@ void Forest::generateTreesAndRocks(Shaders &shaders, int nTrees, int nRocks) {
                                            {1,  -1},
                                            {1,  0},
                                            {1,  1}});
-    while (curNTrees < nTrees && curNRocks < nRocks) {
+    while (curNTrees < nTrees || curNRocks < nRocks) {
         for (auto &p : tileList) {
             int i = p.first;
             int j = p.second;

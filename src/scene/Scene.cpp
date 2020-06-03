@@ -85,11 +85,7 @@ void Scene::updateScene() {
     whiteTexture->bind();
     for (auto &obj : stillObjects) {
         // Forest should be decomposed in its objects
-        auto *f = dynamic_cast<Forest *>(obj.get());
-        if (f != nullptr)
-            for (auto &o : f->getObjects())
-                o->draw(gui->getCamera());
-        else obj->draw(gui->getCamera());
+        obj->draw(gui->getCamera());
         whiteTexture->bind();
     }
 //    std::cout << glfwGetTime() - time << std::endl;

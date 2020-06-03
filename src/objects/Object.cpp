@@ -11,7 +11,7 @@ Object::Object(bool movable, bool shadowless) : movable(movable), shadowless(sha
 
 Object::~Object() = default;
 
-void Object::update(float time) {}
+void Object::update(float) {}
 
 void Object::draw(vcl::camera_scene &camera) {
     if (boundingSphere.isInCameraFrustum(camera)) {

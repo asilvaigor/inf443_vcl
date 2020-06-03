@@ -41,7 +41,7 @@ public:
      * Sets the light object that the object will be rendered with.
      * @param light
      */
-    void setLight(std::shared_ptr<vcl::light_source> &light);
+    virtual void setLight(std::shared_ptr<vcl::light_source> &light);
 
     /**
      * Gets the light object that the object will be rendered with.

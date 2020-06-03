@@ -37,20 +37,20 @@ void Tree::drawMesh(vcl::camera_scene &camera) {
         branchTexture->bind();
         vcl::draw(branchesDrawable, camera);
     }
-    if (!snowyBranchesMesh.empty()) {
-        snowyBranchesDrawable.uniform.lights = lights;
-        snowTexture->bind();
-        vcl::draw(snowyBranchesDrawable, camera);
-    }
     if (!leavesMesh.empty()) {
         leavesDrawable.uniform.lights = lights;
         leafTexture->bind();
         vcl::draw(leavesDrawable, camera);
     }
+
+    snowTexture->bind();
     if (!snowyLeavesMesh.empty()) {
         snowyLeavesDrawable.uniform.lights = lights;
-        snowTexture->bind();
         vcl::draw(snowyLeavesDrawable, camera);
+    }
+    if (!snowyBranchesMesh.empty()) {
+        snowyBranchesDrawable.uniform.lights = lights;
+        vcl::draw(snowyBranchesDrawable, camera);
     }
 }
 
@@ -60,6 +60,22 @@ float &Tree::getTrunkRadius() {
 
 float &Tree::getBranchRadius() {
     return branchRadius;
+}
+
+bool Tree::hasBranches() {
+    return !branchesMesh.empty();
+}
+
+bool Tree::hasSnowyBranches() {
+    return !snowyBranchesMesh.empty();
+}
+
+bool Tree::hasLeaves() {
+    return !leavesMesh.empty();
+}
+
+bool Tree::hasSnowyLeaves() {
+    return !snowyLeavesMesh.empty();
 }
 
 void Tree::createMeshes(float &snowCoverage) {

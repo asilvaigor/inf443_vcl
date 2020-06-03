@@ -26,6 +26,10 @@ public:
      */
     void drawMesh(vcl::camera_scene &camera) override;
 
+    std::shared_ptr<Tree> &getReference();
+
+    vcl::vec3 &getTranslation();
+
     const float &getBranchRadius();
 
     const float &getTrunkRadius();

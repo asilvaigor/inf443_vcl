@@ -18,12 +18,12 @@ Rock::Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellis
     calculateMesh(base, ellisoidAxisSize, zAngle);
     putSnow(snowCoverage);
 
-    rock = vcl::mesh_drawable(mesh);
-    rock.shader = shaders["mesh"];
-    rock.uniform.shading = {0.2, 0.8, 0.2, 128};
-    snow = vcl::mesh_drawable(snowMesh);
-    snow.shader = shaders["mesh"];
-    snow.uniform.shading = {0.2, 0.8, 0.1, 32};
+    rockDrawable = vcl::mesh_drawable(mesh);
+    rockDrawable.shader = shaders["mesh"];
+    rockDrawable.uniform.shading = {0.2, 0.8, 0.2, 128};
+    snowDrawable = vcl::mesh_drawable(snowMesh);
+    snowDrawable.shader = shaders["mesh"];
+    snowDrawable.uniform.shading = {0.2, 0.8, 0.1, 32};
 
     std::vector<vcl::vec3 *> points(mesh.position.size() + snowMesh.position.size());
     for (auto &p : mesh.position)
@@ -47,12 +47,20 @@ Rock::Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellis
 }
 
 void Rock::drawMesh(vcl::camera_scene &camera) {
-    rock.uniform.lights = lights;
+    rockDrawable.uniform.lights = lights;
     rockTexture->bind();
-    vcl::draw(rock, camera);
-    snow.uniform.lights = lights;
+    vcl::draw(rockDrawable, camera);
+    snowDrawable.uniform.lights = lights;
     snowTexture->bind();
-    vcl::draw(snow, camera);
+    vcl::draw(snowDrawable, camera);
+}
+
+bool Rock::hasRock() {
+    return !mesh.empty();
+}
+
+bool Rock::hasSnow() {
+    return !snowMesh.empty();
 }
 
 void Rock::calculateMesh(vcl::vec3 &base, vcl::vec3 &ellipsoidAxisSize, float zAngle) {
