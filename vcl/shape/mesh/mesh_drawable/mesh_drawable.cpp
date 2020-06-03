@@ -36,30 +36,30 @@ void mesh_drawable::overrideShader(GLuint override) {
 }
 
 
-void draw(const mesh_drawable& drawable, const camera_scene& camera)
+void draw(mesh_drawable& drawable, camera_scene& camera)
 {
     draw(drawable, camera, drawable.shader, drawable.texture_id);
 }
 
-void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader)
+void draw(mesh_drawable& drawable, camera_scene& camera, GLuint shader)
 {
     draw(drawable, camera, shader, drawable.texture_id);
 }
 
 
-void draw(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id)
+void draw(mesh_drawable& drawable, camera_scene& camera, GLuint shader, GLuint texture_id)
 {
     load_data(drawable, camera, shader, texture_id);
     vcl::draw(drawable.data); opengl_debug();
 }
 
-void draw_snow(const mesh_drawable& drawable, const camera_scene& camera)
+void draw_snow(mesh_drawable& drawable, camera_scene& camera)
 {
     load_data_snow(drawable, camera, drawable.shader, drawable.texture_id);
     vcl::draw(drawable.data); opengl_debug();
 }
 
-void load_data(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id) {
+void load_data(mesh_drawable& drawable, camera_scene& camera, GLuint shader, GLuint texture_id) {
     if (mesh_drawable::shaderOverride != (GLuint) 0)
         shader = mesh_drawable::shaderOverride;
 
@@ -110,9 +110,7 @@ void load_data(const mesh_drawable& drawable, const camera_scene& camera, GLuint
     uniform(shader, "scaling", drawable.uniform.transform.scaling);              opengl_debug();
     uniform(shader, "scaling_axis", drawable.uniform.transform.scaling_axis);    opengl_debug();
 
-    uniform(shader,"perspective",camera.perspective.matrix());         opengl_debug();
-    uniform(shader,"view",camera.view_matrix());                       opengl_debug();
-    uniform(shader,"camera_position",camera.camera_position());        opengl_debug();
+    uniform(shader,"perspective_view", camera.get_perspective_view_matrix());    opengl_debug();
 
     uniform(shader, "ambiant", drawable.uniform.shading.ambiant);      opengl_debug();
     uniform(shader, "diffuse", drawable.uniform.shading.diffuse);      opengl_debug();
@@ -143,7 +141,7 @@ void load_data(const mesh_drawable& drawable, const camera_scene& camera, GLuint
     vcl::draw(drawable.data); opengl_debug();
 }
 
-void load_data_snow(const mesh_drawable& drawable, const camera_scene& camera, GLuint shader, GLuint texture_id) {
+void load_data_snow(mesh_drawable& drawable, camera_scene& camera, GLuint shader, GLuint texture_id) {
     if (mesh_drawable::shaderOverride != (GLuint) 0)
         shader = mesh_drawable::shaderOverride;
 
@@ -178,9 +176,8 @@ void load_data_snow(const mesh_drawable& drawable, const camera_scene& camera, G
     uniform(shader, "translation", drawable.uniform.transform.translation);  opengl_debug();
     uniform(shader, "scaling", drawable.uniform.transform.scaling);          opengl_debug();
     uniform(shader, "color", drawable.uniform.color);                        opengl_debug();
-    uniform(shader, "camera_dir", camera.camera_direction());                opengl_debug();
-    uniform(shader,"perspective",camera.perspective.matrix());         opengl_debug();
-    uniform(shader,"view",camera.view_matrix());                       opengl_debug();
+    uniform(shader, "camera_dir", camera.get_direction());                   opengl_debug();
+    uniform(shader,"perspective_view", camera.get_perspective_view_matrix()); opengl_debug();
 }
 
 }

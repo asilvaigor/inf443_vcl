@@ -28,7 +28,7 @@ void curve_dynamic_drawable::add_point(const vec3& p)
     }
 }
 
-void curve_dynamic_drawable::draw(GLuint shader_arg, const camera_scene& camera)
+void curve_dynamic_drawable::draw(GLuint shader_arg, camera_scene& camera)
 {
     if( first_time )
     {

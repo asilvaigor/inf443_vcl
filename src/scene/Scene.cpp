@@ -34,8 +34,9 @@ Scene::Scene(std::string &windowTitle) {
     lastTime = 0;
 
     vcl::light_source light({100, 0, 100}, {-1, 0, -1},
-            gui->getCamera().perspective.z_near, gui->getCamera().perspective.z_far);
+            gui->getCamera().get_perspective().z_near, gui->getCamera().get_perspective().z_far);
     cascadeShadow = std::make_shared<CascadeShadow>(light, 2048);
+    gui->getCamera().set_z_near_far_list(cascadeShadow->getZNearFarList());
 
     std::cout << "Finished" << std::endl;
 }
@@ -84,13 +85,10 @@ void Scene::updateScene() {
     whiteTexture->bind();
     for (auto &obj : stillObjects) {
         // Forest should be decomposed in its objects
-        auto *f = dynamic_cast<Forest *>(obj.get());
-        if (f != nullptr)
-            for (auto &o : f->getObjects())
-                o->draw(gui->getCamera());
-        else obj->draw(gui->getCamera());
+        obj->draw(gui->getCamera());
         whiteTexture->bind();
     }
+//    std::cout << glfwGetTime() - time << std::endl;
     for (auto &obj : movableObjects) {
         // Boid should be decomposed in its objects
         auto *b = dynamic_cast<Boid *>(obj.get());

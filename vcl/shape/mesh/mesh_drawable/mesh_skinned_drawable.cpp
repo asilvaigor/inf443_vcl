@@ -18,7 +18,7 @@ mesh_skinned_drawable::mesh_skinned_drawable(const vcl::mesh_skinned &mesh_cpu, 
     texture_id = texture_id_arg;
 }
 
-void mesh_skinned_drawable::draw(const camera_scene& camera) {
+void mesh_skinned_drawable::draw(camera_scene& camera) {
     load_data(*this, camera, shader, texture_id);
     vcl::draw(data); opengl_debug();
 }

@@ -48,8 +48,8 @@ SceneGui::SceneGui(std::string &windowTitle) : windowTitle(windowTitle) {
     glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
 
     float aspectRatio = (float) windowWidth / (float) windowHeight;
-    camera.perspective = vcl::perspective_structure(Constants::CAMERA_ANGLE, aspectRatio, Constants::CAMERA_Z_NEAR,
-            Constants::CAMERA_Z_FAR);
+    camera.set_perspective(vcl::perspective_structure(Constants::CAMERA_ANGLE, aspectRatio, Constants::CAMERA_Z_NEAR,
+                                                      Constants::CAMERA_Z_FAR));
     camera.apply_scaling(4);
     camera.apply_rotation(0, 0, 0, 1.0);
 
@@ -121,10 +121,10 @@ bool SceneGui::showGrid() {
 
 void SceneGui::haveCameraFollow(std::shared_ptr<Object> &obj) {
     followedObject = obj;
-    camera.translation = -obj->getPosition();
+    camera.set_translation(-obj->getPosition());
     float alpha = 0.1;
     objectOrientation = alpha * obj->getOrientation() + (1 - alpha) * objectOrientation;
-    camera.orientation = objectOrientation * followedOrientation;
+    camera.set_orientation(objectOrientation * followedOrientation);
 }
 
 vcl::camera_scene &SceneGui::getCamera() {
@@ -154,7 +154,7 @@ void SceneGui::updateFps() {
 void SceneGui::windowSizeCallback(GLFWwindow *, int, int) {
     glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
 
-    camera.perspective.image_aspect = (float) windowWidth / (float) windowHeight;
+    camera.set_image_aspect((float) windowWidth / (float) windowHeight);
 }
 
 void SceneGui::cursorPositionCallback(GLFWwindow *w, double xpos, double ypos) {

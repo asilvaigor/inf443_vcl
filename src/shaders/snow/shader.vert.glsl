@@ -6,8 +6,7 @@ out struct fragment_data {
     vec3 color;
 } fragment;
 
-uniform mat4 view;
-uniform mat4 perspective;
+uniform mat4 perspective_view;
 uniform vec3 camera_dir;
 uniform vec3 translation = vec3(0.0, 0.0, 0.0);
 uniform float scaling;
@@ -23,5 +22,5 @@ void main()
 
     vec3 transformed_pos = scaling * position.x * v1 + scaling * position.y * v2 + translation;
     fragment.color = color;
-    gl_Position = perspective * view * vec4(transformed_pos, 1);
+    gl_Position = perspective_view * vec4(transformed_pos, 1);
 }

@@ -22,7 +22,7 @@ public:
     void init(GLuint shader_segment_immediate_mode, GLuint shader_mesh);
 
     // Display the hierarchy_mesh_drawable sent as parameter
-    void draw(hierarchy_mesh_drawable const& hierarchy, const camera_scene& camera);
+    void draw(hierarchy_mesh_drawable const& hierarchy, camera_scene& camera);
 
     // Size of the display frames
     float frame_scaling = 0.08f; // adapt this frame_scaling if necessary

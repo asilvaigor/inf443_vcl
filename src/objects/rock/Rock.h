@@ -32,13 +32,18 @@ public:
      */
     void drawMesh(vcl::camera_scene &camera) override;
 
+    bool hasRock();
+
+    bool hasSnow();
+
+    static std::shared_ptr<Texture> rockTexture;
+    static std::shared_ptr<Texture> snowTexture;
+    vcl::mesh_drawable rockDrawable;
+    vcl::mesh_drawable snowDrawable;
+
 private:
     vcl::mesh mesh;
     vcl::mesh snowMesh;
-    vcl::mesh_drawable rock;
-    vcl::mesh_drawable snow;
-    static std::shared_ptr<Texture> rockTexture;
-    static std::shared_ptr<Texture> snowTexture;
 
     /**
      * Calculates the rock's mesh using an ellipsoid with pelerin noise.

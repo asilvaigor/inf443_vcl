@@ -40,10 +40,21 @@ public:
 
     float &getBranchRadius();
 
+    bool hasBranches();
+
+    bool hasSnowyBranches();
+
+    bool hasLeaves();
+
+    bool hasSnowyLeaves();
+
     vcl::mesh_drawable branchesDrawable;
     vcl::mesh_drawable snowyBranchesDrawable;
     vcl::mesh_drawable leavesDrawable;
     vcl::mesh_drawable snowyLeavesDrawable;
+    static std::shared_ptr<Texture> branchTexture;
+    static std::shared_ptr<Texture> leafTexture;
+    static std::shared_ptr<Texture> snowTexture;
 
 private:
     TreeSpecies &species;
@@ -54,9 +65,6 @@ private:
     bool verbose;
     float trunkRadius;
     float branchRadius;
-    static std::shared_ptr<Texture> branchTexture;
-    static std::shared_ptr<Texture> leafTexture;
-    static std::shared_ptr<Texture> snowTexture;
 
     void createMeshes(float &snowCoverage);
 

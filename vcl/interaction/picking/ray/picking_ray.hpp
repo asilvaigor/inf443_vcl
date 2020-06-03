@@ -14,6 +14,6 @@ struct ray
     vec3 u; // direction
 };
 
-ray picking_ray(const camera_scene& camera, const vec2& cursor);
+ray picking_ray(camera_scene& camera, const vec2& cursor);
 
 }

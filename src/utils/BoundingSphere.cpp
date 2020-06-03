@@ -50,7 +50,7 @@ const vcl::vec3 &BoundingSphere::getCenter() {
 
 int BoundingSphere::isInCameraFrustum(vcl::camera_scene &camera) {
     for (int i = 0; i < 6; i++) {
-        auto &plane = camera.frustumPlanes[i];
+        auto &plane = camera.get_frustum_planes()[i];
         // Distance center to plane
         float d = dot(vcl::vec4(pt, 1.0f), plane) /
                   std::sqrt(plane[0] * plane[0] + plane[1] * plane[1] + plane[2] * plane[2]);
@@ -62,8 +62,8 @@ int BoundingSphere::isInCameraFrustum(vcl::camera_scene &camera) {
 }
 
 int BoundingSphere::isInLightRange(vcl::camera_scene &camera, vcl::light_source &light) {
-    vcl::vec3 cameraPos = camera.camera_position();
-    vcl::vec3 cameraDir = camera.camera_direction();
+    vcl::vec3 cameraPos = camera.get_position();
+    vcl::vec3 cameraDir = camera.get_direction();
     vcl::vec3 p1 = pt + radius * cameraDir;
     vcl::vec3 p2 = pt - radius * cameraDir;
 

@@ -38,9 +38,16 @@ public:
                 std::shared_ptr<SceneGui> &gui, std::shared_ptr<Shaders> &shaders,
                 float time);
 
+    /**
+     * Returns the combination of the z distances for each cascade division, as well as the camera total.
+     * @return
+     */
+    std::vector<std::pair<float, float>> &getZNearFarList();
+
 private:
     const int nCascades;
     std::shared_ptr<vcl::depth_maps> maps;
+    std::vector<std::pair<float, float>> zNearFarList;
     std::vector<vcl::camera_scene> lastCamera;
     std::vector<float> lastSunAngle;
     std::vector<float> lastTime;

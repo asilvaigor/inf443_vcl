@@ -12,22 +12,19 @@ in struct vertex_data
 
 
 // view transform
-uniform mat4 view;
-// perspective matrix
-uniform mat4 perspective;
+uniform mat4 perspective_view;
 
 
 void main(void)
 {
-    mat4 M = perspective * view;
 
-    gl_Position = M*vertex[0].position;
+    gl_Position = perspective_view*vertex[0].position;
     EmitVertex();
-    gl_Position = M*vertex[1].position;
+    gl_Position = perspective_view*vertex[1].position;
     EmitVertex();
-    gl_Position = M*vertex[2].position;
+    gl_Position = perspective_view*vertex[2].position;
     EmitVertex();
-    gl_Position = M*vertex[0].position;
+    gl_Position = perspective_view*vertex[0].position;
     EmitVertex();
 
     EndPrimitive();

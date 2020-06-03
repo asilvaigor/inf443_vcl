@@ -27,6 +27,14 @@ void TranslatedTree::drawMesh(vcl::camera_scene &camera) {
     tree->drawMesh(camera);
 }
 
+std::shared_ptr<Tree> &TranslatedTree::getReference() {
+    return tree;
+}
+
+vcl::vec3 &TranslatedTree::getTranslation() {
+    return translation;
+}
+
 const float &TranslatedTree::getBranchRadius() {
     return tree->getBranchRadius();
 }

@@ -20,7 +20,7 @@ public:
     GLuint shader;
 };
 
-void draw(const curve_drawable& drawable, const camera_scene& camera);
-void draw(const curve_drawable& drawable, const camera_scene& camera, GLuint shader);
+void draw(curve_drawable& drawable, camera_scene& camera);
+void draw(curve_drawable& drawable, camera_scene& camera, GLuint shader);
 
 }

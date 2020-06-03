@@ -19,7 +19,7 @@ public:
     GLuint shader;
 };
 
-void draw(const segments_drawable& shape, const camera_scene& camera);
-void draw(const segments_drawable& shape, const camera_scene& camera, GLuint shader);
+void draw(const segments_drawable& shape, camera_scene& camera);
+void draw(const segments_drawable& shape, camera_scene& camera, GLuint shader);
 
 }

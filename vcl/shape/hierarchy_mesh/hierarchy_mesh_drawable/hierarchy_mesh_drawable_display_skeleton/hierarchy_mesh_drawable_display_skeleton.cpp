@@ -31,7 +31,7 @@ void hierarchy_mesh_drawable_display_skeleton::init(GLuint shader_segment_immedi
 }
 
 
-void hierarchy_mesh_drawable_display_skeleton::draw(const hierarchy_mesh_drawable& hierarchy, const camera_scene& camera)
+void hierarchy_mesh_drawable_display_skeleton::draw(const hierarchy_mesh_drawable& hierarchy, camera_scene& camera)
 {
     assert_vcl(initialized==true, "hierarchy_mesh_drawable_display_debug not initialized");
 
