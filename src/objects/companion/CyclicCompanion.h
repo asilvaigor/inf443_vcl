@@ -5,12 +5,16 @@
 #ifndef PGM_CYCLICCOMPANION_H
 #define PGM_CYCLICCOMPANION_H
 
-#include "CompanionObject.h"
+#include "CardinalSplineCompanion.h"
 #include "vcl.hpp"
 
-class CyclicCompanion : public CompanionObject {
+class CyclicCompanion : public CardinalSplineCompanion {
+public:
     CyclicCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS, bool debug=true);
 
+    void update(float time) override;
+private:
+    const float movementRate = 0.005;
 };
 
 

@@ -5,15 +5,12 @@
 #ifndef PGM_CARDINALSPLINECOMPANION_H
 #define PGM_CARDINALSPLINECOMPANION_H
 
-#include "CompanionObject.h"
+#include "DipoleCompanion.h"
 #include "vcl.hpp"
 
-class CardinalSplineCompanion : public CompanionObject {
+class CardinalSplineCompanion : public DipoleCompanion {
 public:
     CardinalSplineCompanion(Shaders &shaders, vcl::CardinalSpline &trajectory, float initialS, bool debug=true);
-
-    vcl::vec2 getFieldAt(vcl::vec2 pos) override;
-
 protected:
     // Trajectory
     float s;

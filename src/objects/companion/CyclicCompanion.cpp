@@ -5,9 +5,16 @@
 #include "CyclicCompanion.h"
 
 CyclicCompanion::CyclicCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS, bool debug) :
-    CompanionObject(shaders, debug){
-    // Update
-//    dp = trajectory.position(s+ds)-trajectory.position(s-ds);
-//    position = trajectory.position(s);
-//    updateChargesPositions();
+    CardinalSplineCompanion(shaders, trajectory, initialS, debug){}
+
+void CyclicCompanion::update(float time) {
+    // TODO remove this current time
+    currentTime = time;
+    
+    dp = trajectory.position(s+ds)-trajectory.position(s-ds);
+
+    s += movementRate;
+
+    position = trajectory.position(s);
+    updateChargesPositions();
 }
