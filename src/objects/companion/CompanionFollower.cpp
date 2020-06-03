@@ -45,6 +45,8 @@ void CompanionFollower::drawMesh(vcl::camera_scene &camera) {
 void CompanionFollower::update(float time) {
     // Updating dp (speed)
     // TODO pass initial speed and initial angle
+    currentCompanionIndex = getTransitionIndex(time);
+
     updateDp();
 
     float dist = (position-companions[currentCompanionIndex]->getNegativeChargePosition()).norm();
@@ -56,7 +58,6 @@ void CompanionFollower::update(float time) {
     // Activate the companion if necessary
     if (dist  < activationRadius && !companions[currentCompanionIndex]->getActivationState())
         companions[currentCompanionIndex]->setActivationState(true);
-
 
     // Making orientation matrix match speed vector and angle
     // Rotation using euler angles
@@ -92,7 +93,7 @@ void CompanionFollower::updateDp() {
 
 int CompanionFollower::getTransitionIndex(float time) {
     int k = 0;
-    while (trasitionTimes[k] < time && k <= trasitionTimes.size())
+    while (k <= (int)trasitionTimes.size()-1 && trasitionTimes[k] < time)
         k++;
     return k;
 }

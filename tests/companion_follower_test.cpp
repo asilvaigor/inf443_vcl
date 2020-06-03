@@ -43,11 +43,14 @@ int main() {
     keyframes.emplace_back(0, 0, 5);
 
     vcl::CardinalSpline spline;
+    vcl::CyclicCardinalSpline spline1((float) keyframes.size());
 
     // Drawing trajectory
     //Adding positions to spline
-    for (int i = 0; i < (int) keyframes.size(); ++i)
+    for (int i = 0; i < (int) keyframes.size(); ++i) {
         spline.addKeyFrame(keyframes[i], (float) i);
+        spline1.addKeyFrame(keyframes[i], (float) i);
+    }
 
     // Trajectory
     const float dt = 0.01;
@@ -63,6 +66,12 @@ int main() {
     scene.addObject(drawer);
 
     // Adding cyclic companion
+    auto companion1 = std::static_pointer_cast<Object>(std::make_shared<CyclicCompanion>(
+            scene.getShaders(), spline1, 0.0f));
+    std::shared_ptr<ActivatableCompanion> companionPtr1 = std::static_pointer_cast<ActivatableCompanion>(companion1);
+    scene.addObject(companion1);
+
+    // Adding cyclic companion
     auto companion = std::static_pointer_cast<Object>(std::make_shared<OneWayCompanion>(
             scene.getShaders(), spline, 0.0f));
     std::shared_ptr<ActivatableCompanion> companionPtr = std::static_pointer_cast<ActivatableCompanion>(companion);
@@ -71,8 +80,10 @@ int main() {
     // Adding companion follower to the scene
     std::vector<std::shared_ptr<ActivatableCompanion>> companions;
     companions.emplace_back(companionPtr);
+    companions.emplace_back(companionPtr1);
 
     std::vector<float> transitionTimes;
+    transitionTimes.emplace_back(20);
 
     auto follower = std::static_pointer_cast<Object>(std::make_shared<CompanionFollower>(
             scene.getShaders(), companions, transitionTimes));

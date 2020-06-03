@@ -32,7 +32,7 @@ private:
 
     // State variables
     vcl::vec3 dp;
-    int currentCompanionIndex{};
+    int currentCompanionIndex;
 
     // Constants
     const float quadraticSpeedThreshold = 10;
