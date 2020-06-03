@@ -32,11 +32,11 @@ Rock::Rock(Shaders &shaders, vcl::vec3 base, float snowCoverage, vcl::vec3 ellis
         points.push_back(&p);
     boundingSphere = BoundingSphere(mesh);
 
-    for (auto &pt : mesh.position)
-        boundingBox.update(pt);
-    for (auto &pt : snowMesh.position)
-        boundingBox.update(pt);
-    billboard = BillboardGenerator(shaders, this);
+//    for (auto &pt : mesh.position)
+//        boundingBox.update(pt);
+//    for (auto &pt : snowMesh.position)
+//        boundingBox.update(pt);
+//    billboard = BillboardGenerator(shaders, this);
 
     if (verbose) {
         std::cout << "Number of vertices: total " << mesh.position.size() + snowMesh.position.size();
