@@ -54,7 +54,6 @@ void Snow::update(float time) {
         auto &v = velocities[i];
         auto &a = accelerations[i];
         auto delta = p - cam;
-        particles[i].uniform.transform.scaling = minFlakeSize + flakeSizeVar * (delta.norm() / cameraDistance);
 
         // Reset particle if it escaped the cube
         if (fabs(delta.x) > cameraDistance || fabs(delta.y) > cameraDistance || fabs(delta.z) > cameraDistance) {
@@ -69,6 +68,9 @@ void Snow::update(float time) {
             v += a * dt;
             p += v * dt;
         }
+
+        delta = p - cam;
+        particles[i].uniform.transform.scaling = minFlakeSize + flakeSizeVar * (delta.norm() / cameraDistance);
     }
 
     lastTime = time;

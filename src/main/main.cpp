@@ -175,14 +175,14 @@ int main() {
     // Adding terrain
     auto terrain = addTerrain(scene);
 
+    // Adding dome
+    auto dome = std::static_pointer_cast<Object>(std::make_shared<Dome>(scene.getShaders()));
+    scene.addObject(dome);
+
     // Adding forest
     auto forest = std::make_shared<Forest>(scene.getShaders(), terrain);
     auto forestObj = std::static_pointer_cast<Object>(forest);
     scene.addObject(forestObj);
-
-    // Adding dome
-    auto dome = std::static_pointer_cast<Object>(std::make_shared<Dome>(scene.getShaders()));
-    scene.addObject(dome);
 
     // Adding snow
     auto snow = std::static_pointer_cast<Object>(std::make_shared<Snow>(scene.getShaders()));
