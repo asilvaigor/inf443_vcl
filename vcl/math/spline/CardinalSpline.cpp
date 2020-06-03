@@ -2,6 +2,7 @@
 // Created by Aloysio Galvão Lopes on 2020-06-01.
 //
 
+#include <assert.h>
 #include "CardinalSpline.h"
 
 vcl::CardinalSpline::CardinalSpline() {
