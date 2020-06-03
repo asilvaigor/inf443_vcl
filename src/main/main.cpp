@@ -75,11 +75,11 @@ std::shared_ptr<Bear> addBear(Scene &scene, std::shared_ptr<BaseTerrain> &terrai
     auto bearPos = std::make_shared<vcl::vec3>(0, -85, 0);
 
     // Adding bear companion
-    auto companion = std::static_pointer_cast<Object>(std::make_shared<BearCompanion>(
+    auto companion = std::static_pointer_cast<Object>(std::make_shared<BearWalkingCompanion>(
             scene.getShaders(), spline, 0.0f, bearPos, false));
     scene.addObject(companion);
 
-    std::shared_ptr<BearCompanion> bearCompanionPtr = std::static_pointer_cast<BearCompanion>(companion);
+    std::shared_ptr<BearWalkingCompanion> bearCompanionPtr = std::static_pointer_cast<BearWalkingCompanion>(companion);
 
     // Creating bear
     auto bear = std::make_shared<Bear>(scene.getShaders(), terrain, bearCompanionPtr, bearPos, forest);

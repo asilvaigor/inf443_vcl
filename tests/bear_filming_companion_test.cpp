@@ -1,5 +1,5 @@
 //
-// Created by Aloysio Galvão Lopes on 2020-06-02.
+// Created by Aloysio Galvão Lopes on 2020-06-03.
 //
 
 #include <vcl/math/spline/CyclicCardinalSpline.h>
@@ -15,24 +15,24 @@
 
 int main() {
     auto scene = Scene::getInstance("Bear Trajectory Test");
-    vcl::camera_scene & camera = scene.getGui()->getCamera();
+    vcl::camera_scene &camera = scene.getGui()->getCamera();
 
     // Camera settings
     camera.set_translation({-50, -50, 0});
 
-    float phi = M_PI_2-M_PI_4/2;
-    float theta = M_PI_2+M_PI_4;
+    float phi = M_PI_2 - M_PI_4 / 2;
+    float theta = M_PI_2 + M_PI_4;
 
-    const vcl::mat3 Rx = {1,0,0,
-                          0,std::cos(phi),-std::sin(phi),
-                          0,std::sin(phi),std::cos(phi)};
+    const vcl::mat3 Rx = {1, 0, 0,
+                          0, std::cos(phi), -std::sin(phi),
+                          0, std::sin(phi), std::cos(phi)};
 
-    const vcl::mat3 Rz = {std::cos(theta),-std::sin(theta),0,
-                          std::sin(theta),std::cos(theta),0,
-                          0,0,1};
+    const vcl::mat3 Rz = {std::cos(theta), -std::sin(theta), 0,
+                          std::sin(theta), std::cos(theta), 0,
+                          0, 0, 1};
 
 
-    camera.set_orientation(Rz*Rx);
+    camera.set_orientation(Rz * Rx);
     camera.set_scale(50);
     scene.getGui()->setShowVertices(true);
 
@@ -67,9 +67,9 @@ int main() {
     float t = 0;
     float tf = (float) keyframes.size();
     auto traj = std::make_shared<std::vector<vcl::vec3>>();
-    while (t <= tf){
+    while (t <= tf) {
         traj->push_back(spline->position(t));
-        t+= dt;
+        t += dt;
     }
 
     auto drawer = std::static_pointer_cast<Object>(std::make_shared<TrajectoryDrawer>(scene.getShaders(), traj));
@@ -77,7 +77,7 @@ int main() {
 
     // Bear animation part
     std::shared_ptr<Object> bear;
-    std::shared_ptr<vcl::vec3 > bearPos = std::make_shared<vcl::vec3>(0, 0, 0);
+    std::shared_ptr<vcl::vec3> bearPos = std::make_shared<vcl::vec3>(0, 0, 0);
 
     // Adding bear companion
     auto companion = std::static_pointer_cast<Object>(std::make_shared<BearWalkingCompanion>(
@@ -94,5 +94,3 @@ int main() {
     scene.display();
     return 0;
 }
-
-

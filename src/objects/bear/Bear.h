@@ -9,7 +9,7 @@
 #include "objects/Object.h"
 #include "objects/terrain/BaseTerrain.h"
 #include "objects/forest/Forest.h"
-#include "BearCompanion.h"
+#include "BearWalkingCompanion.h"
 
 /**
  * Bear object.
@@ -22,7 +22,7 @@ public:
      * @param terrain
      * @param pos
      */
-    explicit Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, std::shared_ptr<BearCompanion> &companion,
+    explicit Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, std::shared_ptr<BearWalkingCompanion> &companion,
                   std::shared_ptr<vcl::vec3> &pos, std::shared_ptr<Forest> forest = nullptr);
 
     /**
@@ -40,7 +40,7 @@ public:
 private:
     vcl::fbx_model bear;
     std::shared_ptr<BaseTerrain> terrain;
-    std::shared_ptr<BearCompanion> companion;
+    std::shared_ptr<BearWalkingCompanion> companion;
     std::shared_ptr<Forest> forest;
     std::shared_ptr<vcl::vec3> pos;
     vcl::vec3 direction;

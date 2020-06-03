@@ -4,11 +4,11 @@
 
 #include "utils/Texture.h"
 #include "Bear.h"
-#include "BearCompanion.h"
+#include "BearWalkingCompanion.h"
 
 std::vector<GLuint> Bear::textures;
 
-Bear::Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, std::shared_ptr<BearCompanion> &companion,
+Bear::Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, std::shared_ptr<BearWalkingCompanion> &companion,
            std::shared_ptr<vcl::vec3> &pos, std::shared_ptr<Forest> forest) :
         Object(true), bear("../src/assets/models/bear.fbx", shaders["mesh"]), terrain(terrain),
         companion(companion), forest(forest), pos(pos) {

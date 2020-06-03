@@ -48,11 +48,11 @@ int main() {
     std::shared_ptr<vcl::vec3 > bearPos = std::make_shared<vcl::vec3>(0, 0, 0);
 
     // Adding bear companion
-    auto companion = std::static_pointer_cast<Object>(std::make_shared<BearCompanion>(
+    auto companion = std::static_pointer_cast<Object>(std::make_shared<BearWalkingCompanion>(
             scene.getShaders(), spline, 6.0f, bearPos));
     scene.addObject(companion);
 
-    std::shared_ptr<BearCompanion> bearCompanionPtr = std::static_pointer_cast<BearCompanion>(companion);
+    std::shared_ptr<BearWalkingCompanion> bearCompanionPtr = std::static_pointer_cast<BearWalkingCompanion>(companion);
 
     bear = std::static_pointer_cast<Object>(
             std::make_shared<Bear>(scene.getShaders(), terrain, bearCompanionPtr, bearPos));
