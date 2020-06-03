@@ -8,11 +8,7 @@
 
 BearCompanion::BearCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS,
                              std::shared_ptr<vcl::vec3> bearPosition, bool debug) :
-    CompanionObject(shaders, debug), s(initialS), trajectory(trajectory), bearPosition(std::move(bearPosition)){
-    dp = trajectory.position(s+ds)-trajectory.position(s-ds);
-    position = trajectory.position(s);
-    updateChargesPositions();
-}
+    CardinalSplineCompanion(shaders, trajectory, initialS, debug), bearPosition(std::move(bearPosition)){}
 
 void BearCompanion::update(float time) {
     currentTime = time;
@@ -27,21 +23,3 @@ void BearCompanion::update(float time) {
     position = trajectory.position(s);
     updateChargesPositions();
 }
-
-vcl::vec2 BearCompanion::getFieldAt(vcl::vec2 pos) {
-    float k = charge;
-
-    vcl::vec2 c1 = {pc1.x, pc1.y};
-    vcl::vec2 c2 = {pc2.x, pc2.y};
-
-    // For first charge
-    float d1 = vcl::norm(pos-c1);
-    vcl::vec2 e1 = -k*(pos-c1)/(d1*d1*d1);
-
-    // For second change
-    float d2 = vcl::norm(pos-c2);
-    vcl::vec2 e2 = -k*(pos-c2)/(d2*d2*d2);
-
-    return e1+e2;
-}
-

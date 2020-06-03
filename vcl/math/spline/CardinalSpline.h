@@ -5,7 +5,8 @@
 #ifndef PGM_CARDINALSPLINE_H
 #define PGM_CARDINALSPLINE_H
 
-#include "vcl.hpp"
+#include <algorithm>
+#include "vcl/math/vec/vec.hpp"
 
 namespace vcl{
 class CardinalSpline {
