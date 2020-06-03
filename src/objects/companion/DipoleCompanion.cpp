@@ -50,3 +50,21 @@ vcl::vec2 DipoleCompanion::getFieldAt(vcl::vec2 pos) {
 
     return e1+e2;
 }
+
+vcl::vec3 DipoleCompanion::getFieldAt(vcl::vec3 pos) {
+    float k = charge;
+
+    // For first charge
+    float d1 = vcl::norm(pos-pc1);
+    vcl::vec3 e1 = -k*(pos-pc1)/(d1*d1*d1);
+
+    // For second change
+    float d2 = vcl::norm(pos-pc2);
+    vcl::vec3 e2 = -k*(pos-pc2)/(d2*d2*d2);
+
+    return e1+e2;
+}
+
+vcl::vec3 DipoleCompanion::getNegativeChargePosition() {
+    return pc1;
+}

@@ -16,6 +16,8 @@ public:
     vcl::vec2 getFieldAt(vcl::vec2 pos);
 
     vcl::vec3 getFieldAt(vcl::vec3 pos);
+
+    vcl::vec3 getNegativeChargePosition();
 protected:
     // Mesh
     vcl::mesh_drawable chargeMesh;
