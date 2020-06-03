@@ -13,7 +13,7 @@
 class Boid : public Object {
 public:
     Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, float maxY, float minZ, float maxZ,
-         std::shared_ptr<MountainTerrain> terrain = nullptr);
+         std::shared_ptr<BaseTerrain> terrain = nullptr);
 
     void drawMesh(vcl::camera_scene &camera) override;
 
@@ -38,7 +38,7 @@ private:
     float maxX, maxY, maxZ;
     float minX, minY, minZ;
     vcl::rand_generator generator;
-    std::shared_ptr<MountainTerrain> terrain;
+    std::shared_ptr<BaseTerrain> terrain;
     float curTime;
 
     // TODO do not hardcode these variables

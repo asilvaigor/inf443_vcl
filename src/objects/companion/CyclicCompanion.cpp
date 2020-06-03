@@ -4,19 +4,20 @@
 
 #include "CyclicCompanion.h"
 
-CyclicCompanion::CyclicCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS, bool active,
-        bool debug) : ActivatableCompanion(shaders, trajectory, initialS, active, debug){}
+CyclicCompanion::CyclicCompanion(Shaders &shaders, std::shared_ptr<vcl::CyclicCardinalSpline> &trajectory,
+                                 float initialS, bool active, bool debug) :
+        ActivatableCompanion(shaders, std::static_pointer_cast<vcl::CardinalSpline>(trajectory), initialS, active, debug) {}
 
 void CyclicCompanion::update(float time) {
     if (!active)
         return;
     // TODO remove this current time
     currentTime = time;
-    
-    dp = trajectory.position(s+ds)-trajectory.position(s-ds);
+
+    dp = trajectory->position(s + ds) - trajectory->position(s - ds);
 
     s += movementRate;
 
-    position = trajectory.position(s);
+    position = trajectory->position(s);
     updateChargesPositions();
 }

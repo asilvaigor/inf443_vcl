@@ -10,8 +10,8 @@
 
 class CyclicCompanion : public ActivatableCompanion {
 public:
-    CyclicCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS, bool active = false
-            , bool debug=true);
+    CyclicCompanion(Shaders &shaders, std::shared_ptr<vcl::CyclicCardinalSpline> &trajectory, float initialS,
+            bool active = false, bool debug=true);
 
     void update(float time) override;
 private:

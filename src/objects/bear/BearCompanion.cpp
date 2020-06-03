@@ -6,13 +6,14 @@
 
 #include "BearCompanion.h"
 
-BearCompanion::BearCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS,
+BearCompanion::BearCompanion(Shaders &shaders, std::shared_ptr<vcl::CyclicCardinalSpline> &trajectory, float initialS,
                              std::shared_ptr<vcl::vec3> bearPosition, bool debug) :
-    CardinalSplineCompanion(shaders, trajectory, initialS, debug), bearPosition(std::move(bearPosition)){}
+    CardinalSplineCompanion(shaders, std::static_pointer_cast<vcl::CardinalSpline>(trajectory), initialS, debug),
+    bearPosition(std::move(bearPosition)) {}
 
 void BearCompanion::update(float time) {
     currentTime = time;
-    dp = trajectory.position(s+ds)-trajectory.position(s-ds);
+    dp = trajectory->position(s+ds)-trajectory->position(s-ds);
 
     vcl::vec3 dist = *bearPosition-position;
 
@@ -20,6 +21,6 @@ void BearCompanion::update(float time) {
 
     s += movingForce*frictionFactor;
 
-    position = trajectory.position(s);
+    position = trajectory->position(s);
     updateChargesPositions();
 }

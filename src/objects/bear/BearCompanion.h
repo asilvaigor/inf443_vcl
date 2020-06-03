@@ -11,7 +11,7 @@
 
 class BearCompanion : public CardinalSplineCompanion {
 public:
-    BearCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS,
+    BearCompanion(Shaders &shaders, std::shared_ptr<vcl::CyclicCardinalSpline> &trajectory, float initialS,
                   std::shared_ptr<vcl::vec3> bearPosition, bool debug = true);
 
     void update(float time) override;

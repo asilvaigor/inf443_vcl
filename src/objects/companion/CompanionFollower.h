@@ -11,8 +11,9 @@
 
 class CompanionFollower : public Object {
 public:
-    CompanionFollower(Shaders &shaders, std::vector<std::shared_ptr<DipoleCompanion>> &companions,
-                      std::vector<float> &trasitionTimes, vcl::vec3 initialPosition = {0, 0, 0}, bool debug = true);
+    CompanionFollower(Shaders &shaders, std::shared_ptr<std::vector<std::shared_ptr<DipoleCompanion>>> &companions,
+                      std::shared_ptr<std::vector<float>> &trasitionTimes, vcl::vec3 initialPosition = {0, 0, 0},
+                      bool debug = true);
 
     void drawMesh(vcl::camera_scene &camera) override;
 
@@ -28,8 +29,8 @@ private:
     vcl::mesh_drawable axisMarkerMesh;
 
     // Companion
-    std::vector<std::shared_ptr<DipoleCompanion>> &companions;
-    std::vector<float> &trasitionTimes;
+    std::shared_ptr<std::vector<std::shared_ptr<DipoleCompanion>>> companions;
+    std::shared_ptr<std::vector<float>> trasitionTimes;
 
     // State variables
     vcl::vec3 dp;

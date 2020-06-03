@@ -9,11 +9,11 @@
 
 class TrajectoryDrawer : public Object {
 public:
-    TrajectoryDrawer(Shaders& shaders, std::vector<vcl::vec3>& points);
+    TrajectoryDrawer(Shaders& shaders, std::shared_ptr<std::vector<vcl::vec3>> &points);
 
     void drawMesh(vcl::camera_scene &camera) override;
 private:
-    std::vector<vcl::vec3>& points;
+    std::shared_ptr<std::vector<vcl::vec3>> points;
     Shaders& shaders;
     vcl::segment_drawable_immediate_mode segmentDrawer;
 };

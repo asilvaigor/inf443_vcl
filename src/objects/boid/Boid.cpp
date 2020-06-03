@@ -8,7 +8,7 @@
 #include "Boid.h"
 
 Boid::Boid(Shaders &shaders, int birdCount, float minX, float maxX, float minY, float maxY, float minZ, float maxZ,
-           std::shared_ptr<MountainTerrain> terrain)
+           std::shared_ptr<BaseTerrain> terrain)
         : Object(true),  minX(minX), maxX(maxX), maxY(maxY), minY(minY), minZ(minZ), maxZ(maxZ),
         generator(Scene::deterministic), terrain(std::move(terrain)){
 

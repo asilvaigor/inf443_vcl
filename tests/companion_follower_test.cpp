@@ -42,48 +42,48 @@ int main() {
     keyframes.emplace_back(0, 50, -10);
     keyframes.emplace_back(0, 0, 5);
 
-    vcl::CardinalSpline spline;
-    vcl::CyclicCardinalSpline spline1((float) keyframes.size());
+    auto spline = std::make_shared<vcl::CardinalSpline>();
+    auto spline1 = std::make_shared<vcl::CyclicCardinalSpline>((float) keyframes.size());
 
     // Drawing trajectory
     //Adding positions to spline
     for (int i = 0; i < (int) keyframes.size(); ++i) {
-        spline.addKeyFrame(keyframes[i], (float) i);
-        spline1.addKeyFrame(keyframes[i], (float) i);
+        spline->addKeyFrame(keyframes[i], (float) i);
+        spline1->addKeyFrame(keyframes[i], (float) i);
     }
 
     // Trajectory
     const float dt = 0.01;
     float t = 0;
     float tf = 3;
-    std::vector<vcl::vec3> traj;
+    auto traj = std::make_shared<std::vector<vcl::vec3>>();
     while (t <= tf) {
-        traj.push_back(spline.position(t));
+        traj->push_back(spline->position(t));
         t += dt;
     }
 
     auto drawer = std::static_pointer_cast<Object>(std::make_shared<TrajectoryDrawer>(scene.getShaders(), traj));
     scene.addObject(drawer);
 
-    // Adding cyclic companion
+    // Adding companion
     auto companion1 = std::static_pointer_cast<Object>(std::make_shared<CyclicCompanion>(
             scene.getShaders(), spline1, 0.0f));
     std::shared_ptr<DipoleCompanion> companionPtr1 = std::static_pointer_cast<DipoleCompanion>(companion1);
     scene.addObject(companion1);
 
-    // Adding cyclic companion
+    // Adding companion
     auto companion = std::static_pointer_cast<Object>(std::make_shared<OneWayCompanion>(
             scene.getShaders(), spline, 0.0f));
     std::shared_ptr<DipoleCompanion> companionPtr = std::static_pointer_cast<DipoleCompanion>(companion);
     scene.addObject(companion);
 
     // Adding companion follower to the scene
-    std::vector<std::shared_ptr<DipoleCompanion>> companions;
-    companions.emplace_back(companionPtr);
-    companions.emplace_back(companionPtr1);
+    auto companions = std::make_shared<std::vector<std::shared_ptr<DipoleCompanion>>>();
+    companions->emplace_back(companionPtr);
+    companions->emplace_back(companionPtr1);
 
-    std::vector<float> transitionTimes;
-    transitionTimes.emplace_back(20);
+    auto transitionTimes = std::make_shared<std::vector<float>>();
+    transitionTimes->emplace_back(20);
 
     auto follower = std::static_pointer_cast<Object>(std::make_shared<CompanionFollower>(
             scene.getShaders(), companions, transitionTimes));

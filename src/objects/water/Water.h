@@ -19,7 +19,7 @@ public:
      * Generates the water mesh
      * @param shaders
      */
-    Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscillator> &oscillators);
+    Water(Shaders &shaders, WaterLimits& waterLimits, std::shared_ptr<std::vector<WaterOscillator>> &oscillators);
 
     /**
      * Draws mesh in opengl
@@ -41,7 +41,7 @@ private:
     float lastTime;
     std::vector<std::vector<vcl::vec3>> waterPositions;
     std::vector<std::vector<float>> waterVerticalSpeeds;
-    std::vector<WaterOscillator>& oscillators;
+    std::shared_ptr<std::vector<WaterOscillator>> oscillators;
 
     static std::shared_ptr<Texture> waterTexture;
 

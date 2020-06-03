@@ -10,12 +10,13 @@
 
 class CardinalSplineCompanion : public DipoleCompanion {
 public:
-    CardinalSplineCompanion(Shaders &shaders, vcl::CardinalSpline &trajectory, float initialS, bool debug=true);
+    CardinalSplineCompanion(Shaders &shaders, std::shared_ptr<vcl::CardinalSpline> trajectory, float initialS,
+            bool debug=true);
 protected:
     // Trajectory
     float s;
     float ds = 0.01;
-    vcl::CardinalSpline& trajectory;
+    std::shared_ptr<vcl::CardinalSpline> trajectory;
 };
 
 

@@ -45,11 +45,11 @@ int main() {
     scene.addObject(terrainPt);
 
     // Adding water to the scene
-    std::vector<WaterOscillator> oscillators;
-    oscillators.emplace_back(vcl::vec2(0.0f, 50.0f), 0.1f, 0.01, 1, 1, waterLimits.getWaterLevel(), false);
-    oscillators.emplace_back(vcl::vec2(20.0f, 50.0f-40*sqrt(3)/6), 0.01f, 0.01, 10, 1, waterLimits.getWaterLevel(), false);
-    oscillators.emplace_back(vcl::vec2(-20.0f, 50.0f-40*sqrt(3)/6), 0.01f, 0.01, 10, 1, waterLimits.getWaterLevel(), false);
-    oscillators.emplace_back(vcl::vec2(0.0f, 50.0f+40*sqrt(3)/3), 0.01f, 0.01, 10, 1, waterLimits.getWaterLevel(), false);
+    auto oscillators = std::make_shared<std::vector<WaterOscillator>>();
+    oscillators->emplace_back(vcl::vec2(0.0f, 50.0f), 0.1f, 0.01, 1, 1, waterLimits.getWaterLevel(), true);
+    oscillators->emplace_back(vcl::vec2(20.0f, 50.0f-40*sqrt(3)/6), 0.01f, 0.01, 10, 1, waterLimits.getWaterLevel(), true);
+    oscillators->emplace_back(vcl::vec2(-20.0f, 50.0f-40*sqrt(3)/6), 0.01f, 0.01, 10, 1, waterLimits.getWaterLevel(), true);
+    oscillators->emplace_back(vcl::vec2(0.0f, 50.0f+40*sqrt(3)/3), 0.01f, 0.01, 10, 1, waterLimits.getWaterLevel(), true);
 
     auto water = std::static_pointer_cast<Object>(std::make_shared<Water>(scene.getShaders(),
                                                                           waterLimits,oscillators));

@@ -4,19 +4,20 @@
 
 #include "OneWayCompanion.h"
 
-OneWayCompanion::OneWayCompanion(Shaders &shaders, vcl::CardinalSpline &trajectory, float initialS, bool active,
-                                 bool debug) : ActivatableCompanion(shaders, trajectory, initialS, active, debug) {}
+OneWayCompanion::OneWayCompanion(Shaders &shaders, std::shared_ptr<vcl::CardinalSpline> &trajectory, float initialS,
+                                 bool active, bool debug) :
+        ActivatableCompanion(shaders, trajectory, initialS, active, debug) {}
 
 void OneWayCompanion::update(float time) {
-    if (!active || s+ds > trajectory.getDuration())
+    if (!active || s + ds > trajectory->getDuration())
         return;
     // TODO remove this current time
     currentTime = time;
 
-    dp = trajectory.position(s+ds)-trajectory.position(s);
+    dp = trajectory->position(s + ds) - trajectory->position(s);
 
     s += movementRate;
 
-    position = trajectory.position(s);
+    position = trajectory->position(s);
     updateChargesPositions();
 }

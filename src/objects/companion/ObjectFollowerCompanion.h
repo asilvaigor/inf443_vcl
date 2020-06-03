@@ -14,7 +14,7 @@ public:
     void update(float time) override;
 
 private:
-    std::shared_ptr<Object>& obj;
+    std::shared_ptr<Object> obj;
 };
 
 

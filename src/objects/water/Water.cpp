@@ -6,8 +6,8 @@
 
 std::shared_ptr<Texture> Water::waterTexture = nullptr;
 
-Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscillator> &oscillators)
-        : Object(true, false), waterLimits(waterLimits), oscillators(oscillators){
+Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::shared_ptr<std::vector<WaterOscillator>> &oscillators)
+        : Object(true, false), waterLimits(waterLimits), oscillators(oscillators) {
     if (waterTexture == nullptr)
         waterTexture = std::make_shared<Texture>(Texture("water"));
 
@@ -20,7 +20,7 @@ Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscill
     initialize_mesh();
 
     // Initializing oscillators
-    for (auto& oscillator: oscillators){
+    for (auto& oscillator: *oscillators){
         if (oscillator.getDebugState())
             oscillator.setShaders(shaders);
     }
@@ -57,7 +57,7 @@ void Water::drawMesh(vcl::camera_scene &camera) {
     glDepthMask(true);
 
     // Drawing oscillators
-    for (auto& oscillator: oscillators){
+    for (auto& oscillator: *oscillators){
         if (oscillator.getDebugState()){
             oscillator.setLights(lights);
             vcl::draw(oscillator.getMesh(), camera);
@@ -66,7 +66,7 @@ void Water::drawMesh(vcl::camera_scene &camera) {
 }
 
 void Water::update(float time) {
-    for (auto& oscillator: oscillators)
+    for (auto& oscillator: *oscillators)
         oscillator.step();
     update_mesh();
     lastTime = time;
@@ -146,7 +146,7 @@ void Water::update_heights() {
             float q = 1;
             float forceZ = 0;
 
-            for (auto& oscillator: oscillators){
+            for (auto& oscillator: *oscillators){
                 float d = vcl::norm(pos-oscillator.getPosition());
                 vcl::vec3 force = q*oscillator.getCharge()/(pow(d,3))*(oscillator.getPosition()-pos);
 

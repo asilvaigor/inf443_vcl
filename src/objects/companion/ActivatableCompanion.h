@@ -9,8 +9,8 @@
 
 class ActivatableCompanion : public CardinalSplineCompanion {
 public:
-    ActivatableCompanion(Shaders& shaders, vcl::CardinalSpline& trajectory, float initialS, bool active = false,
-            bool debug = true);
+    ActivatableCompanion(Shaders& shaders, std::shared_ptr<vcl::CardinalSpline> trajectory, float initialS,
+            bool active = false, bool debug = true);
 
     bool getActivationState();
 

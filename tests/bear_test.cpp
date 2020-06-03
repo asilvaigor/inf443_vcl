@@ -23,20 +23,20 @@ int main() {
     keyframes.emplace_back(0, 50, 5);
     keyframes.emplace_back(0, 0, 5);
 
-    vcl::CyclicCardinalSpline spline((float) keyframes.size());
+    auto spline = std::make_shared<vcl::CyclicCardinalSpline>((float) keyframes.size());
 
     // Drawing trajectory
     //Adding positions to spline
     for (int i = 0; i < (int) keyframes.size(); ++i)
-        spline.addKeyFrame(keyframes[i], (float) i);
+        spline->addKeyFrame(keyframes[i], (float) i);
 
     // Trajectory
     const float dt = 0.01;
     float t = 0;
     float tf = (float) keyframes.size();
-    std::vector<vcl::vec3 > traj;
+    auto traj = std::make_shared<std::vector<vcl::vec3>>();
     while (t <= tf){
-        traj.push_back(spline.position(t));
+        traj->push_back(spline->position(t));
         t+= dt;
     }
 

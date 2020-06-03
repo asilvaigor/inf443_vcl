@@ -4,13 +4,14 @@
 
 #include "CompanionFollower.h"
 
-CompanionFollower::CompanionFollower(Shaders &shaders, std::vector<std::shared_ptr<DipoleCompanion>> &companions,
-                                     std::vector<float> &trasitionTimes, vcl::vec3 initialPosition, bool debug) :
+CompanionFollower::CompanionFollower(Shaders &shaders,
+        std::shared_ptr<std::vector<std::shared_ptr<DipoleCompanion>>> &companions,
+        std::shared_ptr<std::vector<float>> &trasitionTimes, vcl::vec3 initialPosition, bool debug) :
     Object(true), companions(companions), trasitionTimes(trasitionTimes),
     currentCompanionIndex(0), debug(debug)
 {
-    assert(!companions.empty());
-    assert(trasitionTimes.size() == companions.size()-1);
+    assert(!companions->empty());
+    assert(trasitionTimes->size() == companions->size()-1);
     position = initialPosition;
 
     // Setting um meshes if in debug mode
@@ -49,7 +50,7 @@ void CompanionFollower::update(float time) {
 
     updateDp();
 
-    float dist = (position-companions[currentCompanionIndex]->getNegativeChargePosition()).norm();
+    float dist = (position - (*companions)[currentCompanionIndex]->getNegativeChargePosition()).norm();
     if (dist < quadraticSpeedThreshold){
         position+=dp*(dist*dist)/pow(quadraticSpeedThreshold, 2);
     }
@@ -83,7 +84,7 @@ void CompanionFollower::update(float time) {
 
     // Companion specific updates
     // Activate the companion if necessary
-    auto* activableCompanion = dynamic_cast<ActivatableCompanion*>(companions[currentCompanionIndex].get());
+    auto* activableCompanion = dynamic_cast<ActivatableCompanion*>((*companions)[currentCompanionIndex].get());
     if (activableCompanion != nullptr){
         activableCompanion->setActivationState(
                 dist < activationRadius && !activableCompanion->getActivationState());
@@ -93,12 +94,12 @@ void CompanionFollower::update(float time) {
 
 void CompanionFollower::updateDp() {
     // Following field
-    dp = companions[currentCompanionIndex]->getFieldAt(position).normalized()*maxSpeedFactor;
+    dp = (*companions)[currentCompanionIndex]->getFieldAt(position).normalized()*maxSpeedFactor;
 }
 
 int CompanionFollower::getTransitionIndex(float time) {
     int k = 0;
-    while (k <= (int)trasitionTimes.size()-1 && trasitionTimes[k] < time)
+    while (k <= (int)trasitionTimes->size()-1 && (*trasitionTimes)[k] < time)
         k++;
     return k;
 }

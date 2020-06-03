@@ -4,8 +4,9 @@
 
 #include "ActivatableCompanion.h"
 
-ActivatableCompanion::ActivatableCompanion(Shaders &shaders, vcl::CardinalSpline &trajectory, float initialS,
-        bool active, bool debug): CardinalSplineCompanion(shaders, trajectory, initialS, debug), active(active) {}
+ActivatableCompanion::ActivatableCompanion(Shaders &shaders, std::shared_ptr<vcl::CardinalSpline> trajectory,
+                                           float initialS, bool active, bool debug) :
+        CardinalSplineCompanion(shaders, trajectory, initialS, debug), active(active) {}
 
 bool ActivatableCompanion::getActivationState() {
     return active;

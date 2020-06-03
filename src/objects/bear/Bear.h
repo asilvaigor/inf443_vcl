@@ -39,10 +39,10 @@ public:
 
 private:
     vcl::fbx_model bear;
-    std::shared_ptr<BaseTerrain> &terrain;
-    std::shared_ptr<BearCompanion> &companion;
+    std::shared_ptr<BaseTerrain> terrain;
+    std::shared_ptr<BearCompanion> companion;
     std::shared_ptr<Forest> forest;
-    std::shared_ptr<vcl::vec3> &pos;
+    std::shared_ptr<vcl::vec3> pos;
     vcl::vec3 direction;
     float boundingSphereRadius;
     float deltaZ;

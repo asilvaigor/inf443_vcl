@@ -9,8 +9,8 @@
 
 class OneWayCompanion : public ActivatableCompanion {
 public:
-    OneWayCompanion(Shaders& shaders, vcl::CardinalSpline& trajectory, float initialS, bool active = false,
-            bool debug = true);
+    OneWayCompanion(Shaders& shaders, std::shared_ptr<vcl::CardinalSpline> &trajectory, float initialS,
+            bool active = false, bool debug = true);
 
     void update(float time) override;
 private:
