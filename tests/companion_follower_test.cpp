@@ -61,15 +61,20 @@ int main() {
     auto drawer = std::static_pointer_cast<Object>(std::make_shared<TrajectoryDrawer>(scene.getShaders(), traj));
     scene.addObject(drawer);
 
-    // Adding bear companion
+    // Adding cyclic companion
     auto companion = std::static_pointer_cast<Object>(std::make_shared<CyclicCompanion>(
             scene.getShaders(), spline, 0.0f));
-    std::shared_ptr<DipoleCompanion> companionPtr = std::static_pointer_cast<DipoleCompanion>(companion);
+    std::shared_ptr<ActivatableCompanion> companionPtr = std::static_pointer_cast<ActivatableCompanion>(companion);
     scene.addObject(companion);
 
     // Adding companion follower to the scene
+    std::vector<std::shared_ptr<ActivatableCompanion>> companions;
+    companions.emplace_back(companionPtr);
+
+    std::vector<float> transitionTimes;
+
     auto follower = std::static_pointer_cast<Object>(std::make_shared<CompanionFollower>(
-            scene.getShaders(), companionPtr));
+            scene.getShaders(), companions, transitionTimes));
     scene.addObject(follower);
 
     scene.display();

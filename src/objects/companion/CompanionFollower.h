@@ -6,11 +6,12 @@
 #define PGM_COMPANIONFOLLOWER_H
 
 #include "objects/Object.h"
-#include "DipoleCompanion.h"
+#include "ActivatableCompanion.h"
 
 class CompanionFollower : public Object {
 public:
-    CompanionFollower(Shaders& shaders, std::shared_ptr<DipoleCompanion>& companion, bool debug=true);
+    CompanionFollower(Shaders &shaders, std::vector<std::shared_ptr<ActivatableCompanion>> &companions,
+            std::vector<float> &trasitionTimes, bool debug = true);
 
     void drawMesh(vcl::camera_scene &camera) override;
 
@@ -18,20 +19,25 @@ public:
 
     void updateDp();
 
+    int getTransitionIndex(float time);
+
 private:
     // Meshes for drawing object
     vcl::mesh_drawable sphereMesh;
     vcl::mesh_drawable axisMarkerMesh;
 
     // Companion
-    std::shared_ptr<DipoleCompanion>& companion;
+    std::vector<std::shared_ptr<ActivatableCompanion>> &companions;
+    std::vector<float> &trasitionTimes;
 
     // State variables
     vcl::vec3 dp;
+    int currentCompanionIndex{};
 
     // Constants
     const float quadraticSpeedThreshold = 10;
     const float maxSpeedFactor = 0.4;
+    const float activationRadius = 10;
 
     // In debug mode
     bool debug;

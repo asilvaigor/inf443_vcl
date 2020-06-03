@@ -4,10 +4,12 @@
 
 #include "CyclicCompanion.h"
 
-CyclicCompanion::CyclicCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS, bool debug) :
-    CardinalSplineCompanion(shaders, trajectory, initialS, debug){}
+CyclicCompanion::CyclicCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS, bool active,
+        bool debug) : ActivatableCompanion(shaders, trajectory, initialS, active, debug){}
 
 void CyclicCompanion::update(float time) {
+    if (!active)
+        return;
     // TODO remove this current time
     currentTime = time;
     
