@@ -89,8 +89,9 @@ std::shared_ptr<Bear> addBear(Scene &scene, std::shared_ptr<BaseTerrain> &terrai
     return bear;
 }
 
-void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_ptr<Bear> &bear) {
+void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_ptr<Object> &bearPtr) {
     scene.getGui()->getCamera().set_scale(5);
+    std::shared_ptr<Bear> bear = std::static_pointer_cast<Bear>(bearPtr);
 
     // Spline
     // Adding positions
@@ -129,6 +130,12 @@ void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_pt
     std::shared_ptr<DipoleCompanion> companion3Ptr = std::static_pointer_cast<DipoleCompanion>(companion3);
     scene.addObject(companion3);
 
+    // Adding companion
+    auto companion4 = std::static_pointer_cast<Object>
+            (std::make_shared<ObjectFollowerCompanion>(scene.getShaders(), bearPtr, false));
+    std::shared_ptr<DipoleCompanion> companion4Ptr = std::static_pointer_cast<DipoleCompanion>(companion4);
+    scene.addObject(companion4);
+
 //    // Trajectory
 //    const float dt = 0.01;
 //    float t = 0;
@@ -143,13 +150,16 @@ void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_pt
 
     // Adding companion follower to the scene
     auto companions = std::make_shared<std::vector<std::shared_ptr<DipoleCompanion>>>();
+
     companions->emplace_back(companion1Ptr);
     companions->emplace_back(companion2Ptr);
     companions->emplace_back(companion3Ptr);
+    companions->emplace_back(companion4Ptr);
 
     auto transitionTimes = std::make_shared<std::vector<float>>();
     transitionTimes->emplace_back(20);
     transitionTimes->emplace_back(30);
+    transitionTimes->emplace_back(40);
 
     auto follower = std::static_pointer_cast<Object>(std::make_shared<CompanionFollower>(
             scene.getShaders(), companions, transitionTimes, keyframes[0][0], false));
@@ -179,7 +189,7 @@ int main() {
     scene.addObject(snow);
 
     // Adding bear
-    auto bear = addBear(scene, terrain, forest);
+    std::shared_ptr<Object> bear = addBear(scene, terrain, forest);
 
     // Adding boid
     auto boid = std::make_shared<Boid>(scene.getShaders(), 20, -140, 140, -140, 140, -10, 100, terrain);
