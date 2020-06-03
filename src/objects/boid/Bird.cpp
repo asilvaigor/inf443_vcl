@@ -26,7 +26,7 @@ void Bird::drawMesh(vcl::camera_scene &camera) {
     // TODO add scaling to birds
     // TODO Add bounding sphere
 
-    //Rotation using euler angles
+    // Rotation using euler angles
     vcl::vec3 projDpXY = {dp.x, dp.y, 0};
 
     float alpha;

@@ -8,4 +8,7 @@
 #include "helper_functions/helper_functions.hpp"
 #include "quaternion/quaternion.hpp"
 #include "light_source/light_source.hpp"
+#include "spline/CardinalSpline.h"
+#include "spline/CyclicCardinalSpline.h"
+#include "noise/PerlinNoise.h"
 

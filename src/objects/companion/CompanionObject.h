@@ -12,33 +12,15 @@ public:
     CompanionObject(Shaders& shaders, bool debug);
 
     void drawMesh(vcl::camera_scene &camera) override;
-
-    virtual vcl::vec2 getFieldAt(vcl::vec2 pos);
-
-    virtual vcl::vec3 getFieldAt(vcl::vec3 pos);
-
 protected:
-    // Mesh related
+    // Mesh
     vcl::mesh_drawable mesh;
-    vcl::mesh_drawable chargeMesh;
 
     vcl::vec3 dp;
     float currentTime;
 
-    // Chargers variables
-    vcl::vec3 pc1, pc2;
-
-    // TODO make this global
-    const float T = 1.0/60;
-    const float frictionFactor = 0.01f;
-    const float distanceDipole = 5.0f;
-    const float dipoleOffset = 8.0f;
-    const float charge = 15.0f;
-
     // Debug
     bool debug;
-
-    void updateChargesPositions();
 };
 
 
