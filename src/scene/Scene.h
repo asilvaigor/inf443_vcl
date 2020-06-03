@@ -65,6 +65,7 @@ private:
     std::shared_ptr<Texture> whiteTexture;
     std::shared_ptr<Grid> grid;
     std::shared_ptr<CascadeShadow> cascadeShadow;
+    float lastTime;
 
     static bool exists; // Singleton bool
 

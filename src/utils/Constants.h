@@ -7,6 +7,7 @@
 
 
 struct Constants {
+    static const float FPS;
     static const float CAMERA_ANGLE;
     static const float CAMERA_Z_NEAR;
     static const float CAMERA_Z_FAR;
