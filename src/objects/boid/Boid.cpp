@@ -37,25 +37,22 @@ std::vector<std::shared_ptr<Object>> &Boid::getObjects() {
 }
 
 void Boid::update(float time) {
-    // TODO add animation framerate or some kind of animator
-    if (time - curTime > 1.0f / 60.0f) {
-        for (auto& obj : birds){
-            auto bird = dynamic_cast<Bird *>(obj.get());
+    for (auto& obj : birds){
+        auto bird = dynamic_cast<Bird *>(obj.get());
 
-            birdFlyCenter(bird);
-            birdAvoidOthers(bird);
-            birdMatchOthers(bird);
-            birdBound(bird);
-            birdLimitSpeed(bird);
-        }
-        for (auto& obj : birds){
-            auto bird = dynamic_cast<Bird *>(obj.get());
-            bird->stepSpeed();
-            bird->stepPosition();
-            bird->update(time);
-        }
-        curTime = time;
+        birdFlyCenter(bird);
+        birdAvoidOthers(bird);
+        birdMatchOthers(bird);
+        birdBound(bird);
+        birdLimitSpeed(bird);
     }
+    for (auto& obj : birds){
+        auto bird = dynamic_cast<Bird *>(obj.get());
+        bird->stepSpeed();
+        bird->stepPosition();
+        bird->update(time);
+    }
+    curTime = time;
 }
 
 void Boid::birdFlyCenter(Bird* bird) {

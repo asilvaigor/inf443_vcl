@@ -7,7 +7,7 @@
 std::shared_ptr<Texture> Water::waterTexture = nullptr;
 
 Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscillator> &oscillators)
-        : Object(true, true), waterLimits(waterLimits), oscillators(oscillators){
+        : Object(true, false), waterLimits(waterLimits), oscillators(oscillators){
     if (waterTexture == nullptr)
         waterTexture = std::make_shared<Texture>(Texture("water"));
 
@@ -30,8 +30,7 @@ Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscill
     waterMeshDrawable.uniform.shading = {0.5f, 0.6f, 1.0f, 128};
 
     // Setting current time
-    timer = std::chrono::system_clock::now();
-    std::chrono::system_clock::now();
+    lastTime = 0;
 
     waterMeshDrawable.uniform.color = {15.0f/255.0f, 94.0f/255.0f, 156.0f/255.0f};
     waterMeshDrawable.uniform.color_alpha = 0.5;
@@ -51,20 +50,6 @@ void Water::drawMesh(vcl::camera_scene &camera) {
     glDepthMask(false);
 
     waterMeshDrawable.uniform.lights = lights;
-
-    // Updating animation
-    std::chrono::duration<double> duration = std::chrono::system_clock::now() - timer;
-    // Chance animation rate
-
-    //TODO add parameter for this
-    if (duration.count() > 1/60){
-//        std::cout << "here\n";
-        for (auto& oscillator: oscillators){
-            oscillator.step();
-        }
-        update_mesh();
-        timer = std::chrono::system_clock::now();
-    }
     waterTexture->bind();
     vcl::draw(waterMeshDrawable, camera);
 
@@ -78,6 +63,13 @@ void Water::drawMesh(vcl::camera_scene &camera) {
             vcl::draw(oscillator.getMesh(), camera);
         }
     }
+}
+
+void Water::update(float time) {
+    for (auto& oscillator: oscillators)
+        oscillator.step();
+    update_mesh();
+    lastTime = time;
 }
 
 void Water::initialize_mesh() {

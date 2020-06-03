@@ -2,10 +2,13 @@
 // Created by igor on 22/04/2020.
 //
 
-#include <src/objects/boid/Boid.h>
+#include <chrono>
+#include <thread>
 #include "Scene.h"
 #include "objects/forest/Forest.h"
+#include "objects/boid/Boid.h"
 #include "utils/SingletonException.h"
+#include "utils/Constants.h"
 
 bool Scene::exists = false;
 bool Scene::deterministic = true;
@@ -28,6 +31,7 @@ Scene::Scene(std::string &windowTitle) {
     // Creating rendering stuff
     whiteTexture = std::make_shared<Texture>(255, 255, 255);
     grid = std::make_shared<Grid>(*shaders);
+    lastTime = 0;
 
     vcl::light_source light({100, 0, 100}, {-1, 0, -1},
             gui->getCamera().perspective.z_near, gui->getCamera().perspective.z_far);
@@ -64,7 +68,11 @@ void Scene::haveCameraFollow(std::shared_ptr<Object> &object) {
 }
 
 void Scene::updateScene() {
+    // Limiting fps
     float time = glfwGetTime();
+    std::this_thread::sleep_for(std::chrono::duration<float>(1.0f / Constants::FPS - (time - lastTime)));
+    lastTime = time;
+
     for (auto &obj : movableObjects)
         obj->update(time);
 
