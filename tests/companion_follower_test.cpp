@@ -38,7 +38,7 @@ int main() {
     std::vector<vcl::vec3> keyframes;
     keyframes.emplace_back(50, 0, 5);
     keyframes.emplace_back(50, 50, 5);
-    keyframes.emplace_back(0, 50, 5);
+    keyframes.emplace_back(0, 50, -10);
     keyframes.emplace_back(0, 0, 5);
 
     vcl::CyclicCardinalSpline spline((float) keyframes.size());
@@ -64,7 +64,7 @@ int main() {
     // Adding bear companion
     auto companion = std::static_pointer_cast<Object>(std::make_shared<CyclicCompanion>(
             scene.getShaders(), spline, 0.0f));
-    std::shared_ptr<CompanionObject> companionPtr = std::static_pointer_cast<CompanionObject>(companion);
+    std::shared_ptr<DipoleCompanion> companionPtr = std::static_pointer_cast<DipoleCompanion>(companion);
     scene.addObject(companion);
 
     // Adding companion follower to the scene
