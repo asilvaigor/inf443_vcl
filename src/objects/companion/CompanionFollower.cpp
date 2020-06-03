@@ -4,7 +4,7 @@
 
 #include "CompanionFollower.h"
 
-CompanionFollower::CompanionFollower(Shaders &shaders, std::shared_ptr<CompanionObject> &companion, bool debug) :
+CompanionFollower::CompanionFollower(Shaders &shaders, std::shared_ptr<DipoleCompanion> &companion, bool debug) :
     Object(true), companion(companion), debug(debug)
 {
     // Setting um meshes if in debug mode
@@ -29,7 +29,7 @@ void CompanionFollower::drawMesh(vcl::camera_scene &camera) {
 
         // Marker
         axisMarkerMesh.uniform.transform.translation = position;
-//        mesh.uniform.transform.rotation = vcl::rotation_between_vector_mat3({0, 0, 1}, dp);
+        axisMarkerMesh.uniform.transform.rotation = orientation;
         axisMarkerMesh.uniform.lights = lights;
 
         vcl::draw(axisMarkerMesh, camera);
@@ -39,31 +39,46 @@ void CompanionFollower::drawMesh(vcl::camera_scene &camera) {
 void CompanionFollower::update(float time) {
     // Updating dp (speed)
     // TODO pass initial speed and initial angle
-//
-//    // Making orientation matrix match speed vector and angle
-//    // Rotation using euler angles
-//    vcl::vec3 projDpXY = {dp.x, dp.y, 0};
-//
-//    float alpha;
-//    if (vcl::cross(projDpXY, {0, 1, 0}).z > 0)
-//        alpha = -projDpXY.angle({0, 1, 0});
-//    else alpha = projDpXY.angle({0, 1, 0});
-//    vcl::mat3 aRotation = vcl::rotation_from_axis_angle_mat3({0, 0, 1}, alpha);
-//
-//    vcl::vec3 bAxis = vcl::cross(dp, {0, 0, 1});
-//    float beta = -dp.angle({0, 0, 1})+M_PI_2;
+    updateDp();
+
+    float dist = (position-companion->getNegativeChargePosition()).norm();
+    if (dist < 10){
+        position+=dp.normalized()*(dist*dist)/100;
+    }
+    else position+=dp.normalized();
+
+
+    // Making orientation matrix match speed vector and angle
+    // Rotation using euler angles
+    vcl::vec3 projDpXY = {dp.x, dp.y, 0};
+
+    float alpha;
+    if (vcl::cross(projDpXY, {0, 1, 0}).z > 0)
+        alpha = -projDpXY.angle({0, 1, 0});
+    else alpha = projDpXY.angle({0, 1, 0});
+    vcl::mat3 aRotation = vcl::rotation_from_axis_angle_mat3({0, 0, 1}, alpha);
+
+    vcl::vec3 bAxis = vcl::cross(dp, {0, 0, 1});
+    float beta = -dp.angle({0, 0, 1})+M_PI_2;
 //    vcl::mat3 bRotation = vcl::rotation_from_axis_angle_mat3(bAxis, beta);
-//
-////    vcl::vec3 projDpo = {odp.x, odp.y, 1};
-////    vcl::vec3 projNdp = {ndp.x, ndp.y, 1};
-////    float gamma = projDpo.angle(projNdp)*turining;
-////    if (gamma > M_PI_2)
-////        gamma = M_PI_2;
-////    else if (gamma < -M_PI_2)
-////        gamma = -M_PI_2;
-////    vcl::mat3 cRotation = vcl::rotation_from_axis_angle_mat3(dp, gamma);
-//
-//    orientation = bRotation*aRotation;
+
+//    vcl::vec3 projDpo = {odp.x, odp.y, 1};
+//    vcl::vec3 projNdp = {ndp.x, ndp.y, 1};
+//    float gamma = projDpo.angle(projNdp)*turining;
+//    if (gamma > M_PI_2)
+//        gamma = M_PI_2;
+//    else if (gamma < -M_PI_2)
+//        gamma = -M_PI_2;
+//    vcl::mat3 cRotation = vcl::rotation_from_axis_angle_mat3(dp, gamma);
+
+    orientation = aRotation;
 }
+
+void CompanionFollower::updateDp() {
+    // Following field
+    dp = companion->getFieldAt(position);
+}
+
+
 
 
