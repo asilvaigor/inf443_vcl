@@ -29,6 +29,10 @@ private:
     // State variables
     vcl::vec3 dp;
 
+    // Constants
+    const float quadraticSpeedThreshold = 10;
+    const float maxSpeedFactor = 0.4;
+
     // In debug mode
     bool debug;
 };

@@ -42,10 +42,10 @@ void CompanionFollower::update(float time) {
     updateDp();
 
     float dist = (position-companion->getNegativeChargePosition()).norm();
-    if (dist < 10){
-        position+=dp.normalized()*(dist*dist)/100;
+    if (dist < quadraticSpeedThreshold){
+        position+=dp*(dist*dist)/pow(quadraticSpeedThreshold, 2);
     }
-    else position+=dp.normalized();
+    else position+=dp;
 
 
     // Making orientation matrix match speed vector and angle
@@ -60,7 +60,7 @@ void CompanionFollower::update(float time) {
 
     vcl::vec3 bAxis = vcl::cross(dp, {0, 0, 1});
     float beta = -dp.angle({0, 0, 1})+M_PI_2;
-//    vcl::mat3 bRotation = vcl::rotation_from_axis_angle_mat3(bAxis, beta);
+    vcl::mat3 bRotation = vcl::rotation_from_axis_angle_mat3(bAxis, beta);
 
 //    vcl::vec3 projDpo = {odp.x, odp.y, 1};
 //    vcl::vec3 projNdp = {ndp.x, ndp.y, 1};
@@ -71,12 +71,13 @@ void CompanionFollower::update(float time) {
 //        gamma = -M_PI_2;
 //    vcl::mat3 cRotation = vcl::rotation_from_axis_angle_mat3(dp, gamma);
 
-    orientation = aRotation;
+    orientation = bRotation*aRotation;
 }
 
 void CompanionFollower::updateDp() {
     // Following field
-    dp = companion->getFieldAt(position);
+    dp = companion->getFieldAt(position).normalized()*maxSpeedFactor;
+
 }
 
 
