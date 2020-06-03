@@ -18,6 +18,7 @@
 #include <src/objects/companion/CompanionFollower.h>
 #include <src/objects/companion/OneWayCompanion.h>
 #include <src/objects/dome/Dome.h>
+#include <src/objects/companion/ObjectFollowerCompanion.h>
 
 std::shared_ptr<BaseTerrain> addTerrain(Scene &scene) {
     // Adding terrain
@@ -122,6 +123,12 @@ void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_pt
     auto companion2Ptr = std::static_pointer_cast<DipoleCompanion>(companion2);
     scene.addObject(companion2);
 
+    // Adding companion
+    auto companion3 = std::static_pointer_cast<Object>
+            (std::make_shared<ObjectFollowerCompanion>(scene.getShaders(), bird, false));
+    std::shared_ptr<DipoleCompanion> companion3Ptr = std::static_pointer_cast<DipoleCompanion>(companion3);
+    scene.addObject(companion3);
+
 //    // Trajectory
 //    const float dt = 0.01;
 //    float t = 0;
@@ -138,8 +145,11 @@ void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_pt
     auto companions = std::make_shared<std::vector<std::shared_ptr<DipoleCompanion>>>();
     companions->emplace_back(companion1Ptr);
     companions->emplace_back(companion2Ptr);
+    companions->emplace_back(companion3Ptr);
+
     auto transitionTimes = std::make_shared<std::vector<float>>();
     transitionTimes->emplace_back(20);
+    transitionTimes->emplace_back(30);
 
     auto follower = std::static_pointer_cast<Object>(std::make_shared<CompanionFollower>(
             scene.getShaders(), companions, transitionTimes, keyframes[0][0], false));

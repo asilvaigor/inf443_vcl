@@ -69,7 +69,7 @@ int main() {
     companions->push_back(companionPtr);
     auto times = std::make_shared<std::vector<float>>();
 
-    auto follower= std::static_pointer_cast<Object>
+    auto follower = std::static_pointer_cast<Object>
             (std::make_shared<CompanionFollower>(scene.getShaders(), companions, times, vcl::vec3(0, 0, 0), false));
     scene.addObject(follower);
 
