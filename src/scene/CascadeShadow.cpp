@@ -103,12 +103,10 @@ void CascadeShadow::renderObject(std::shared_ptr<Object> &obj, vcl::camera_scene
     auto dome = std::static_pointer_cast<Dome>(obj);
     obj->setLight(lights[lastUpdated]);
 
+    // A normal object must be in the correct frustum to be rendered
     if (obj->hasShadow() && (obj->getLight()->get_shadow_map_id() == lastUpdated ||
            obj->getBoundingSphere().isInLightRange(camera, *lights[lastUpdated]))) {
-        // A normal object must be in the correct frustum to be rendered
-        if (obj->isMovable()) {
-            obj->draw(camera, lastTime[lastUpdated]);
-            nMovableObjects[lastUpdated]++;
-        } else obj->draw(camera);
+        nMovableObjects[lastUpdated]++;
+        obj->draw(camera);
     }
 }

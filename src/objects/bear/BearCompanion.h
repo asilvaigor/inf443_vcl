@@ -14,6 +14,8 @@ public:
     BearCompanion(Shaders &shaders, vcl::CyclicCardinalSpline &trajectory, float initialS,
                   std::shared_ptr<vcl::vec3> bearPosition, bool debug = true);
 
+    void update(float time) override;
+
     vcl::vec2 getFieldAt(vcl::vec2 pos) override;
 
 private:
@@ -21,11 +23,9 @@ private:
     float s;
     float ds = 0.01;
     vcl::CyclicCardinalSpline& trajectory;
-    
+
     // Bear
     std::shared_ptr<vcl::vec3> bearPosition;
-    
-    void update(float time) override;
 };
 
 

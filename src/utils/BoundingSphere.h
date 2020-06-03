@@ -25,6 +25,10 @@ public:
 
     BoundingSphere(std::vector<vcl::vec3 *> &points);
 
+    const float &getRadius();
+
+    const vcl::vec3 &getCenter();
+
     /**
      * Calculates if the sphere is in the camera frustum.
      * @param camera

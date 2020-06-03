@@ -40,6 +40,14 @@ BoundingSphere::BoundingSphere(std::vector<vcl::vec3 *> &points) {
     calculate(points);
 }
 
+const float &BoundingSphere::getRadius() {
+    return radius;
+}
+
+const vcl::vec3 &BoundingSphere::getCenter() {
+    return pt;
+}
+
 int BoundingSphere::isInCameraFrustum(vcl::camera_scene &camera) {
     for (int i = 0; i < 6; i++) {
         auto &plane = camera.frustumPlanes[i];

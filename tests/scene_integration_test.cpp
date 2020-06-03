@@ -15,7 +15,7 @@
 #include <src/objects/forest/Forest.h>
 
 int main() {
-    std::string windowTitle = "Lake Test";
+    std::string windowTitle = "Scene Integration Test";
     auto scene = Scene::getInstance(windowTitle);
     vcl::camera_scene &camera = scene.getGui()->getCamera();
 

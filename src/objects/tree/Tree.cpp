@@ -31,7 +31,7 @@ Tree::Tree(Shaders &shaders, vcl::vec3 &pos, TreeSpecies &species, float snowCov
     else trunkRadius = branchRadius;
 }
 
-void Tree::drawMesh(vcl::camera_scene &camera, float) {
+void Tree::drawMesh(vcl::camera_scene &camera) {
     if (!branchesMesh.empty()) {
         branchesDrawable.uniform.lights = lights;
         branchTexture->bind();

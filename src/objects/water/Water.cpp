@@ -37,7 +37,7 @@ Water::Water(Shaders &shaders, WaterLimits& waterLimits, std::vector<WaterOscill
     waterMeshDrawable.uniform.color_alpha = 0.5;
 }
 
-void Water::drawMesh(vcl::camera_scene &camera, float time) {
+void Water::drawMesh(vcl::camera_scene &camera) {
     // TODO fix this mess
 
     // Enable use of alpha component as color blending for transparent elements

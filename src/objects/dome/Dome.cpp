@@ -11,7 +11,7 @@ Dome::Dome(Shaders &shaders) : Object(false, true), texture("skydome") {
     meshDrawable.shader = shaders["mesh"];
 }
 
-void Dome::drawMesh(vcl::camera_scene &camera, float) {
+void Dome::drawMesh(vcl::camera_scene &camera) {
     meshDrawable.uniform.lights = lights;
     texture.bind();
     vcl::draw(meshDrawable, camera);

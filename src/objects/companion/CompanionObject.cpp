@@ -18,11 +18,7 @@ CompanionObject::CompanionObject(Shaders &shaders, bool debug) : Object(true, tr
     }
 }
 
-void CompanionObject::drawMesh(vcl::camera_scene &camera, float time) {
-    // Animation
-    if (time-currentTime > T)
-        update(time);
-
+void CompanionObject::drawMesh(vcl::camera_scene &camera) {
     // Print meshes if in debug mode
     if (debug){
         // Direction and position

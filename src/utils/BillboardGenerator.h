@@ -31,6 +31,13 @@ public:
     BillboardGenerator(Shaders &shaders, Object *object);
 
     /**
+     * Stores a pointer to another billboard, and will draw it with a translation.
+     * @param billboard
+     * @param translation
+     */
+    BillboardGenerator(BillboardGenerator *billboard, vcl::vec3 &translation);
+
+    /**
      * Deletes buffers.
      */
     ~BillboardGenerator();
@@ -48,6 +55,9 @@ public:
      */
     bool empty() const;
 
+    vcl::mesh_drawable quad1;
+    vcl::mesh_drawable quad2;
+
 private:
     Shaders *shaders;
     bool isEmpty;
@@ -58,8 +68,8 @@ private:
     int texture2Width, texture2Height;
     vcl::camera_scene virtualCamera1;
     vcl::camera_scene virtualCamera2;
-    vcl::mesh_drawable quad1;
-    vcl::mesh_drawable quad2;
+    BillboardGenerator *reference;
+    vcl::vec3 translation;
 
     /**
      * Calculates two camera angles that cover two faces of the bounding box.

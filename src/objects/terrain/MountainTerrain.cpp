@@ -44,7 +44,7 @@ MountainTerrain::MountainTerrain(Shaders &shaders, float xSize, float ySize, Wat
     std::cout << "Finished" << std::endl;
 }
 
-void MountainTerrain::drawMesh(vcl::camera_scene &camera, float) {
+void MountainTerrain::drawMesh(vcl::camera_scene &camera) {
     terrain.uniform.lights = lights;
     terrain.uniform.current_light = currentLight;
     terrainTexture->bind();

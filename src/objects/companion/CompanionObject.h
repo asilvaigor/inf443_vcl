@@ -11,7 +11,7 @@ class CompanionObject : public Object {
 public:
     CompanionObject(Shaders& shaders, bool debug);
 
-    void drawMesh(vcl::camera_scene &camera, float time) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
     virtual vcl::vec2 getFieldAt(vcl::vec2 pos);
 
@@ -37,13 +37,6 @@ protected:
 
     // Debug
     bool debug;
-
-    /**
-     * Updates position and speed, must be
-     * implemented in each companion object
-     * @param time
-     */
-    virtual void update(float time) = 0;
 
     void updateChargesPositions();
 };

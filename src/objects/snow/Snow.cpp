@@ -9,6 +9,8 @@ vcl::rand_generator Snow::generator(Scene::deterministic);
 
 Snow::Snow(Shaders &shaders, int nParticles) :
         Object(true, true), nParticles(nParticles) {
+    camera = nullptr;
+
     vcl::mesh m;
     m.position.push_back({0.0f, 1.0f, 0.0f});
     m.position.push_back({-0.866f, -0.5f, 0.0f});
@@ -35,9 +37,15 @@ Snow::Snow(Shaders &shaders, int nParticles) :
         velocities[i].z = -gravity * flakeMass / airDamping;
 }
 
-void Snow::drawMesh(vcl::camera_scene &camera, float time) {
+void Snow::drawMesh(vcl::camera_scene &camera) {
+    this->camera = &camera;
+    for (int i = 0; i < nParticles; i++)
+        vcl::draw_snow(particles[i], camera);
+}
+
+void Snow::update(float time) {
     float dt = time - lastTime;
-    vcl::vec3 cam = camera.camera_position();
+    vcl::vec3 cam = camera->camera_position();
 
     for (int i = 0; i < nParticles; i++) {
         auto &p = particles[i].uniform.transform.translation;
@@ -62,6 +70,4 @@ void Snow::drawMesh(vcl::camera_scene &camera, float time) {
     }
 
     lastTime = time;
-    for (int i = 0; i < nParticles; i++)
-        vcl::draw_snow(particles[i], camera);
 }

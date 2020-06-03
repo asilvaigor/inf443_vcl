@@ -23,18 +23,19 @@ public:
      */
     virtual ~Object();
 
+    virtual void update(float time);
+
     /**
      * Calls vcl::draw to draw the object in the scene.
      * @param camera
      */
-    void draw(vcl::camera_scene &camera, float time = 0.0f);
+    void draw(vcl::camera_scene &camera);
 
     /**
      * Draws the object's mesh in screen.
      * @param camera
-     * @param time
      */
-    virtual void drawMesh(vcl::camera_scene &camera, float time = 0.0f) = 0;
+    virtual void drawMesh(vcl::camera_scene &camera) = 0;
 
     /**
      * Sets the light object that the object will be rendered with.
@@ -75,6 +76,8 @@ public:
     vcl::vec3 &getPosition();
 
     vcl::mat3 &getOrientation();
+
+    BillboardGenerator &getBillboard();
 
 protected:
     const bool movable;

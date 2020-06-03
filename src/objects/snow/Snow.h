@@ -11,11 +11,14 @@ class Snow : public Object {
 public:
     explicit Snow(Shaders &shaders, int nParticles = 250);
 
-    void drawMesh(vcl::camera_scene& camera, float time) override;
+    void drawMesh(vcl::camera_scene& camera) override;
+
+    void update(float time) override;
 
 private:
     std::vector<vcl::mesh_drawable> particles;
     std::vector<vcl::vec3> velocities, accelerations;
+    vcl::camera_scene *camera;
     float lastTime;
     int nParticles;
     float cameraDistance;

@@ -11,7 +11,7 @@ class TrajectoryDrawer : public Object {
 public:
     TrajectoryDrawer(Shaders& shaders, std::vector<vcl::vec3>& points);
 
-    void drawMesh(vcl::camera_scene &camera, float time) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 private:
     std::vector<vcl::vec3>& points;
     Shaders& shaders;

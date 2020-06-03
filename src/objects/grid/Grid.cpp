@@ -10,6 +10,6 @@ Grid::Grid(Shaders &shaders) : Object(false) {
     grid.shader = shaders["wireframe"];
 }
 
-void Grid::drawMesh(vcl::camera_scene &camera, float) {
+void Grid::drawMesh(vcl::camera_scene &camera) {
     vcl::draw(grid, camera);
 }

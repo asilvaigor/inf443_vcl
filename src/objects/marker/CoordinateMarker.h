@@ -16,7 +16,7 @@ public:
      */
     explicit CoordinateMarker(Shaders& shaders, vcl::vec3 position = {0.0f, 0.0f, 0.0f});
 
-    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
     void setPosition(vcl::vec3 position);
 

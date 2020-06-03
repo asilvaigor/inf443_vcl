@@ -12,7 +12,9 @@ class Bird : public Object {
 public:
     Bird(Shaders &shaders, vcl::vec3 pos, float scale, vcl::vec3 speed = {1, 0, 0}, float turning = 50);
 
-    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
+    void drawMesh(vcl::camera_scene &camera) override;
+
+    void update(float time) override;
 
     vcl::vec3 getSpeed();
 
@@ -29,6 +31,7 @@ public:
     void stepPosition();
 
 private:
+    float curTime;
     vcl::vec3 dp;
     vcl::vec3 odp;
     vcl::vec3 ndp;

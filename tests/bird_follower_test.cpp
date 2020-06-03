@@ -12,7 +12,7 @@
 #include <src/objects/boid/Boid.h>
 
 int main() {
-    std::string windowTitle = "Lake Test";
+    std::string windowTitle = "Bird follower Test";
     auto scene = Scene::getInstance(windowTitle);
     vcl::camera_scene &camera = scene.getGui()->getCamera();
 

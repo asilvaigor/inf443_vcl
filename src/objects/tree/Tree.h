@@ -34,11 +34,16 @@ public:
      * @param camera
      * @param time
      */
-    void drawMesh(vcl::camera_scene &camera, float time = 0.0f) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
     float &getTrunkRadius();
 
     float &getBranchRadius();
+
+    vcl::mesh_drawable branchesDrawable;
+    vcl::mesh_drawable snowyBranchesDrawable;
+    vcl::mesh_drawable leavesDrawable;
+    vcl::mesh_drawable snowyLeavesDrawable;
 
 private:
     TreeSpecies &species;
@@ -46,10 +51,6 @@ private:
     vcl::mesh snowyBranchesMesh;
     vcl::mesh leavesMesh;
     vcl::mesh snowyLeavesMesh;
-    vcl::mesh_drawable branchesDrawable;
-    vcl::mesh_drawable snowyBranchesDrawable;
-    vcl::mesh_drawable leavesDrawable;
-    vcl::mesh_drawable snowyLeavesDrawable;
     bool verbose;
     float trunkRadius;
     float branchRadius;

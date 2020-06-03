@@ -11,7 +11,7 @@ class DebugObject : public Object {
 public:
     DebugObject(Shaders& shaders);
 
-    void drawMesh(vcl::camera_scene &camera, float time) override;
+    void drawMesh(vcl::camera_scene &camera) override;
 
     void addMesh(vcl::mesh_drawable mesh);
 
