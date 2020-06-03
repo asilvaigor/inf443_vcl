@@ -10,6 +10,8 @@
 #include <vector>
 #include <src/objects/debug/DebugObject.h>
 #include <src/objects/boid/Boid.h>
+#include <src/objects/companion/ObjectFollowerCompanion.h>
+#include <src/objects/companion/CompanionFollower.h>
 
 int main() {
     std::string windowTitle = "Bird follower Test";
@@ -56,10 +58,22 @@ int main() {
     // Adding boid to the scene
     auto boid = std::make_shared<Boid>(scene.getShaders(), 20, -140, 140, -140, 140, -10, 100, terrainPtr);
     auto boidObj = std::static_pointer_cast<Object>(boid);
-
     scene.addObject(boidObj);
 
-    scene.haveCameraFollow(boid->getBird(0));
+    auto companion = std::static_pointer_cast<Object>
+            (std::make_shared<ObjectFollowerCompanion>(scene.getShaders(), boid->getBird(0)));
+    std::shared_ptr<DipoleCompanion> companionPtr = std::static_pointer_cast<DipoleCompanion>(companion);
+    scene.addObject(companion);
+
+    auto companions = std::make_shared<std::vector<std::shared_ptr<DipoleCompanion>>>();
+    companions->push_back(companionPtr);
+    auto times = std::make_shared<std::vector<float>>();
+
+    auto follower= std::static_pointer_cast<Object>
+            (std::make_shared<CompanionFollower>(scene.getShaders(), companions, times, vcl::vec3(0, 0, 0), false));
+    scene.addObject(follower);
+
+    scene.haveCameraFollow(follower);
 
     scene.display();
     return 0;

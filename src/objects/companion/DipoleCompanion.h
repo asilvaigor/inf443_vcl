@@ -13,6 +13,8 @@ public:
 
     void drawMesh(vcl::camera_scene &camera) override;
 
+    void update(float time) override;
+
     vcl::vec2 getFieldAt(vcl::vec2 pos);
 
     vcl::vec3 getFieldAt(vcl::vec3 pos);

@@ -68,3 +68,7 @@ vcl::vec3 DipoleCompanion::getFieldAt(vcl::vec3 pos) {
 vcl::vec3 DipoleCompanion::getNegativeChargePosition() {
     return pc1;
 }
+
+void DipoleCompanion::update(float time) {
+    updateChargesPositions();
+}

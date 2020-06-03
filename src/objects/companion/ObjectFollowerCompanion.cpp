@@ -10,4 +10,6 @@ ObjectFollowerCompanion::ObjectFollowerCompanion(Shaders &shaders, std::shared_p
 void ObjectFollowerCompanion::update(float time) {
     position = obj->getPosition();
     orientation = obj->getOrientation();
+    dp = orientation*vcl::vec3(0, 1, 0);
+    updateChargesPositions();
 }
