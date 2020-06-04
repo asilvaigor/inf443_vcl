@@ -19,15 +19,16 @@ private:
     std::vector<vcl::mesh_drawable> particles;
     std::vector<vcl::vec3> velocities, accelerations;
     vcl::camera_scene *camera;
+    vcl::vec3 lastCameraPosition;
     float lastTime;
     int nParticles;
     float cameraDistance;
     float minFlakeSize;
     float flakeSizeVar;
-    float airDamping;
+    float dampingMassRatio;
     float accelerationNoise;
-    float flakeMass;
-    float gravity;
+    std::vector<float> timeLastNoise;
+    std::vector<vcl::vec2> noise;
 
     static vcl::rand_generator generator;
 };
