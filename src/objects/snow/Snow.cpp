@@ -45,10 +45,6 @@ Snow::Snow(Shaders &shaders, int nParticles) :
     accelerations.resize(nParticles);
     for (int i = 0; i < nParticles; i++) {
         velocities[i].z = -0.03;
-        auto &p = particles[i].uniform.transform.translation;
-        p.x = generator.rand(-cameraDistance, cameraDistance);
-        p.y = generator.rand(-cameraDistance, cameraDistance);
-        p.z = generator.rand(-cameraDistance, cameraDistance);
     }
 }
 
