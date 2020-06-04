@@ -63,21 +63,7 @@ void CompanionFollower::update(float time) {
 
             dp += diff*0.05;
 
-            // TODO fix this immediatly
-            // Rotation using euler angles
-            vcl::vec3 projDpXY = {dp.x, dp.y, 0};
-
-            float alpha;
-            if (vcl::cross(projDpXY, {0, 1, 0}).z > 0)
-                alpha = -projDpXY.angle({0, 1, 0});
-            else alpha = projDpXY.angle({0, 1, 0});
-            vcl::mat3 aRotation = vcl::rotation_from_axis_angle_mat3({0, 0, 1}, alpha);
-
-            vcl::vec3 bAxis = vcl::cross(dp, {0, 0, 1});
-            float beta = -dp.angle({0, 0, 1})+M_PI_2;
-            vcl::mat3 bRotation = vcl::rotation_from_axis_angle_mat3(bAxis, beta);
-
-            orientation = bRotation*aRotation;
+            orientation = vcl::rotation_euler(dp, 0.0f);
 
             return;
         }
@@ -104,29 +90,7 @@ void CompanionFollower::update(float time) {
     }
     else position+=dp;
 
-    // Making orientation matrix match speed vector and angle
-    // Rotation using euler angles
-    vcl::vec3 projDpXY = {dp.x, dp.y, 0};
-
-    float alpha;
-    if (vcl::cross(projDpXY, {0, 1, 0}).z > 0)
-        alpha = -projDpXY.angle({0, 1, 0});
-    else alpha = projDpXY.angle({0, 1, 0});
-    vcl::mat3 aRotation = vcl::rotation_from_axis_angle_mat3({0, 0, 1}, alpha);
-
-    vcl::vec3 bAxis = vcl::cross(dp, {0, 0, 1});
-    float beta = -dp.angle({0, 0, 1})+M_PI_2;
-    vcl::mat3 bRotation = vcl::rotation_from_axis_angle_mat3(bAxis, beta);
-
-    // TODO make set angle
-    float gamma = (*companions)[currentCompanionIndex]->getRotationAngle();
-    if (gamma > M_PI_2)
-        gamma = M_PI_2;
-    else if (gamma < -M_PI_2)
-        gamma = -M_PI_2;
-    vcl::mat3 cRotation = vcl::rotation_from_axis_angle_mat3(dp, gamma);
-
-    orientation = cRotation*bRotation*aRotation;
+    orientation = vcl::rotation_euler(dp, (*companions)[currentCompanionIndex]->getRotationAngle());
 
 }
 

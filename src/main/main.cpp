@@ -152,10 +152,13 @@ void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_pt
     // Adding companion follower to the scene
     auto companions = std::make_shared<std::vector<std::shared_ptr<DipoleCompanion>>>();
 
+
+    companions->emplace_back(companion4Ptr);
+
     companions->emplace_back(companion1Ptr);
     companions->emplace_back(companion2Ptr);
     companions->emplace_back(companion3Ptr);
-    companions->emplace_back(companion4Ptr);
+//    companions->emplace_back(companion4Ptr);
 
     auto transitionTimes = std::make_shared<std::vector<float>>();
     transitionTimes->emplace_back(150);

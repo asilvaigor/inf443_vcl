@@ -36,4 +36,23 @@ mat3 rotation_between_vector_mat3(const vec3& a, const vec3& b)
     return rotation_from_axis_angle_mat3(axis,angle);
 }
 
+mat3 rotation_euler(vcl::vec3& orientation, float rotation){
+    // Rotation using euler angles and basis on y
+    vcl::vec3 projDpXY = {orientation.x, orientation.y, 0};
+
+    float alpha;
+    if (vcl::cross(projDpXY, {0, 1, 0}).z > 0)
+        alpha = -projDpXY.angle({0, 1, 0});
+    else alpha = projDpXY.angle({0, 1, 0});
+    vcl::mat3 aRotation = vcl::rotation_from_axis_angle_mat3({0, 0, 1}, alpha);
+
+    vcl::vec3 bAxis = vcl::cross(orientation, {0, 0, 1});
+    float beta = -orientation.angle({0, 0, 1})+M_PI_2;
+    vcl::mat3 bRotation = vcl::rotation_from_axis_angle_mat3(bAxis, beta);
+
+    vcl::mat3 cRotation = vcl::rotation_from_axis_angle_mat3(orientation, rotation);
+
+    return cRotation*bRotation*aRotation;
+}
+
 }

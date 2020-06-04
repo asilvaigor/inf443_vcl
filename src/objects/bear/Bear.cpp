@@ -34,9 +34,6 @@ Bear::Bear(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain, std::shared_
     stepPeriod = 0.5f;
     animationTime = 0.0f;
     lastTime = 0.0f;
-
-    //TODO remove this initialization
-    poses.push_back({50, 0, 5});
 }
 
 void Bear::drawMesh(vcl::camera_scene &camera) {
@@ -63,6 +60,7 @@ vcl::mat4 Bear::updateTransform(float &time) {
     if (vcl::cross(direction, {0, -1, 0}).z > 0)
         alpha = -direction.angle({0, -1, 0});
     else alpha = direction.angle({0, -1, 0});
+
     vcl::mat3 aRotation = vcl::rotation_from_axis_angle_mat3({0, 0, 1}, alpha);
 
     // Beta rotation
@@ -105,9 +103,8 @@ void Bear::updateDirection() {
 
             // For first charge
             float d = vcl::norm(pos2d - c);
-//        std::cout << d << "\n";
             if (d > 0.01)
-                field += k * (pos2d - c) / (pow(d, 3));
+                field += Constants::BEAR_CHARGE_FACTOR * (pos2d - c) / (pow(d, 3));
 
         }
     }

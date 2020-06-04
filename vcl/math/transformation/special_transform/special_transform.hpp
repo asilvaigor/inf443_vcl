@@ -21,4 +21,15 @@ mat3 rotation_from_axis_angle_mat3(const vec3& axis, float angle);
  * Note that R is generally not the unique possible rotation */
 mat3 rotation_between_vector_mat3(const vec3& a, const vec3& b);
 
+/**
+ * Takes a orientation vector
+ * and uses euler rotations to
+ * match this vector and makes
+ * final turning around this vector
+ * @param orientation
+ * @param rotation
+ * @return rotation matrix
+ */
+mat3 rotation_euler(vcl::vec3& orientation, float rotation);
+
 }

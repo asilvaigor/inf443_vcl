@@ -7,6 +7,7 @@
 
 
 #include <src/objects/Object.h>
+#include "utils/Constants.h"
 
 class Bird : public Object {
 public:
@@ -40,12 +41,6 @@ private:
     float turining;
 
     vcl::fbx_model bird;
-
-    // TODO move somewhere else
-    const float turnFactor = 0.05f;
-    const float maxTurnFactor = 100.0f;
-    const float animationMaxTime = 1;
-    const float animationSpeed = 0.03f;
 
     static std::vector<GLuint> textures;
 };

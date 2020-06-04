@@ -10,6 +10,7 @@
 #include "objects/terrain/BaseTerrain.h"
 #include "objects/forest/Forest.h"
 #include "BearWalkingCompanion.h"
+#include "utils/Constants.h"
 
 /**
  * Bear object.
@@ -50,11 +51,6 @@ private:
     float stepPhi, stepPeriod;
     float animationTime;
     float lastTime;
-
-    const float k = 0.3;
-
-    // TODO change this
-    std::vector<vcl::vec3>poses;
 
     static std::vector<GLuint> textures;
 

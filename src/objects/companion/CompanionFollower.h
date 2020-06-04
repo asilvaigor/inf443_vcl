@@ -38,8 +38,8 @@ private:
 
     // Constants
     const float quadraticSpeedThreshold = 10;
-    const float maxSpeedFactor = 1;
-    const float activationRadius = 10;
+    const float maxSpeedFactor = 0.5;
+    const float activationRadius = 20;
     const float filmingThreshold = 30;
 
     // In debug mode
