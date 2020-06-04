@@ -158,9 +158,9 @@ void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_pt
     companions->emplace_back(companion4Ptr);
 
     auto transitionTimes = std::make_shared<std::vector<float>>();
-    transitionTimes->emplace_back(20);
-    transitionTimes->emplace_back(50);
-    transitionTimes->emplace_back(80);
+    transitionTimes->emplace_back(150);
+    transitionTimes->emplace_back(250);
+    transitionTimes->emplace_back(330);
 
     auto follower = std::static_pointer_cast<Object>(std::make_shared<CompanionFollower>(
             scene.getShaders(), companions, transitionTimes, keyframes[0][0], false));

@@ -15,8 +15,8 @@ Snow::Snow(Shaders &shaders, int nParticles) :
 
     camera = nullptr;
     cameraDistance = 0.5f;
-    minFlakeSize = 0.0002f;
-    flakeSizeVar = 0.003f;
+    minFlakeSize = 0.0003f;
+    flakeSizeVar = 0.005f;
     dampingMassRatio = 1.0f;
     accelerationNoise = 0.03f;
 
