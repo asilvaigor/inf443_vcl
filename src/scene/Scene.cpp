@@ -31,7 +31,7 @@ Scene::Scene(std::string &windowTitle) {
     // Creating rendering stuff
     whiteTexture = std::make_shared<Texture>(255, 255, 255);
     grid = std::make_shared<Grid>(*shaders);
-    lastTime = 0;
+    simulatedTime = 0;
 
     vcl::light_source light({100, 0, 100}, {-1, 0, -1},
             gui->getCamera().get_perspective().z_near, gui->getCamera().get_perspective().z_far);
@@ -69,15 +69,13 @@ void Scene::haveCameraFollow(std::shared_ptr<Object> &object) {
 }
 
 void Scene::updateScene() {
-    // Limiting fps
-    float time = glfwGetTime();
-    std::this_thread::sleep_for(std::chrono::duration<float>(1.0f / Constants::FPS - (time - lastTime)));
-    lastTime = time;
+    auto initialTime = (float) glfwGetTime();
+    simulatedTime += 1.0f / Constants::FPS;
 
     for (auto &obj : movableObjects)
-        obj->update(time);
+        obj->update(simulatedTime);
 
-    cascadeShadow->update(movableObjects, stillObjects, gui, shaders, time);
+    cascadeShadow->update(movableObjects, stillObjects, gui, shaders, simulatedTime);
     shaders->override("wireframe", gui->showVertices());
     if (gui->showGrid())
         grid->draw(gui->getCamera());
@@ -98,4 +96,8 @@ void Scene::updateScene() {
         else obj->draw(gui->getCamera());
         whiteTexture->bind();
     }
+
+    // Limiting fps
+    auto finalTime = (float) glfwGetTime();
+    std::this_thread::sleep_for(std::chrono::duration<float>(1.0f / Constants::FPS - (finalTime - initialTime)));
 }
