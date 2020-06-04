@@ -56,7 +56,7 @@ void CompanionFollower::update(float time) {
             float speedAddTarget = pow(dist, 2);
             vcl::vec3 dir = orientation*vcl::vec3(0, 1, 0);
             speedAddTarget = std::min(speedAddTarget, maxSpeedFactor);
-            dp += (speedAddTarget -dp)*0.1;
+            dp += (speedAddTarget -dp)*accelerationFactor;
             position += (filmingCompanion->getPosition()-position).normalized()*dp;
 
             vcl::vec3 newOrientation = filmingCompanion->getOrientation()*vcl::vec3(0, 1, 0).normalized();

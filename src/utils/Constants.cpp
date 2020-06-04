@@ -19,8 +19,8 @@ const float Constants::BILLBOARD_TEXTURE_SIZE_RATIO = 100;
 const float Constants::BEAR_CHARGE_FACTOR = 0.3f;
 
 // Bear filming companion
-const float Constants::FLOATING_MARGIN = 15.0f;
-const float Constants::FLOATING_RADIUS = 20.0f;
+const float Constants::FLOATING_MARGIN = 7.5f;
+const float Constants::FLOATING_RADIUS = 10.0f;
 const float Constants::TIME_FACTOR = 0.2f;
 
 // Bird
