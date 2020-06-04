@@ -17,12 +17,11 @@ CompanionFollower::CompanionFollower(Shaders &shaders,
 
     // Setting um meshes if in debug mode
     if (debug){
-        // TODO do not hardcode the sizes
         sphereMesh = vcl::mesh_primitive_sphere();
         sphereMesh.shader = shaders["mesh"];
         axisMarkerMesh = vcl::mesh_drawable(vcl::mesh_primitive_frame());
         axisMarkerMesh.shader = shaders["mesh"];
-        axisMarkerMesh.uniform.transform.scaling = 2.0f;
+        axisMarkerMesh.uniform.transform.scaling = Constants::AXIS_MARKER_MESH_SCALE;
     }
 }
 
@@ -45,6 +44,8 @@ void CompanionFollower::drawMesh(vcl::camera_scene &camera) {
 }
 
 void CompanionFollower::update(float time) {
+    currentCompanionIndex = getTransitionIndex(time);
+
     float dist = (position - (*companions)[currentCompanionIndex]->getPosition()).norm();
 
     // Companion specific updates
@@ -52,41 +53,39 @@ void CompanionFollower::update(float time) {
     auto* filmingCompanion = dynamic_cast<BearFilmingCompanion*>((*companions)[currentCompanionIndex].get());
     if (filmingCompanion != nullptr){
         if (dist < filmingThreshold){
-            float speedAdd = pow(dist, 2);
-            speedAdd = std::min(speedAdd, maxSpeedFactor);
-            position += (filmingCompanion->getPosition()-position).normalized()*speedAdd;
+            float speedAddTarget = pow(dist, 2);
+            vcl::vec3 dir = orientation*vcl::vec3(0, 1, 0);
+            speedAddTarget = std::min(speedAddTarget, maxSpeedFactor);
+            dp += (speedAddTarget -dp)*0.1;
+            position += (filmingCompanion->getPosition()-position).normalized()*dp;
 
-            dp = dp.normalized();
             vcl::vec3 newOrientation = filmingCompanion->getOrientation()*vcl::vec3(0, 1, 0).normalized();
 
-            vcl::vec3 diff = (newOrientation-dp);
+            vcl::vec3 diff = (newOrientation-dir);
 
-            dp += diff*0.05;
+            dir += diff*0.05;
 
-            orientation = vcl::rotation_euler(dp, 0.0f);
+            orientation = vcl::rotation_euler(dir, 0.0f);
 
             return;
         }
     }
 
-    float distNedagive = (position - (*companions)[currentCompanionIndex]->getNegativeChargePosition()).norm();
+    float distNegative = (position - (*companions)[currentCompanionIndex]->getNegativeChargePosition()).norm();
 
     // Activate the companion if necessary
     auto* activableCompanion = dynamic_cast<ActivatableCompanion*>((*companions)[currentCompanionIndex].get());
     if (activableCompanion != nullptr){
         activableCompanion->setActivationState(
-                distNedagive < activationRadius && !activableCompanion->getActivationState());
+                distNegative < activationRadius && !activableCompanion->getActivationState());
     }
 
     // General updates
-    // Updating dp (speed)
-    // TODO pass initial speed and initial angle
-    currentCompanionIndex = getTransitionIndex(time);
 
     updateDp();
 
-    if (distNedagive < quadraticSpeedThreshold){
-        position+=dp*(distNedagive*distNedagive)/pow(quadraticSpeedThreshold, 2);
+    if (distNegative < quadraticSpeedThreshold){
+        position+=dp*(distNegative*distNegative)/pow(quadraticSpeedThreshold, 2);
     }
     else position+=dp;
 
@@ -96,7 +95,13 @@ void CompanionFollower::update(float time) {
 
 void CompanionFollower::updateDp() {
     // Following field
-    dp = (*companions)[currentCompanionIndex]->getFieldAt(position).normalized()*maxSpeedFactor;
+    vcl::vec3 field = (*companions)[currentCompanionIndex]->getFieldAt(position);
+    vcl::vec3 targetDp;
+    if (field.norm() < 1e-6f)
+         targetDp = {1, 0, 0};
+    else targetDp = field.normalized()*maxSpeedFactor;
+
+    dp += (targetDp-dp)*accelerationFactor;
 }
 
 int CompanionFollower::getTransitionIndex(float time) {

@@ -43,6 +43,15 @@ struct Constants {
     static const float BIRD_MAX_SPEED_LIMIT;
     static const float BIRD_MIN_SPEED_LIMIT;
     static const float TERRAIN_MARGIN;
+
+    // Companion follower
+    static const float AXIS_MARKER_MESH_SCALE;
+
+    // Dipole companion
+    static const float DIPOLE_FRICTION_FACTOR;
+    static const float DIPOLE_DISTANCE;
+    static const float DIPOLE_OFFSET;
+    static const float DIPOLE_CHARGE;
 };
 
 

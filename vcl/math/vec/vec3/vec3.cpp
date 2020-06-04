@@ -102,6 +102,8 @@ float vec3::norm() const {
 
 vec3 vec3::normalized() {
     float n = norm();
+    // FIXME adding this asset causes horribles damages
+//    assert(n < 1e-6f);
     return {x / n, y / n, z / n};
 }
 

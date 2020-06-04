@@ -6,6 +6,7 @@
 #define PGM_DIPOLECOMPANION_H
 
 #include "CompanionObject.h"
+#include "utils/Constants.h"
 
 class DipoleCompanion : public CompanionObject {
 public:
@@ -29,13 +30,6 @@ protected:
     // Charges variables
     vcl::vec3 pc1, pc2;
     float rotation;
-
-    // TODO make this global
-    const float T = 1.0/60;
-    const float frictionFactor = 0.01f;
-    const float distanceDipole = 5.0f;
-    const float dipoleOffset = 8.0f;
-    const float charge = 15.0f;
 
     void updateChargesPositions();
 };

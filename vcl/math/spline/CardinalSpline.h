@@ -17,7 +17,7 @@ public:
 
     vcl::vec3 position(float time);
 
-    virtual float getDuration();
+    virtual float getFinalTime();
 
 protected:
     std::vector<vcl::vec4> keyframes;

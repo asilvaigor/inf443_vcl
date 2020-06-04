@@ -11,8 +11,6 @@ CyclicCompanion::CyclicCompanion(Shaders &shaders, std::shared_ptr<vcl::CyclicCa
 void CyclicCompanion::update(float time) {
     if (!active)
         return;
-    // TODO remove this current time
-    currentTime = time;
 
     dp = trajectory->position(s + ds) - trajectory->position(s - ds);
 

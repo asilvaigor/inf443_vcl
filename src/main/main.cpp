@@ -97,13 +97,14 @@ void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_pt
     // Spline
     // Adding positions
     std::vector<std::vector<vcl::vec3>> keyframes;
-    keyframes.push_back({{135, 135, 2}, {100, 100, 10}, {0, 80, -5}, {-80, 80, 10}, {-90, 0, 10},
-                         {-85, -85, 75}, {0, -85, 10}, {70, -100, 5}, {100, -70, 2}, {100, -50, 2}, {0, 0, 2}});
+    keyframes.push_back({{135, 135, 2}, {120, 120, 2}, {100, 100, 10}, {0, 80, -5}, {-80, 80, 10}, {-90, 0, 10},
+                         {-85, -85, 75}, {0, -85, 10}, {70, -100, 5}, {100, -70, 2}, {100, -50, 2}, {80, -10, 4},
+                         {40, -50, 2}, {80, -90, 4}});
     keyframes.push_back({{60, 135, -2}, {50, 100, -8}, {50, 50, -8}, {30, 10, -8}, {0, 20, -8}, {-50, 20, -8},
                          {-50, 20, -8}});
 
-//    auto keyDrawer = std::static_pointer_cast<Object>(std::make_shared<KeyframesDrawer>(scene.getShaders(), keyframes));
-//    scene.addObject(keyDrawer);
+    auto keyDrawer = std::static_pointer_cast<Object>(std::make_shared<KeyframesDrawer>(scene.getShaders(), keyframes[0]));
+    scene.addObject(keyDrawer);
 
     auto spline1 = std::make_shared<vcl::CardinalSpline>();
     for (int i = 0; i < (int) keyframes[0].size(); ++i)
@@ -152,17 +153,16 @@ void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_pt
     // Adding companion follower to the scene
     auto companions = std::make_shared<std::vector<std::shared_ptr<DipoleCompanion>>>();
 
-
-    companions->emplace_back(companion4Ptr);
-
     companions->emplace_back(companion1Ptr);
+    companions->emplace_back(companion4Ptr);
     companions->emplace_back(companion2Ptr);
     companions->emplace_back(companion3Ptr);
+
 //    companions->emplace_back(companion4Ptr);
 
     auto transitionTimes = std::make_shared<std::vector<float>>();
-    transitionTimes->emplace_back(150);
-    transitionTimes->emplace_back(250);
+    transitionTimes->emplace_back(15);
+    transitionTimes->emplace_back(30);
     transitionTimes->emplace_back(330);
 
     auto follower = std::static_pointer_cast<Object>(std::make_shared<CompanionFollower>(

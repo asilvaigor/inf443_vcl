@@ -17,7 +17,6 @@ protected:
     vcl::mesh_drawable mesh;
 
     vcl::vec3 dp;
-    float currentTime;
 
     // Debug
     bool debug;

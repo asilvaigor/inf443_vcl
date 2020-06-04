@@ -9,8 +9,7 @@ DipoleCompanion::DipoleCompanion(Shaders &shaders, bool debug) : CompanionObject
 
     // Setting up debug meshes
     if (debug){
-        // TODO do not hardcode constants
-        chargeMesh = vcl::mesh_primitive_sphere(1);
+        chargeMesh = vcl::mesh_primitive_sphere();
         chargeMesh.shader = shaders["mesh"];
     }
 }
@@ -32,12 +31,12 @@ void DipoleCompanion::drawMesh(vcl::camera_scene &camera) {
 
 void DipoleCompanion::updateChargesPositions() {
     vcl::vec3 dir = dp.normalized();
-    pc1 = position+dir*dipoleOffset;
-    pc2 = pc1+dir*distanceDipole;
+    pc1 = position+dir*Constants::DIPOLE_OFFSET;
+    pc2 = pc1+dir*Constants::DIPOLE_DISTANCE;
 }
 
 vcl::vec2 DipoleCompanion::getFieldAt(vcl::vec2 pos) {
-    float k = charge;
+    float k = Constants::DIPOLE_CHARGE;
 
     vcl::vec2 c1 = {pc1.x, pc1.y};
     vcl::vec2 c2 = {pc2.x, pc2.y};
@@ -54,7 +53,7 @@ vcl::vec2 DipoleCompanion::getFieldAt(vcl::vec2 pos) {
 }
 
 vcl::vec3 DipoleCompanion::getFieldAt(vcl::vec3 pos) {
-    float k = charge;
+    float k = Constants::DIPOLE_CHARGE;
 
     // For first charge
     float d1 = vcl::norm(pos-pc1);

@@ -42,3 +42,12 @@ const float Constants::BIRD_MAX_SPEED_LIMIT = 1.0f;
 const float Constants::BIRD_MIN_SPEED_LIMIT = 0.5f;
 const float Constants::TERRAIN_MARGIN = 20.0f;
 
+// Companion follower
+const float Constants::AXIS_MARKER_MESH_SCALE = 2.0f;
+
+// Dipole companion
+const float Constants::DIPOLE_FRICTION_FACTOR = 0.01f;
+const float Constants::DIPOLE_DISTANCE = 5.0f;
+const float Constants::DIPOLE_OFFSET = 8.0f;
+const float Constants::DIPOLE_CHARGE = 15.0f;
+

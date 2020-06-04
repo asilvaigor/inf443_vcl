@@ -9,13 +9,13 @@
 
 class KeyframesDrawer : public Object {
 public:
-    KeyframesDrawer(Shaders &shaders, std::vector<vcl::vec3> &keyframes);
+    KeyframesDrawer(Shaders &shaders, std::vector<vcl::vec3> keyframes);
 
     void drawMesh(vcl::camera_scene &camera) override;
 
 public:
     std::vector<vcl::mesh_drawable> drawables;
-    std::vector<vcl::vec3> &keyframes;
+    std::vector<vcl::vec3> keyframes;
 };
 
 

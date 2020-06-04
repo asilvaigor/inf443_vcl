@@ -8,6 +8,7 @@
 #include "objects/Object.h"
 #include "ActivatableCompanion.h"
 #include "DipoleCompanion.h"
+#include "utils/Constants.h"
 
 class CompanionFollower : public Object {
 public:
@@ -41,6 +42,7 @@ private:
     const float maxSpeedFactor = 0.5;
     const float activationRadius = 20;
     const float filmingThreshold = 30;
+    const float accelerationFactor = 0.5f;
 
     // In debug mode
     bool debug;

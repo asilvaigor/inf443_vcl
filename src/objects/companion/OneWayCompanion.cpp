@@ -9,10 +9,8 @@ OneWayCompanion::OneWayCompanion(Shaders &shaders, std::shared_ptr<vcl::Cardinal
         ActivatableCompanion(shaders, trajectory, initialS, active, debug) {}
 
 void OneWayCompanion::update(float time) {
-    if (!active || s + ds > trajectory->getDuration())
+    if (!active || s + ds > trajectory->getFinalTime())
         return;
-    // TODO remove this current time
-    currentTime = time;
 
     dp = trajectory->position(s + ds) - trajectory->position(s);
 

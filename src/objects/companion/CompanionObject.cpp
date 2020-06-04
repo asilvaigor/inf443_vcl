@@ -6,11 +6,9 @@
 
 CompanionObject::CompanionObject(Shaders &shaders, bool debug) : Object(true, true), debug(debug) {
     // Setting up animation timer
-    currentTime = 0;
 
     // Setting up debug meshes
     if (debug){
-        // TODO do not hardcode constants
         mesh = vcl::mesh_primitive_cone(2, {0, 0, 0}, {0, 0, 3});
         mesh.shader= shaders["mesh"];
     }

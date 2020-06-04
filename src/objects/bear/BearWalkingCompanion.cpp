@@ -12,14 +12,13 @@ BearWalkingCompanion::BearWalkingCompanion(Shaders &shaders, std::shared_ptr<vcl
     bearPosition(std::move(bearPosition)) {}
 
 void BearWalkingCompanion::update(float time) {
-    currentTime = time;
     dp = trajectory->position(s+ds)-trajectory->position(s-ds);
 
     vcl::vec3 dist = *bearPosition-position;
 
     float movingForce = vcl::dot(dist.normalized(), dp.normalized());
 
-    s += movingForce*frictionFactor;
+    s += movingForce*Constants::DIPOLE_FRICTION_FACTOR;
 
     position = trajectory->position(s);
     updateChargesPositions();

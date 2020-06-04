@@ -41,10 +41,15 @@ mat3 rotation_euler(vcl::vec3& orientation, float rotation){
     vcl::vec3 projDpXY = {orientation.x, orientation.y, 0};
 
     float alpha;
-    if (vcl::cross(projDpXY, {0, 1, 0}).z > 0)
-        alpha = -projDpXY.angle({0, 1, 0});
-    else alpha = projDpXY.angle({0, 1, 0});
-    vcl::mat3 aRotation = vcl::rotation_from_axis_angle_mat3({0, 0, 1}, alpha);
+    vcl::mat3 aRotation;
+    if (projDpXY.norm() < 1e-6)
+        aRotation = {{1, 0, 0},{0, 1, 0},{0, 0, 1}};
+    else{
+        if (vcl::cross(projDpXY, {0, 1, 0}).z > 0)
+            alpha = -projDpXY.angle({0, 1, 0});
+        else alpha = projDpXY.angle({0, 1, 0});
+        aRotation = vcl::rotation_from_axis_angle_mat3({0, 0, 1}, alpha);
+    }
 
     vcl::vec3 bAxis = vcl::cross(orientation, {0, 0, 1});
     float beta = -orientation.angle({0, 0, 1})+M_PI_2;
