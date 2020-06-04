@@ -13,7 +13,7 @@ public:
 
     void update(float time) override;
 
-private:
+protected:
     std::shared_ptr<Object> obj;
 };
 

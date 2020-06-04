@@ -19,6 +19,7 @@
 #include <src/objects/companion/OneWayCompanion.h>
 #include <src/objects/dome/Dome.h>
 #include <src/objects/companion/ObjectFollowerCompanion.h>
+#include <src/objects/bear/BearFilmingCompanion.h>
 
 std::shared_ptr<BaseTerrain> addTerrain(Scene &scene) {
     // Adding terrain
@@ -132,7 +133,7 @@ void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_pt
 
     // Adding companion
     auto companion4 = std::static_pointer_cast<Object>
-            (std::make_shared<ObjectFollowerCompanion>(scene.getShaders(), bearPtr, false));
+            (std::make_shared<BearFilmingCompanion>(scene.getShaders(), bearPtr, false));
     std::shared_ptr<DipoleCompanion> companion4Ptr = std::static_pointer_cast<DipoleCompanion>(companion4);
     scene.addObject(companion4);
 

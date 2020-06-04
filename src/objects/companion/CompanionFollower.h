@@ -40,6 +40,7 @@ private:
     const float quadraticSpeedThreshold = 10;
     const float maxSpeedFactor = 1;
     const float activationRadius = 10;
+    const float filmingThreshold = 30;
 
     // In debug mode
     bool debug;

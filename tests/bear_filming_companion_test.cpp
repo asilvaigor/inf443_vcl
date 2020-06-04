@@ -6,6 +6,8 @@
 #include <src/objects/debug/TrajectoryDrawer.h>
 #include <src/objects/debug/DebugObject.h>
 #include <src/objects/forest/Forest.h>
+#include <src/objects/bear/BearFilmingCompanion.h>
+#include <src/objects/companion/CompanionFollower.h>
 #include "scene/Scene.h"
 #include "shaders/Shaders.h"
 #include "objects/bear/Bear.h"
@@ -90,6 +92,22 @@ int main() {
     bear = std::make_shared<Bear>(scene.getShaders(), terrain, bearCompanionPtr, bearPos, forestPtr);
     auto bearObj = std::static_pointer_cast<Object>(bear);
     scene.addObject(bearObj);
+
+    // Adding bear filming companion
+    auto filmingCompanion = std::static_pointer_cast<Object>(std::make_shared<BearFilmingCompanion>(
+            scene.getShaders(), bear));
+    scene.addObject(filmingCompanion);
+
+    std::shared_ptr<DipoleCompanion> companionPtr = std::static_pointer_cast<DipoleCompanion>(filmingCompanion);
+
+    auto companions = std::make_shared<std::vector<std::shared_ptr<DipoleCompanion>>>();
+    companions->push_back(companionPtr);
+    auto times = std::make_shared<std::vector<float>>();
+
+    auto follower = std::static_pointer_cast<Object>
+            (std::make_shared<CompanionFollower>(scene.getShaders(), companions, times, vcl::vec3(100, 0, 0), true));
+    scene.addObject(follower);
+
 
     scene.display();
     return 0;
