@@ -6,21 +6,28 @@
 #include "scene/Scene.h"
 
 vcl::rand_generator Snow::generator(Scene::deterministic);
+std::shared_ptr<Texture> Snow::texture = nullptr;
 
 Snow::Snow(Shaders &shaders, int nParticles) :
         Object(true, true), nParticles(nParticles) {
+    if (texture == nullptr)
+        Snow::texture = std::make_shared<Texture>("snowflake", GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE);
+
     camera = nullptr;
     cameraDistance = 0.5f;
-    minFlakeSize = 0.0005f;
-    flakeSizeVar = 0.001f;
+    minFlakeSize = 0.0002f;
+    flakeSizeVar = 0.003f;
     dampingMassRatio = 1.0f;
     accelerationNoise = 0.03f;
 
     vcl::mesh m;
     m.position.push_back({0.0f, 1.0f, 0.0f});
     m.position.push_back({-0.866f, -0.5f, 0.0f});
-    m.position.push_back({0.866f, 0.5f, 0.0f});
+    m.position.push_back({0.866f, -0.5f, 0.0f});
     m.connectivity.push_back({0, 1, 2});
+    m.texture_uv.push_back({-0.58, 0});
+    m.texture_uv.push_back({0.867, 1.867});
+    m.texture_uv.push_back({2.31, 0});
 
     particles.resize(nParticles);
     timeLastNoise.resize(nParticles);
@@ -47,8 +54,16 @@ Snow::Snow(Shaders &shaders, int nParticles) :
 
 void Snow::drawMesh(vcl::camera_scene &camera) {
     this->camera = &camera;
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDepthMask(false);
+
+    texture->bind();
     for (int i = 0; i < nParticles; i++)
         vcl::draw_snow(particles[i], camera);
+
+    glDepthMask(true);
 }
 
 void Snow::update(float time) {

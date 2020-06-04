@@ -6,6 +6,7 @@
 #define PGM_SNOW_H
 
 #include "objects/Object.h"
+#include "utils/Texture.h"
 
 class Snow : public Object {
 public:
@@ -29,6 +30,8 @@ private:
     float accelerationNoise;
     std::vector<float> timeLastNoise;
     std::vector<vcl::vec2> noise;
+
+    static std::shared_ptr<Texture> texture;
 
     static vcl::rand_generator generator;
 };
