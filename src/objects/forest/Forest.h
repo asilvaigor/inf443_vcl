@@ -14,7 +14,7 @@
 class Forest : public Object {
 public:
     Forest(Shaders &shaders, std::shared_ptr<BaseTerrain> &terrain,
-           int nTrees = 400, int nBushes = 800, int nRocks = 50);
+           int nTrees = 400, int nBushes = 800, int nRocks = 25);
 
     void drawMesh(vcl::camera_scene &camera) override;
 
