@@ -20,10 +20,12 @@ if(NOT ZLIB_FOUND)
   set(ZLIB_FOUND 1)
   set(ZLIB_LIBRARIES zlibstatic)
   set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/contrib/zlib ${CMAKE_CURRENT_BINARY_DIR}/contrib/zlib)
+  set(LINK_Z 0)
   # need to ensure we don't link with system zlib or minizip as well.
 else()
   add_definitions(-DASSIMP_BUILD_NO_OWN_ZLIB)
   set(ZLIB_LIBRARIES_LINKED -lz)
+  set(LINK_Z 1)
 #  use_pkgconfig(UNZIP minizip)
 endif()
 include_directories(${ZLIB_INCLUDE_DIR})
@@ -37,4 +39,9 @@ file(GLOB_RECURSE assimp_files
         code/*.[ch]pp code/*.[ch]
         include/*.[ch]pp include/*.[ch])
 add_library(assimp ${assimp_files})
-target_link_libraries(assimp IrrXML z)
+
+if(LINK_Z)
+  target_link_libraries(assimp IrrXML z)
+else()
+  target_link_libraries(assimp IrrXML zlibstatic)
+endif()
