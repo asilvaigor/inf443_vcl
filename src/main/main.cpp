@@ -100,11 +100,11 @@ void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_pt
     keyframes.push_back({{135, 135, 2}, {120, 120, 2}, {100, 100, 10}, {0, 80, -5}, {-80, 80, 10}, {-90, 0, 10},
                          {-85, -85, 75}, {0, -85, 10}, {70, -100, 5}, {100, -70, 2}, {100, -50, 2}, {80, -10, 4},
                          {40, -50, 2}, {80, -90, 4}});
-    keyframes.push_back({{60, 135, -2}, {50, 100, -8}, {50, 50, -8}, {30, 10, -8}, {0, 20, -8}, {-50, 20, -8},
-                         {-50, 20, -8}});
+    keyframes.push_back({{80, -15, 0}, {50, 5, -5}, {30, 10, -5}, {0, 20, -5}, {-50, 20, -5}, {-50, 0, 15}});
 
-    auto keyDrawer = std::static_pointer_cast<Object>(std::make_shared<KeyframesDrawer>(scene.getShaders(), keyframes[0]));
-    scene.addObject(keyDrawer);
+
+//    auto keyDrawer = std::static_pointer_cast<Object>(std::make_shared<KeyframesDrawer>(scene.getShaders(), keyframes[0]));
+//    scene.addObject(keyDrawer);
 
     auto spline1 = std::make_shared<vcl::CardinalSpline>();
     for (int i = 0; i < (int) keyframes[0].size(); ++i)
@@ -162,8 +162,8 @@ void configureCamera(Scene &scene, std::shared_ptr<Object> &bird, std::shared_pt
 
     auto transitionTimes = std::make_shared<std::vector<float>>();
     transitionTimes->emplace_back(82);
-    transitionTimes->emplace_back(250);
-    transitionTimes->emplace_back(330);
+    transitionTimes->emplace_back(108);
+    transitionTimes->emplace_back(135);
 
     auto follower = std::static_pointer_cast<Object>(std::make_shared<CompanionFollower>(
             scene.getShaders(), companions, transitionTimes, keyframes[0][0], false));
@@ -201,7 +201,7 @@ int main() {
     scene.addObject(boidObj);
 
     // Adding camera options
-    configureCamera(scene, boid->getBird(0), bear);
+    configureCamera(scene, boid->getBird(1), bear);
 
     scene.display();
     return 0;

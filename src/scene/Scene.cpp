@@ -70,7 +70,7 @@ void Scene::haveCameraFollow(std::shared_ptr<Object> &object) {
 
 void Scene::updateScene() {
     auto initialTime = (float) glfwGetTime();
-    simulatedTime += 1.0f / Constants::FPS;
+    simulatedTime += 1.0f / 60.0f;
 
     for (auto &obj : movableObjects)
         obj->update(simulatedTime);
