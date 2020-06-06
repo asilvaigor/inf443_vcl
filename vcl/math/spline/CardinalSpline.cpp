@@ -21,7 +21,7 @@ void vcl::CardinalSpline::addKeyFrame(vcl::vec3 position, float time) {
         maxT = std::max(time, maxT);
     }
 
-    std::sort(keyframes.begin(), keyframes.end(), [&](vcl::vec4& a, vcl::vec4 b){
+    std::sort(keyframes.begin(), keyframes.end(), [](vcl::vec4 a, vcl::vec4 b){
         return a.w < b.w;
     });
 }
